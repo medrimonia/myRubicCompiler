@@ -14,3 +14,12 @@ lex.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) -c $<
 rubic: y.tab.o lex.yy.o
 	$(CC) -o $@ $^ $(LDFLAGS)
+
+%.s: %.ll
+	llc $<
+
+hello_world: hello_world.s
+	gcc -o $@ $<
+
+clean:
+	rm -rf *.o *.s hello_world rubic lex.yy.c y.tab.c y.tab.h

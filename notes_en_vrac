@@ -1,0 +1,20 @@
+Liste des types :
+			- boolean
+			- int
+			- double
+			- string
+			- object
+-> typage dynamique
+-> une fois typée, une variable ne peut pas changer de type
+-> le type de toute variable doit être connu à la fin de la lecture du programme
+
+
+À traiter :
+	- variables
+		- globales ($)
+		- locales
+		- d'instance (@)
+		- paramètres
+	- constantes
+	- méthodes
+	- fonction
