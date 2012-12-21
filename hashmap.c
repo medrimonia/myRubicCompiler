@@ -6,8 +6,7 @@
 #define INITIAL_SIZE 100
 
 void fill_map(void ** map, int size){
-	int i;
-	for (i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 		map[i] = NULL;
 }
 
@@ -26,8 +25,11 @@ hashmap_pointer new_hash_map(hash_function h_f, equals_function e_f){
 }
 
 void * hash_map_get(hashmap_pointer hm, void * key){
-	return hm->map[get_index(hm, key)];
-	
+	return hm->map[get_index(hm, key)];	
+}
+
+bool hash_map_exists(hashmap_pointer hm, void * key){
+	return hash_map_get(hm, key) != NULL;
 }
 
 void hash_map_add(hashmap_pointer hm, void * key, void * value){
@@ -37,4 +39,13 @@ void hash_map_add(hashmap_pointer hm, void * key, void * value){
 		return;
 	}
 	hm->map[index] = value;
+	hm->nb_elements++;
+}
+
+void hash_map_remove(hashmap_pointer hm, void * key){
+	//TODO
+}
+
+int hash_map_size(hashmap_pointer hm){
+	return hm->nb_elements;
 }

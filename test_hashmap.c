@@ -57,6 +57,7 @@ int main(int argc, char ** argv){
 	printf("Received struct : name = '%s', n = '%d'\n",
 				 getted_struct3->name,
 				 getted_struct3->n);
-	printf("Is invalid working ? %d\n", invalid == NULL);
+	printf("Is invalid working ? %d\n", invalid == NULL &&
+				 !hash_map_exists(myMap,"inexistant"));
 
 }

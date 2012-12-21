@@ -1,4 +1,4 @@
-CFLAGS=   # -g, -O3 , ... par exemple
+CFLAGS= -std=c99 -g   # -g, -O3 , ... par exemple
 LDFLAGS=-ll -ly # les bibliotheques necessaires
 CC=gcc
 
@@ -31,5 +31,21 @@ test_hashmap.o: hashmap.h
 test_hashmap: hashmap.o test_hashmap.o
 	$(CC) -o $@ $^
 
+test_linked_list.o: linked_list.h
+
+test_linked_list: linked_list.o test_linked_list.o
+	$(CC) -o $@ $^
+
+EXECUTABLES= \
+	hello_world \
+	rubic	\
+	test_hashmap \
+	test_linked_list
+
+.PHONY: clean mrproper
+
 clean:
-	rm -rf *.o *.s hello_world rubic lex.yy.c y.tab.c y.tab.h
+	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h
+
+mrproper: clean
+	rm -rf $(EXECUTABLES)
