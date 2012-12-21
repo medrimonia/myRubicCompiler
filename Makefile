@@ -19,7 +19,17 @@ rubic: y.tab.o lex.yy.o
 	llc $<
 
 hello_world: hello_world.s
-	gcc -o $@ $<
+	$(CC) -o $@ $<
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
+
+hashmap.o: hashmap.h
+
+test_hashmap.o: hashmap.h
+
+test_hashmap: hashmap.o test_hashmap.o
+	$(CC) -o $@ $^
 
 clean:
 	rm -rf *.o *.s hello_world rubic lex.yy.c y.tab.c y.tab.h
