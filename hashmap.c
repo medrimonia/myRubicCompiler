@@ -12,13 +12,31 @@ struct hashmap_element{
 
 typedef struct hashmap_element * e_p;
 
+int get_index(hashmap_pointer hm, void * key){
+	return (*hm->h_f)(key) % hm->map_size;
+}
+
+e_p getElementByKey(hashmap_pointer hm, void * key){
+	// The key is in this list if it's in the map
+	linked_list_pointer l = hm->map[get_index(hm, key)];
+	if (linked_list_is_empty(l))
+		return NULL;
+	linked_list_restart(l);
+	while (!linked_list_end(l)){
+		e_p element = linked_list_get(l);
+		if ((*hm->e_f)(element->key, key))
+			return element;
+		linked_list_next(l);
+	}
+	e_p element = linked_list_get(l);
+	if ((*hm->e_f)(element->key, key))
+		return element;
+	return NULL;
+}
+
 void fill_map(linked_list_pointer * map, int size){
 	for (int i = 0; i < size; i++)
 		map[i] = new_linked_list();
-}
-
-int get_index(hashmap_pointer hm, void * key){
-	return (*hm->h_f)(key) % hm->map_size;
 }
 
 hashmap_pointer new_hash_map(hash_function h_f, equals_function e_f){
@@ -33,25 +51,14 @@ hashmap_pointer new_hash_map(hash_function h_f, equals_function e_f){
 }
 
 void * hash_map_get(hashmap_pointer hm, void * key){
-	// The key is in this list if it's in the map
-	linked_list_pointer l = hm->map[get_index(hm, key)];
-	if (linked_list_is_empty(l))
-		return NULL;
-	linked_list_restart(l);
-	while (!linked_list_end(l)){
-		e_p element = linked_list_get(l);
-		if ((*hm->e_f)(element->key, key))
-			return element->data;
-		linked_list_next(l);
-	}
-	e_p element = linked_list_get(l);
-	if ((*hm->e_f)(element->key, key))
-		return element->data;
-	return NULL;	
+	e_p element = getElementByKey(hm, key);
+	if (element == NULL)
+		return NULL;	
+	return element->data;
 }
 
 bool hash_map_exists(hashmap_pointer hm, void * key){
-	return hash_map_get(hm, key) != NULL;
+	return getElementByKey(hm, key) != NULL;
 }
 
 void hash_map_add(hashmap_pointer hm, void * key, void * value){
@@ -72,4 +79,32 @@ void hash_map_remove(hashmap_pointer hm, void * key){
 
 int hash_map_size(hashmap_pointer hm){
 	return hm->nb_elements;
+}
+
+/* destroy an hashmap and free all of it's content */
+void hashmap_destroy(hashmap_pointer hm,
+											bool free_keys,
+											bool free_data){
+	for(int i = 0; i < hm->map_size; i++){
+		linked_list_pointer l = hm->map[i];
+		linked_list_restart(l);
+		while(!linked_list_end(l)){
+			e_p element = linked_list_get(l);
+			if (free_keys)
+				free(element->key);
+			if (free_data)
+				free(element->data);
+			linked_list_next(l);
+		}
+		if (!linked_list_is_empty(l)){
+			e_p element = linked_list_get(l);
+			if (free_keys)
+				free(element->key);
+			if (free_data)
+				free(element->data);
+		}
+		linked_list_destroy(l);
+	}
+	free(hm->map);
+	free(hm);
 }

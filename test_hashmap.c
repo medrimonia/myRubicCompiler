@@ -60,4 +60,6 @@ int main(int argc, char ** argv){
 	printf("Is invalid working ? %d\n", invalid == NULL &&
 				 !hash_map_exists(myMap,"inexistant"));
 
+	hashmap_destroy(myMap,false,true);
+
 }

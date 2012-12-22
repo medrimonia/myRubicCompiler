@@ -29,4 +29,8 @@ void hash_map_add(hashmap_pointer hm, void * key, void * value);
 
 int hash_map_size(hashmap_pointer hm);
 
+void hashmap_destroy(hashmap_pointer hm,
+										 bool free_keys,
+										 bool free_data);
+
 #endif
