@@ -1,8 +1,13 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "linked_list.h"
+
+#define ELEMENT1 "ELEMENT 1"
+#define ELEMENT2 "ELEMENT 2"
+#define ELEMENT3 "ELEMENT 3"
 
 
 struct test{
@@ -10,35 +15,105 @@ struct test{
 	int n;
 };
 
-int main(int argc, char ** argv){
-	struct test * myStruct = malloc(sizeof(struct test));
-	myStruct->name = "abracadabra";
-	myStruct->n = 1;
-	struct test * myStruct2 = malloc(sizeof(struct test));
-	myStruct2->name = "plouf";
-	myStruct2->n = 2;
-	struct test * myStruct3 = malloc(sizeof(struct test));
-	myStruct3->name = "alakazam";
-	myStruct3->n = 3;
+int test_new_linked_list(){
 	linked_list_pointer myList = new_linked_list();
-	linked_list_insert_in_head(myList, myStruct);
-	linked_list_insert_in_head(myList, myStruct2);
-	linked_list_insert_in_head(myList, myStruct3);
-	linked_list_restart(myList);
-	struct test * getted_struct = linked_list_get(myList);
-	linked_list_next(myList);
-	struct test * getted_struct2 = linked_list_get(myList);
-	linked_list_next(myList);
-	struct test * getted_struct3 = linked_list_get(myList);
-	printf("Received struct : name = '%s', n = '%d'\n",
-				 getted_struct->name,
-				 getted_struct->n);
-	printf("Received struct : name = '%s', n = '%d'\n",
-				 getted_struct2->name,
-				 getted_struct2->n);
-	printf("Received struct : name = '%s', n = '%d'\n",
-				 getted_struct3->name,
-				 getted_struct3->n);
-	printf("Is end working ? %d\n", linked_list_end(myList));
+	assert(linked_list_size(myList) == 0);
+	linked_list_destroy(myList);
+}
 
+int test_linked_list_insert(){
+	char * got_element;
+	linked_list_pointer myList = new_linked_list();
+	char * element1 = malloc((1 + strlen(ELEMENT1)) * sizeof(char));
+	// Inserting in an empty array
+	linked_list_insert(myList, strcpy(element1,ELEMENT1));
+	got_element = linked_list_get(myList);
+	assert(got_element == element1);
+	// Inserting before the first element
+	char * element2 = malloc((1 + strlen(ELEMENT2)) * sizeof(char));
+	linked_list_insert(myList, strcpy(element2,ELEMENT2));
+	got_element = linked_list_get(myList);
+	assert(got_element == element2);
+	linked_list_next(myList);
+	got_element = linked_list_get(myList);
+	assert(got_element == element1);
+	linked_list_destroy(myList);
+}
+int test_linked_list_insert_in_head(){
+	char * got_element;
+	linked_list_pointer myList = new_linked_list();
+	char * element1 = malloc((1 + strlen(ELEMENT1)) * sizeof(char));
+	// Inserting in an empty array
+	linked_list_insert_in_head(myList, strcpy(element1,ELEMENT1));
+	got_element = linked_list_get(myList);
+	assert(got_element == element1);
+	// Inserting in head, while on head
+	char * element2 = malloc((1 + strlen(ELEMENT2)) * sizeof(char));
+	linked_list_insert_in_head(myList, strcpy(element2,ELEMENT2));
+	got_element = linked_list_get(myList);
+	assert(got_element == element1);
+	linked_list_restart(myList);
+	got_element = linked_list_get(myList);
+	assert(got_element == element2);
+	// Inserting while on the second element
+	linked_list_next(myList);
+	got_element = linked_list_get(myList);
+	assert(got_element == element1);
+	char * element3 = malloc((1 + strlen(ELEMENT3)) * sizeof(char));
+	linked_list_insert_in_head(myList, strcpy(element3,ELEMENT3));
+	// element should be the same as before
+	got_element = linked_list_get(myList);
+	assert(got_element == element1);
+	// checking order
+	linked_list_restart(myList);
+	got_element = linked_list_get(myList);
+	assert(got_element == element3);
+	linked_list_next(myList);
+	got_element = linked_list_get(myList);
+	assert(got_element == element2);
+	linked_list_next(myList);
+	got_element = linked_list_get(myList);
+	assert(got_element == element1);
+	linked_list_destroy(myList);
+}
+
+int test_linked_list_end(){
+	char * got_element;
+	linked_list_pointer myList = new_linked_list();
+	assert(linked_list_end(myList));
+	char * element1 = malloc((1 + strlen(ELEMENT1)) * sizeof(char));
+	// Inserting in an empty array
+	linked_list_insert(myList, strcpy(element1,ELEMENT1));
+	assert(linked_list_end(myList));
+	char * element2 = malloc((1 + strlen(ELEMENT2)) * sizeof(char));
+	// Inserting in an empty array
+	linked_list_insert(myList, strcpy(element2,ELEMENT2));
+	assert(!linked_list_end(myList));
+	linked_list_next(myList);
+	assert(linked_list_end(myList));
+	linked_list_destroy(myList);
+}
+
+int test_linked_list_remove_next(){
+	char * got_element;
+	linked_list_pointer myList = new_linked_list();
+	char * element1 = malloc((1 + strlen(ELEMENT1)) * sizeof(char));
+	linked_list_insert(myList, strcpy(element1,ELEMENT1));
+	char * element2 = malloc((1 + strlen(ELEMENT2)) * sizeof(char));
+	linked_list_insert(myList, strcpy(element2,ELEMENT2));
+	char * element3 = malloc((1 + strlen(ELEMENT3)) * sizeof(char));
+	linked_list_insert(myList, strcpy(element3,ELEMENT3));
+	assert(linked_list_get(myList) == element3);
+	linked_list_remove_next(myList);
+	linked_list_next(myList);
+	assert(linked_list_get(myList) == element1);
+	linked_list_destroy(myList);	
+}
+
+int main(int argc, char ** argv){
+	test_new_linked_list();
+	test_linked_list_insert();
+	test_linked_list_insert_in_head();
+	test_linked_list_end();
+	test_linked_list_remove_next();
 }
