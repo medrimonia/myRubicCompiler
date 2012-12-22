@@ -74,6 +74,10 @@ int linked_list_size(linked_list_pointer l){
 	return l->size;
 }
 
+int linked_list_is_empty(linked_list_pointer l){
+	return l->size == 0;
+}
+
 void linked_list_destroy(linked_list_pointer l){
 	linked_list_restart(l);
 	while(l->size > 1)

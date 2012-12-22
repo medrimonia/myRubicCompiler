@@ -26,7 +26,7 @@ int string_hash_function(void * key){
 }
 
 int str_equal_function(void * key_1, void * key_2){
-	return strcmp((char *) key_1, (char *) key_2);
+	return strcmp((char *) key_1, (char *) key_2) == 0;
 }
 
 int main(int argc, char ** argv){

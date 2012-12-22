@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#include "linked_list.h"
+
 typedef int (*hash_function)(void *);
 typedef int (*equals_function)(void *, void *);
 
@@ -11,8 +13,7 @@ struct hashmap{
 	equals_function e_f;
 	int nb_elements;
 	int map_size;
-	void ** map;
-	
+	linked_list_pointer * map;
 };
 
 

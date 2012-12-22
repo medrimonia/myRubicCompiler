@@ -24,12 +24,14 @@ hello_world: hello_world.s
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
-hashmap.o: hashmap.h
+hashmap.o: hashmap.h linked_list.h
 
 test_hashmap.o: hashmap.h
 
-test_hashmap: hashmap.o test_hashmap.o
+test_hashmap: hashmap.o test_hashmap.o linked_list.o
 	$(CC) -o $@ $^
+
+linked_list.o: linked_list.h
 
 test_linked_list.o: linked_list.h
 

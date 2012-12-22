@@ -1,5 +1,5 @@
-#ifndef HASHMAP_H
-#define HASHMAP_H
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
 
 #include <stdbool.h>
 
@@ -51,6 +51,9 @@ void linked_list_remove_next(linked_list_pointer l);
 
 /* Return the number of elements contained in the list */
 int linked_list_size(linked_list_pointer l);
+
+/* Return the number of elements contained in the list */
+int linked_list_is_empty(linked_list_pointer l);
 
 /* Destroy the specified list */
 void linked_list_destroy(linked_list_pointer l);
