@@ -25,21 +25,51 @@ struct hashmap{
 
 typedef struct hashmap * hashmap_pointer;
 
+/* Create a new hashmap with the specified hash_function and equals_function
+ */
 hashmap_pointer new_hash_map(hash_function h_f, equals_function e_f);
 
+/* Get an element with the specified key, return NULL in two cases
+ * - The key can't be found  int the hashmap
+ * - The key is found but is associated with the data NULL
+ */
 void * hash_map_get(hashmap_pointer hm, void * key);
 
+/* Return true if the specified key can be found in the map,
+ * false otherwise. */
 bool hash_map_exists(hashmap_pointer hm, void * key);
 
-void hash_map_add(hashmap_pointer hm, void * key, void * value);
+/* Add the specified value with the specified key in the hashmap.
+ * If the key is already in the specified map, NULL is returned,
+ * If everything worked properly, returns the inserted value.
+ */
+void * hash_map_add(hashmap_pointer hm, void * key, void * value);
 
+/* Remove the entry with the specified key.
+ * If no entry with the specified key can be found, nothing is done
+ * If the option free_key is specified :
+ * - The key of the object found will be erased.
+ *   (If it contains pointers of pointers, better use your own free)
+ * If the option free_data is specified :
+ * - The data of the object found will be erased.
+ *   (If it contains pointers of pointers, better use your own free)
+ */
 void hash_map_remove(hashmap_pointer hm,
 										 void * key,
 										 bool free_key,
 										 bool free_data);
 
+/* Return the number of elements contained in the hashmap. */
 int hash_map_size(hashmap_pointer hm);
 
+/* Remove all the entries and destroy the hashmap.
+ * If the option free_key is specified :
+ * - The key of the object found will be erased.
+ *   (If it contains pointers of pointers, better use your own free)
+ * If the option free_data is specified :
+ * - The data of the object found will be erased.
+ *   (If it contains pointers of pointers, better use your own free)
+ */
 void hashmap_destroy(hashmap_pointer hm,
 										 bool free_keys,
 										 bool free_data);

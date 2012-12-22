@@ -61,10 +61,10 @@ bool hash_map_exists(hashmap_pointer hm, void * key){
 	return getElementByKey(hm, key) != NULL;
 }
 
-void hash_map_add(hashmap_pointer hm, void * key, void * value){
+void * hash_map_add(hashmap_pointer hm, void * key, void * value){
 	//TODO increase size if nb_elements > map_size
 	if (hash_map_exists(hm, key))
-		return;
+		return NULL;
 	int index = get_index(hm, key);
 	e_p element = malloc(sizeof(struct hashmap_element));
 	element->key = key;
