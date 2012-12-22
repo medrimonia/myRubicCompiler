@@ -44,6 +44,8 @@ bool linked_list_end(linked_list_pointer l);
 /* Return the iterator at the beginning of the list */
 void linked_list_restart(linked_list_pointer l);
 
+void linked_list_remove(linked_list_pointer l);
+
 /* This function shouldn't be called if linked_list_end(l) is true 
  * destroy the data contained too.
  */

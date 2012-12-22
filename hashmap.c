@@ -74,7 +74,20 @@ void hash_map_add(hashmap_pointer hm, void * key, void * value){
 }
 
 void hash_map_remove(hashmap_pointer hm, void * key){
-	//TODO
+	linked_list_pointer l = hm->map[get_index(hm, key)];
+	if (linked_list_is_empty(l))
+		return;
+	linked_list_restart(l);
+	e_p element;
+	while (!linked_list_end(l)){
+		element = linked_list_get(l);
+		if ((*hm->e_f)(element->key, key))
+			linked_list_remove(l);
+		linked_list_next(l);
+	}
+	element = linked_list_get(l);
+	if ((*hm->e_f)(element->key, key))
+			linked_list_remove(l);
 }
 
 int hash_map_size(hashmap_pointer hm){

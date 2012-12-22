@@ -62,6 +62,37 @@ void linked_list_restart(linked_list_pointer l){
 	l->actual = l->first;
 }
 
+void linked_list_remove(linked_list_pointer l){
+	if (linked_list_size(l) == 1){
+		free(l->first->data);
+		free(l->first);
+		l->first = NULL;
+		l->actual = NULL;
+		l->size = 0;
+		return;
+	}
+	// if next is empty, we're removing the last element of the list
+	// we do need to change the element before then
+	// otherwise, values will be swaped and the next node will be deleted
+	node_pointer next = l->actual->next;
+	if (next == NULL){
+		node_pointer removed = l->actual;
+		free(l->actual->data);
+		free(l->actual);
+		l->size--;
+		linked_list_restart(l);
+		while (l->actual->next != removed)
+			l->actual = l->actual->next;
+		l->actual->next = NULL;
+	}else{
+		free(l->actual->data);
+		l->actual->next = next->next;
+		l->actual->data = next->data;
+		free(next);
+		l->size--;
+	}
+}
+
 void linked_list_remove_next(linked_list_pointer l){
 	node_pointer to_remove = l->actual->next;
 	l->actual->next = to_remove->next;
