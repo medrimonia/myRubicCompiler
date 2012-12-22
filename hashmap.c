@@ -73,7 +73,10 @@ void hash_map_add(hashmap_pointer hm, void * key, void * value){
 	hm->nb_elements++;
 }
 
-void hash_map_remove(hashmap_pointer hm, void * key){
+void hash_map_remove(hashmap_pointer hm,
+										 void * key,
+										 bool free_key,
+										 bool free_data){
 	linked_list_pointer l = hm->map[get_index(hm, key)];
 	if (linked_list_is_empty(l))
 		return;
@@ -81,13 +84,24 @@ void hash_map_remove(hashmap_pointer hm, void * key){
 	e_p element;
 	while (!linked_list_end(l)){
 		element = linked_list_get(l);
-		if ((*hm->e_f)(element->key, key))
+		if ((*hm->e_f)(element->key, key)){
+			if (free_key)
+				free(element->key);
+			if (free_data)
+				free(element->data);
 			linked_list_remove(l);
+			return;
+		}
 		linked_list_next(l);
 	}
 	element = linked_list_get(l);
-	if ((*hm->e_f)(element->key, key))
-			linked_list_remove(l);
+	if ((*hm->e_f)(element->key, key)){
+		if (free_key)
+			free(element->key);
+		if (free_data)
+			free(element->data);
+		linked_list_remove(l);
+	}
 }
 
 int hash_map_size(hashmap_pointer hm){

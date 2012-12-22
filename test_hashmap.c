@@ -25,7 +25,7 @@ int string_hash_function(void * key){
 	return sum;	
 }
 
-int str_equal_function(void * key_1, void * key_2){
+bool str_equal_function(void * key_1, void * key_2){
 	return strcmp((char *) key_1, (char *) key_2) == 0;
 }
 
@@ -59,6 +59,10 @@ int main(int argc, char ** argv){
 				 getted_struct3->n);
 	printf("Is invalid working ? %d\n", invalid == NULL &&
 				 !hash_map_exists(myMap,"inexistant"));
+	hash_map_remove(myMap, myStruct2->name, false, true);
+	struct test * removed = hash_map_get(myMap,"plouf");
+	printf("Is invalid working ? %d\n", removed == NULL &&
+				 !hash_map_exists(myMap,"plouf"));
 
 	hashmap_destroy(myMap,false,true);
 
