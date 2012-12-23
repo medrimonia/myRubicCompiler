@@ -16,5 +16,8 @@ Liste des types :
 		- d'instance (@)
 		- paramètres
 	- constantes
-	- méthodes
+	- types
+		- int/double ...
+		- class
+			- méthodes
 	- fonction

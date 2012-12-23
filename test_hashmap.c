@@ -39,15 +39,15 @@ int main(int argc, char ** argv){
 	struct test * myStruct3 = malloc(sizeof(struct test));
 	myStruct3->name = "alakazam";
 	myStruct3->n = 3;
-	hashmap_pointer myMap = new_hash_map(string_hash_function,
+	hashmap_pointer myMap = new_hashmap(string_hash_function,
 																			 str_equal_function);
-	hash_map_add(myMap, myStruct->name, myStruct);
-	hash_map_add(myMap, myStruct2->name, myStruct2);
-	hash_map_add(myMap, myStruct3->name, myStruct3);
-	struct test * getted_struct = hash_map_get(myMap, myStruct->name);
-	struct test * getted_struct2 = hash_map_get(myMap, myStruct2->name);
-	struct test * getted_struct3 = hash_map_get(myMap, myStruct3->name);
-	struct test * invalid = hash_map_get(myMap,"inexistant");
+	hashmap_add(myMap, myStruct->name, myStruct);
+	hashmap_add(myMap, myStruct2->name, myStruct2);
+	hashmap_add(myMap, myStruct3->name, myStruct3);
+	struct test * getted_struct = hashmap_get(myMap, myStruct->name);
+	struct test * getted_struct2 = hashmap_get(myMap, myStruct2->name);
+	struct test * getted_struct3 = hashmap_get(myMap, myStruct3->name);
+	struct test * invalid = hashmap_get(myMap,"inexistant");
 	printf("Received struct : name = '%s', n = '%d'\n",
 				 getted_struct->name,
 				 getted_struct->n);
@@ -58,11 +58,11 @@ int main(int argc, char ** argv){
 				 getted_struct3->name,
 				 getted_struct3->n);
 	printf("Is invalid working ? %d\n", invalid == NULL &&
-				 !hash_map_exists(myMap,"inexistant"));
-	hash_map_remove(myMap, myStruct2->name, false, true);
-	struct test * removed = hash_map_get(myMap,"plouf");
+				 !hashmap_exists(myMap,"inexistant"));
+	hashmap_remove(myMap, myStruct2->name, false, true);
+	struct test * removed = hashmap_get(myMap,"plouf");
 	printf("Is invalid working ? %d\n", removed == NULL &&
-				 !hash_map_exists(myMap,"plouf"));
+				 !hashmap_exists(myMap,"plouf"));
 
 	hashmap_destroy(myMap,false,true);
 

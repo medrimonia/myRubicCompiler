@@ -39,7 +39,7 @@ void fill_map(linked_list_pointer * map, int size){
 		map[i] = new_linked_list();
 }
 
-hashmap_pointer new_hash_map(hash_function h_f, equals_function e_f){
+hashmap_pointer new_hashmap(hash_function h_f, equals_function e_f){
 	struct hashmap * hm = malloc(sizeof(struct hashmap));
 	hm->h_f = h_f;
 	hm->e_f = e_f;
@@ -50,20 +50,20 @@ hashmap_pointer new_hash_map(hash_function h_f, equals_function e_f){
 	return hm;
 }
 
-void * hash_map_get(hashmap_pointer hm, void * key){
+void * hashmap_get(hashmap_pointer hm, void * key){
 	e_p element = getElementByKey(hm, key);
 	if (element == NULL)
 		return NULL;	
 	return element->data;
 }
 
-bool hash_map_exists(hashmap_pointer hm, void * key){
+bool hashmap_exists(hashmap_pointer hm, void * key){
 	return getElementByKey(hm, key) != NULL;
 }
 
-void * hash_map_add(hashmap_pointer hm, void * key, void * value){
+void * hashmap_add(hashmap_pointer hm, void * key, void * value){
 	//TODO increase size if nb_elements > map_size
-	if (hash_map_exists(hm, key))
+	if (hashmap_exists(hm, key))
 		return NULL;
 	int index = get_index(hm, key);
 	e_p element = malloc(sizeof(struct hashmap_element));
@@ -73,7 +73,7 @@ void * hash_map_add(hashmap_pointer hm, void * key, void * value){
 	hm->nb_elements++;
 }
 
-void hash_map_remove(hashmap_pointer hm,
+void hashmap_remove(hashmap_pointer hm,
 										 void * key,
 										 bool free_key,
 										 bool free_data){
@@ -104,7 +104,7 @@ void hash_map_remove(hashmap_pointer hm,
 	}
 }
 
-int hash_map_size(hashmap_pointer hm){
+int hashmap_size(hashmap_pointer hm){
 	return hm->nb_elements;
 }
 
