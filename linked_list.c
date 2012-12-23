@@ -9,6 +9,7 @@ linked_list_pointer new_linked_list(){
 	new->first = NULL;
 	new->actual = NULL;
 	new->size = 0;
+	return new;
 }
 
 void linked_list_next(linked_list_pointer l){

@@ -1,4 +1,4 @@
-CFLAGS= -std=c99 -g   # -g, -O3 , ... par exemple
+CFLAGS= -std=c99 -g -Wall # -g, -O3 , ... par exemple
 LDFLAGS=-ll -ly # les bibliotheques necessaires
 CC=gcc
 

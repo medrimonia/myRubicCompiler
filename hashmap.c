@@ -71,6 +71,7 @@ void * hashmap_add(hashmap_pointer hm, void * key, void * value){
 	element->data = value;
 	linked_list_insert_in_head(hm->map[index], element);
 	hm->nb_elements++;
+	return value;
 }
 
 void hashmap_remove(hashmap_pointer hm,
