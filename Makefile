@@ -8,11 +8,11 @@ lex.yy.c: scanner.l
 	lex $<
 y.tab.c: parse.y
 	yacc -d $<
-y.tab.o: y.tab.c y.tab.h
+y.tab.o: y.tab.c y.tab.h context.h
 	$(CC) $(CFLAGS) -c $<
 lex.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) -c $<
-rubic: y.tab.o lex.yy.o
+rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.s: %.ll
@@ -23,6 +23,12 @@ hello_world: hello_world.s
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
+
+context.h : dictionnary.h
+
+context.o : context.h
+
+dictionnary.o : dictionnary.h
 
 hashmap.o: hashmap.h linked_list.h
 

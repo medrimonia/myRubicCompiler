@@ -18,6 +18,7 @@
 
 #include <stdbool.h>
 
+#include "hashmap.h"
 
 typedef hashmap_pointer dictionnary_pointer;
 

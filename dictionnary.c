@@ -8,6 +8,10 @@
  * by using an hashmap structure
  */
 
+#include <string.h>
+
+#include "dictionnary.h"
+
 #define NB_PRIMES 4
 
 int primes[] = {3,5,7,11};
@@ -29,8 +33,8 @@ bool str_equal_function(void * key_1, void * key_2){
 }
 
 dictionnary_pointer new_dictionnary(){
-	return new_hash_map(string_hash_function,
-											str_equal_function);
+	return new_hashmap(string_hash_function,
+										 str_equal_function);
 }
 
 void * dictionnary_get(dictionnary_pointer d, char * key){
@@ -57,7 +61,5 @@ int dictionnary_size(dictionnary_pointer d){
 void dictionnary_destroy(hashmap_pointer d,
 												 bool free_keys,
 												 bool free_data){
-	hashmap(d, free_keys, free_data);
+	hashmap_destroy(d, free_keys, free_data);
 }
-
-#endif
