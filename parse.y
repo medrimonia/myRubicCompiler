@@ -6,14 +6,21 @@
 	context_pointer global_context;
 	context_pointer actual_context;
 
+	int yydebug = 1;
+
 %}
 %union{
 	int i;
 	char * s;
  }
 
+%token <s> STRING
+
+
+%token <s> ID
+
 %token AND OR CLASS IF THEN ELSE END WHILE DO DEF LEQ GEQ 
-%token STRING FLOAT INT ID FOR TO RETURN IN NEQ
+%token FLOAT INT FOR TO RETURN IN NEQ
 %left '*' 
 %left '/'
 %left '+' '-'
@@ -45,6 +52,7 @@ stmt		: IF expr THEN stmts terms END
                 | WHILE expr DO term stmts terms END 
                 | lhs '=' expr
 {
+	printf("Variable named '%s'.\n", $1);
 	if (!is_declared_global_variable(actual_context,$1)){
 		printf("Declaring a variable named '%s'.\n", $1);
 		declare_global_variable(actual_context,$1);
@@ -65,6 +73,11 @@ params          : ID ',' params
                 | ID
 ; 
 lhs             : ID
+{
+	printf("test : %s\n", $1);
+	$$ = $1;
+	printf("ok\n");
+}
                 | ID '.' primary
                 | ID '(' exprs ')'
 ;

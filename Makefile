@@ -1,13 +1,14 @@
 CFLAGS= -std=c99 -g -Wall -Wextra # -g, -O3 , ... par exemple
 LDFLAGS=-ll -ly # les bibliotheques necessaires
 CC=gcc
+YACCFLAGS= #--debug --verbose
 
 all: rubic
 
 lex.yy.c: scanner.l
 	lex $<
 y.tab.c: parse.y
-	yacc -d $<
+	yacc $(YACCFLAGS) -d $<
 y.tab.o: y.tab.c y.tab.h context.h
 	$(CC) $(CFLAGS) -c $<
 lex.yy.o: lex.yy.c
