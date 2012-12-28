@@ -3,6 +3,7 @@
   #include "y.tab.h"
 	#include "context.h"
 	#include "tree.h"
+	#include "code_generator.h"
 
 	context_pointer global_context;
 	context_pointer actual_context;
@@ -34,7 +35,7 @@
 %left '<' '>' LEQ GEQ EQ
 %left AND OR
 
-%type <s> lhs
+%type <node> lhs
 %type <node> expr
 %type <node> primary
 %type <node> stmt
@@ -57,7 +58,9 @@ topstmts        :
 | topstmts terms topstmt
 {
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	printf("topstmts : left_child : %p\n",$1);
 	$$->left_child = $1;
+	printf("topstmts : right_child : %p\n",$3);
 	$$->right_child = $3;
 	$$->type = LIST;
 }
@@ -75,7 +78,9 @@ stmts	        : /* none */
                 | stmts terms stmt
 {
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	printf("left_child : %p\n",$1);
 	$$->left_child = $1;
+	printf("stmts terms stmt : right_child : %p\n",$3);
 	$$->right_child = $3;
 	$$->type = LIST;
 }
@@ -87,19 +92,27 @@ stmt		: IF expr THEN stmts terms END
                 | WHILE expr DO term stmts terms END 
                 | lhs '=' expr
 {
-	if (!is_declared_global_variable(actual_context,$1)){
-		printf("Declaring a variable named '%s'.\n", $1);
-		declare_global_variable(actual_context,$1);
+	if (!is_declared_global_variable(actual_context,$1->content)){
+		printf("Declaring a variable named '%s'.\n", (char *) $1->content);
+		declare_global_variable(actual_context,$1->content);
 	}
 	else{
-		printf("Variable %s was already declared\n", $1);
+		printf("Variable %s was already declared\n", (char *) $1->content);
 		// variable won't be added to the dictionnary, access to it will be lost
 		free($1);
 	}
+	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	printf("lhs = expr : left_child : %p\n",$1);
+	$$->left_child = $1;
+	printf("lhs = expr : right_child : %p\n",$3);
+	$$->right_child = $3;
+	$$->type = AFFECT;
+	
 }
                 | RETURN expr
 {
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	printf("left_child : %p\n",$2);
 	$$->left_child = $2;
 	$$->right_child = NULL;
 	$$->type = RETURN;
@@ -116,7 +129,11 @@ params          : ID ',' params
 ; 
 lhs             : ID
 {
-	$$ = $1;
+	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$->left_child = NULL;
+	$$->right_child = NULL;
+	$$->type = IDENTIFIER;
+	$$->content = $1;
 }
                 | ID '.' primary
                 | ID '(' exprs ')'
@@ -148,7 +165,14 @@ additive_expr   : multiplicative_expr { $$ = $1;}
 ;
 multiplicative_expr : multiplicative_expr '*' primary
                     | multiplicative_expr '/' primary
-                    | primary {$$ = $1;}
+                    | primary
+{
+	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$->left_child = NULL;
+	$$->right_child = NULL;
+	$$->content = $1;
+	$$->type = PRIMARY;
+}
 ;
 opt_terms	: /* none */
             | terms
@@ -168,6 +192,7 @@ int main() {
 	global_context = new_context();
 	actual_context = global_context;
   yyparse();
+	generate_code(global_root);
 	destroy_context(global_context);
   return 0;
 }

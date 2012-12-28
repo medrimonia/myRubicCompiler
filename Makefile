@@ -1,7 +1,7 @@
 CFLAGS= -std=c99 -g -Wall -Wextra # -g, -O3 , ... par exemple
 LDFLAGS=-ll -ly # les bibliotheques necessaires
 CC=gcc
-YACCFLAGS= #--debug --verbose
+YACCFLAGS= #--debug --verbose #used to debug grammar issues
 
 all: rubic
 
@@ -9,11 +9,11 @@ lex.yy.c: scanner.l
 	lex $<
 y.tab.c: parse.y tree.h
 	yacc $(YACCFLAGS) -d $<
-y.tab.o: y.tab.c y.tab.h context.h tree.h
+y.tab.o: y.tab.c y.tab.h context.h tree.h code_generator.h
 	$(CC) $(CFLAGS) -c $<
 lex.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) -c $<
-rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o
+rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o code_generator.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.s: %.ll
@@ -28,6 +28,8 @@ hello_world: hello_world.s
 context.h : dictionnary.h
 
 context.o : context.h
+
+code_generator.o : code_generator.h
 
 dictionnary.o : dictionnary.h
 
