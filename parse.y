@@ -127,6 +127,7 @@ term            : ';'
 int main() {
 	global_context = new_context();
 	actual_context = global_context;
-  yyparse(); 
+  yyparse();
+	destroy_context(global_context);
   return 0;
 }

@@ -54,7 +54,7 @@ void declare_global_variable(context_pointer c, char * name){
 	}
 	else{
 		//TODO add control of variable, once parameter has changed
-		dictionnary_add(c->global_variables, name, name);
+		dictionnary_add(c->global_variables, name, NULL);
 	}
 }
 
