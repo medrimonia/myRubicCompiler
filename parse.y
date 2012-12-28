@@ -41,6 +41,9 @@
 %type <node> comp_expr
 %type <node> additive_expr
 %type <node> multiplicative_expr
+%type <node> topstmts
+%type <node> topstmt
+%type <node> stmts
 
 %%
 
@@ -50,17 +53,33 @@ program		:  topstmts opt_terms
 }
 ;
 topstmts        :      
-| topstmt
+| topstmt { global_root = $1;}
 | topstmts terms topstmt
+{
+	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$->left_child = $1;
+	$$->right_child = $3;
+	$$->type = LIST;
+	global_root = $$;
+}
 ;
 topstmt	        : CLASS ID term stmts END 
                 | CLASS ID '<' ID term stmts END
-                | stmt
+| stmt { $$ = $1;}
 ;
 
 stmts	        : /* none */
                 | stmt
+{
+	$$ = $1;
+}
                 | stmts terms stmt
+{
+	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$->left_child = $1;
+	$$->right_child = $3;
+	$$->type = LIST;
+}
                 ;
 
 stmt		: IF expr THEN stmts terms END

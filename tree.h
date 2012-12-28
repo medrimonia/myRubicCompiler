@@ -4,7 +4,8 @@
 typedef enum {
 	PRIMARY,
 	EXPR,
-	AFFECT
+	AFFECT,
+	LIST
 } node_type;
 
 
