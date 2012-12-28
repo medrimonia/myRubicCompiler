@@ -49,18 +49,17 @@
 
 program		:  topstmts opt_terms
 {
-	//TODO : global_root
+	global_root = $1;
 }
 ;
 topstmts        :      
-| topstmt { global_root = $1;}
+| topstmt { $$ = $1;}
 | topstmts terms topstmt
 {
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
 	$$->left_child = $1;
 	$$->right_child = $3;
 	$$->type = LIST;
-	global_root = $$;
 }
 ;
 topstmt	        : CLASS ID term stmts END 
