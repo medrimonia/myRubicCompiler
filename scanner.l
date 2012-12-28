@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "y.tab.h"
+#include "tree.h"
 
 int column=0; int lineno=0;
 

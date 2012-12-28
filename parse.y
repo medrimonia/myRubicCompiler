@@ -1,17 +1,24 @@
-%{
+%code top{
   #include <stdio.h>
   #include "y.tab.h"
 	#include "context.h"
+	#include "tree.h"
 
 	context_pointer global_context;
 	context_pointer actual_context;
 
+	tn_pointer global_root;
+
 	int yydebug = 1;
 
-%}
+}
+%code requires{
+  #include "tree.h"
+}
 %union{
 	int i;
 	char * s;
+	tn_pointer node;
  }
 
 %token <s> STRING
@@ -28,9 +35,19 @@
 %left AND OR
 
 %type <s> lhs
+%type <node> expr
+%type <node> primary
+%type <node> stmt
+%type <node> comp_expr
+%type <node> additive_expr
+%type <node> multiplicative_expr
 
 %%
+
 program		:  topstmts opt_terms
+{
+	//TODO : global_root
+}
 ;
 topstmts        :      
 | topstmt
@@ -52,16 +69,23 @@ stmt		: IF expr THEN stmts terms END
                 | WHILE expr DO term stmts terms END 
                 | lhs '=' expr
 {
-	printf("Variable named '%s'.\n", $1);
 	if (!is_declared_global_variable(actual_context,$1)){
 		printf("Declaring a variable named '%s'.\n", $1);
 		declare_global_variable(actual_context,$1);
 	}
 	else{
-		printf("Variable was already declared\n");
+		printf("Variable %s was already declared\n", $1);
+		// variable won't be added to the dictionnary, access to it will be lost
+		free($1);
 	}
 }
                 | RETURN expr
+{
+	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$->left_child = $2;
+	$$->right_child = NULL;
+	$$->type = RETURN;
+}
                 | DEF ID opt_params term stmts terms END
 ; 
 
@@ -74,9 +98,7 @@ params          : ID ',' params
 ; 
 lhs             : ID
 {
-	printf("test : %s\n", $1);
 	$$ = $1;
-	printf("ok\n");
 }
                 | ID '.' primary
                 | ID '(' exprs ')'
@@ -92,7 +114,7 @@ primary         : lhs
 ;
 expr            : expr AND comp_expr
                 | expr OR comp_expr
-                | comp_expr
+                | comp_expr { $$ = $1;}
 ;
 comp_expr       : additive_expr '<' additive_expr
                 | additive_expr '>' additive_expr
@@ -100,28 +122,28 @@ comp_expr       : additive_expr '<' additive_expr
                 | additive_expr GEQ additive_expr
                 | additive_expr EQ additive_expr
                 | additive_expr NEQ additive_expr
-                | additive_expr
+                | additive_expr { $$ = $1;}
 ;
-additive_expr   : multiplicative_expr
+additive_expr   : multiplicative_expr { $$ = $1;}
                 | additive_expr '+' multiplicative_expr
                 | additive_expr '-' multiplicative_expr
 ;
 multiplicative_expr : multiplicative_expr '*' primary
                     | multiplicative_expr '/' primary
-                    | primary
+                    | primary {$$ = $1;}
 ;
 opt_terms	: /* none */
-		| terms
-		;
+            | terms
+						;
 
 terms		: terms ';'
-                | terms '\n'
-		| ';'
-                | '\n'
-		;
+          | terms '\n'
+          | ';'
+          | '\n'
+          ;
 term            : ';'
                 | '\n'
-;
+                ;
 %%
 
 int main() {

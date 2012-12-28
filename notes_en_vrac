@@ -21,3 +21,17 @@ Liste des types :
 		- class
 			- méthodes
 	- fonction
+
+
+- tree option
+	- args :
+		- max 2 pour opérateurs et cie
+		- max n pour fonctions (linkedlist?)
+  - type
+		- opérateur/fonction/move/affectation
+	- 
+
+
+Problèmes :
+- Résolution dynamique du typage
+- stmt : ... | lhs '=' expr avec lhs = ID | ID '.' primary | ID '(' exprs ')'
