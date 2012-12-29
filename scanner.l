@@ -29,9 +29,9 @@ I ([0-9]+)
 S (\"[^\n\"]*\")
 ID ([$@]?[a-zA-Z_][a-zA-Z_0-9]*)
 %%
-{F}      { count(); return(FLOAT); }
-{I}      { count(); return(INT); }
-{S}      { count(); return(STRING); }
+{F}      { sscanf(yytext, "%f",&yylval.f);count(); return(FLOAT); }
+{I}      { sscanf(yytext, "%f",&yylval.i);count(); return(INT); }
+{S}      { yylval.s = strdup(yytext);count(); return(STRING); }
 "for"    { count(); return(FOR); }
 "while"  { count(); return(WHILE);}
 "if"     { count(); return(IF); }

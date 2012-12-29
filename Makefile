@@ -13,7 +13,7 @@ y.tab.o: y.tab.c y.tab.h context.h tree.h code_generator.h
 	$(CC) $(CFLAGS) -c $<
 lex.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) -c $<
-rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o code_generator.o
+rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o code_generator.o tree.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.s: %.ll
@@ -25,7 +25,9 @@ hello_world: hello_world.s
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
-context.h : dictionnary.h
+tree.o : tree.h
+
+context.o : dictionnary.h
 
 context.o : context.h
 
