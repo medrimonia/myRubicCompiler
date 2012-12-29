@@ -61,9 +61,7 @@ topstmts        :
 | topstmts terms topstmt
 {
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
-	printf("topstmts : left_child : %p\n",$1);
 	$$->left_child = $1;
-	printf("topstmts : right_child : %p\n",$3);
 	$$->right_child = $3;
 	$$->type = LIST;
 }
@@ -81,9 +79,7 @@ stmts	        : /* none */
                 | stmts terms stmt
 {
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
-	printf("left_child : %p\n",$1);
 	$$->left_child = $1;
-	printf("stmts terms stmt : right_child : %p\n",$3);
 	$$->right_child = $3;
 	$$->type = LIST;
 }
@@ -96,17 +92,15 @@ stmt		: IF expr THEN stmts terms END
                 | lhs '=' expr
 {
 	if (!is_declared_global_variable(actual_context,$1->content)){
-		printf("Declaring a variable named '%s'.\n", (char *) $1->content);
+		//printf("Declaring a variable named '%s'.\n", (char *) $1->content);
 		declare_global_variable(actual_context,$1->content);
 	}
 	else{
-		printf("Variable %s was already declared\n", (char *) $1->content);
+		//printf("Variable %s was already declared\n", (char *) $1->content);
 		// variable won't be added to the dictionnary, access to it will be lost
 	}
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
-	printf("lhs = expr : left_child : %p\n",$1);
 	$$->left_child = $1;
-	printf("lhs = expr : right_child : %p\n",$3);
 	$$->right_child = $3;
 	$$->type = AFFECT;
 	
@@ -114,7 +108,6 @@ stmt		: IF expr THEN stmts terms END
                 | RETURN expr
 {
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
-	printf("left_child : %p\n",$2);
 	$$->left_child = $2;
 	$$->right_child = NULL;
 	$$->type = RETURN;
@@ -167,7 +160,6 @@ primary         : lhs
 	value->t = PRIMARY_INT;
 	value->i = $1;
 	$$->content = value;
-	printf("PRIMARY_INT value : %d\n",value->i);
 }
                 | '(' expr ')'
 ;

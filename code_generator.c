@@ -36,7 +36,7 @@ void generate_code_primary(tn_pointer node){
 	case PRIMARY_FLOAT: //TODO : handle later
 		break;
 	case PRIMARY_INT :
-		printf("%%%d = i32 %d\n", node->reg_number, p->i);
+		printf("%%%d = add i32 %d, 0\n", node->reg_number, p->i);
 		break;
 	}
 }
@@ -49,7 +49,7 @@ void generate_code_affect(tn_pointer node){
 	generate_code(node->left_child);
 	generate_code(node->right_child);
 	node->reg_number = actual_register++;
-	printf("%%%s = i32 %%%d\n",
+	printf("%%%s = add i32 %%%d, 0\n",
 				 (char *) node->left_child->content,
 				 node->right_child->reg_number);
 } 

@@ -19,6 +19,12 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o code_gen
 %.s: %.ll
 	llc $<
 
+test.ll: test.txt rubic
+	./rubic <test.txt >test.ll
+
+test: test.s
+	$(CC) -o $@ $<
+
 hello_world: hello_world.s
 	$(CC) -o $@ $<
 
