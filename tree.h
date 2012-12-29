@@ -22,7 +22,7 @@ struct tree_node{
 	struct tree_node * left_child;
 	struct tree_node * right_child;
 	node_type type;
-	char * reg;
+	int reg_number;
 	void * content;
 };
 

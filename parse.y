@@ -167,6 +167,7 @@ primary         : lhs
 	value->t = PRIMARY_INT;
 	value->i = $1;
 	$$->content = value;
+	printf("PRIMARY_INT value : %d\n",value->i);
 }
                 | '(' expr ')'
 ;
@@ -186,7 +187,8 @@ additive_expr   : multiplicative_expr { $$ = $1;}
                 | additive_expr '+' multiplicative_expr
 {
 	$$ = new_tree_node(ADDITION);
-	$$->content = $1;
+	$$->left_child = $1;
+	$$->right_child = $3;
 }
                 | additive_expr '-' multiplicative_expr
 ;
