@@ -108,10 +108,8 @@ stmt		: IF expr THEN stmts terms END
 }
                 | RETURN expr
 {
-	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$ = new_tree_node(RETURN_NODE);
 	$$->left_child = $2;
-	$$->right_child = NULL;
-	$$->type = RETURN;
 }
                 | DEF ID opt_params term stmts terms END
 								{
@@ -220,7 +218,7 @@ int main() {
 	global_context = new_context();
 	actual_context = global_context;
   yyparse();
-	printf("declare i32 @puts(i32*)\n"); //TODO Hack
+	//printf("declare i32 @puts(i32*)\n"); //TODO Hack
 	generate_code(global_root);
 	destroy_context(global_context);
   return 0;

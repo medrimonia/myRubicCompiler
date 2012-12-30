@@ -25,6 +25,7 @@ int generate_code(tn_pointer node){
 	case IDENTIFIER : generate_code_identifier(node); break;
 	case ADDITION : generate_code_addition(node); break;
 	case FUNCTION : generate_code_function(node); break;
+	case RETURN_NODE : generate_code_return(node); break;
 	default: break;
 	}
 	return 0;	
@@ -66,7 +67,7 @@ void generate_code_list(tn_pointer node){
 }
 
 void generate_code_identifier(tn_pointer node){
-
+	printf("%%%d = load i32 * %%test\n", actual_register++);
 }
 
 void generate_code_addition(tn_pointer node){
@@ -87,10 +88,13 @@ void generate_code_function(tn_pointer node){
 	printf("define i32 @%s(){\n",f->name);
 	printf("%%test = alloca i32, align 4\n");//TODO Hack
 	generate_code(f->root);
-	printf("%%%d = load i32 * %%test\n", actual_register);//TODO Hack
-	//printf("call i32 @puts(i32 * %%test)\n");//TODO Hack
-	printf("ret i32 %%%d\n", actual_register);//TODO Hack
 	printf("}\n");
+}
+
+void generate_code_return(tn_pointer node){
+	// TODO handle type
+	printf("ret i32 %%%d\n", actual_register - 1);
+	
 }
 
 void generate_variable_allocation(function_p f){

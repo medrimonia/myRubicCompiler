@@ -9,7 +9,8 @@ typedef enum {
 	LIST,
 	IDENTIFIER,
 	ADDITION,
-	FUNCTION
+	FUNCTION,
+	RETURN_NODE
 } node_type;
 
 typedef enum{
