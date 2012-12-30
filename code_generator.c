@@ -4,7 +4,7 @@
 #include "code_generator.h"
 #include "function.h"
 
-int actual_register = 1;
+int actual_register = 0;
 
 void generate_code_primary(tn_pointer node);
 void generate_code_expr(tn_pointer node);
@@ -33,7 +33,7 @@ int generate_code(tn_pointer node){
 
 void generate_code_primary(tn_pointer node){
 	primary_p p = (primary_p) node->content;
-	node->reg_number = actual_register++;
+	node->reg_number = ++actual_register;
 	switch(p->t){
 	case PRIMARY_STRING: //TODO : handle later
 		break;
@@ -67,13 +67,13 @@ void generate_code_list(tn_pointer node){
 }
 
 void generate_code_identifier(tn_pointer node){
-	printf("%%%d = load i32 * %%test\n", actual_register++);
+	printf("%%%d = load i32 * %%test\n", ++actual_register);
 }
 
 void generate_code_addition(tn_pointer node){
 	generate_code(node->left_child);
 	generate_code(node->right_child);
-	node->reg_number = actual_register++;
+	node->reg_number = ++actual_register;
  
 	//TODO handle type
 	printf("%%%d = add i32 %%%d, %%%d\n",
@@ -93,7 +93,7 @@ void generate_code_function(tn_pointer node){
 
 void generate_code_return(tn_pointer node){
 	// TODO handle type
-	printf("ret i32 %%%d\n", actual_register - 1);
+	printf("ret i32 %%%d\n", actual_register);
 	
 }
 
