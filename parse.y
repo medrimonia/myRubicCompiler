@@ -4,6 +4,7 @@
 	#include "context.h"
 	#include "tree.h"
 	#include "code_generator.h"
+	#include "function.h"
 
 	context_pointer global_context;
 	context_pointer actual_context;
@@ -113,6 +114,15 @@ stmt		: IF expr THEN stmts terms END
 	$$->type = RETURN;
 }
                 | DEF ID opt_params term stmts terms END
+								{
+									//TODO improve : handle opt params etc
+									actual_context = create_context_child(actual_context);
+									function_p f = new_function(actual_context);
+									f->name = $2;
+									add_function_to_context(f, actual_context->parent_context);
+									printf("FUNCTION ADDED\n");
+									//TODO handling nodes, null node error
+								}
 ; 
 
 opt_params      : /* none */

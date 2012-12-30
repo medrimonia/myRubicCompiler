@@ -1,0 +1,4 @@
+def main()
+		test = 3 + 5;
+		test = 3 + 5;
+end
