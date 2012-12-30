@@ -120,8 +120,9 @@ stmt		: IF expr THEN stmts terms END
 									function_p f = new_function(actual_context);
 									f->name = $2;
 									add_function_to_context(f, actual_context->parent_context);
-									printf("FUNCTION ADDED\n");
-									//TODO handling nodes, null node error
+									f->root = $5; //stmts = code
+									$$ = new_tree_node(FUNCTION);
+									$$->content = f;
 								}
 ; 
 
@@ -219,6 +220,7 @@ int main() {
 	global_context = new_context();
 	actual_context = global_context;
   yyparse();
+	printf("declare i32 @puts(i32*)\n"); //TODO Hack
 	generate_code(global_root);
 	destroy_context(global_context);
   return 0;

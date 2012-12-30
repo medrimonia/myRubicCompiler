@@ -2,6 +2,7 @@
 #define FUNCTION_H
 
 #include "context.h"
+#include "tree.h"
 #include "linked_list.h"
 
 /* TODO hash function and equals function in order to be able to use multiple
@@ -12,6 +13,7 @@ struct function{
 	context_pointer inner_context;
 	char * name;
 	linked_list_pointer parameters;
+	tn_pointer root;
 	//TODO handle return type
 };
 

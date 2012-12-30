@@ -8,7 +8,8 @@ typedef enum {
 	AFFECT,
 	LIST,
 	IDENTIFIER,
-	ADDITION
+	ADDITION,
+	FUNCTION
 } node_type;
 
 typedef enum{
