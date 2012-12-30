@@ -1,7 +1,7 @@
 CFLAGS= -std=c99 -g -Wall -Wextra # -g, -O3 , ... par exemple
 LDFLAGS=-ll -ly # les bibliotheques necessaires
 CC=gcc
-YACCFLAGS= --debug --verbose #used to debug grammar issues
+YACCFLAGS= #--debug --verbose #used to debug grammar issues
 
 all: rubic
 
@@ -66,7 +66,7 @@ EXECUTABLES= \
 .PHONY: clean mrproper
 
 clean:
-	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h
+	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output test.ll
 
 mrproper: clean
 	rm -rf $(EXECUTABLES)
