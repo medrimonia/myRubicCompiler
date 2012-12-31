@@ -70,4 +70,17 @@ void dictionnary_destroy(dictionnary_pointer d,
 												 bool free_keys,
 												 bool free_data);
 
+
+
+void dictionnary_start_iteration(dictionnary_pointer d);
+
+void * dictionnary_get_current_key(dictionnary_pointer d);
+
+void * dictionnary_get_current_value(dictionnary_pointer d);
+
+void dictionnary_next_element(dictionnary_pointer d);
+
+bool dictionnary_is_ended_iteration(dictionnary_pointer d);
+
+
 #endif

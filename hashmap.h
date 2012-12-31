@@ -20,6 +20,7 @@ struct hashmap{
 	int nb_elements;
 	int map_size;
 	linked_list_pointer * map;
+	int actual_indice;
 };
 
 
@@ -73,5 +74,16 @@ int hashmap_size(hashmap_pointer hm);
 void hashmap_destroy(hashmap_pointer hm,
 										 bool free_keys,
 										 bool free_data);
+
+
+void hashmap_start_iteration(hashmap_pointer hm);
+
+void * hashmap_get_current_key(hashmap_pointer hm);
+
+void * hashmap_get_current_value(hashmap_pointer hm);
+
+void hashmap_next_element(hashmap_pointer hm);
+
+bool hashmap_is_ended_iteration(hashmap_pointer hm);
 
 #endif

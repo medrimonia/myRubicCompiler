@@ -63,3 +63,24 @@ void dictionnary_destroy(hashmap_pointer d,
 												 bool free_data){
 	hashmap_destroy(d, free_keys, free_data);
 }
+
+
+void dictionnary_start_iteration(dictionnary_pointer d){
+	hashmap_start_iteration(d);
+}
+
+void * dictionnary_get_current_key(dictionnary_pointer d){
+	return hashmap_get_current_key(d);
+}
+
+void * dictionnary_get_current_value(dictionnary_pointer d){
+	return hashmap_get_current_value(d);
+}
+
+void dictionnary_next_element(dictionnary_pointer d){
+	hashmap_next_element(d);
+}
+
+bool dictionnary_is_ended_iteration(dictionnary_pointer d){
+	return hashmap_is_ended_iteration(d);
+}

@@ -12,6 +12,9 @@ void generate_code_affect(tn_pointer node);
 void generate_code_list(tn_pointer node);
 void generate_code_identifier(tn_pointer node);
 void generate_code_addition(tn_pointer node);
+void generate_code_function(tn_pointer node);
+void generate_code_return();
+void generate_variable_allocation(function_p f);
 
 
 int generate_code(tn_pointer node){
@@ -86,17 +89,26 @@ void generate_code_function(tn_pointer node){
 	function_p f = (function_p) node->content;
 	// TODO handle type and parameters
 	printf("define i32 @%s(){\n",f->name);
+	generate_variable_allocation(f);
 	printf("%%test = alloca i32, align 4\n");//TODO Hack
 	generate_code(f->root);
 	printf("}\n");
 }
 
-void generate_code_return(tn_pointer node){
+void generate_code_return(){
 	// TODO handle type
 	printf("ret i32 %%%d\n", actual_register);
 	
 }
 
+// TODO variable not added to dictionnary
 void generate_variable_allocation(function_p f){
-	
+	//TODO handle type
+	printf(";allocating\n");
+	dictionnary_pointer d = f->inner_context->local_variables;
+	dictionnary_start_iteration(d);
+	while(!dictionnary_is_ended_iteration(d)){
+		printf("%%%s = alloca i32, align 4\n",
+					 (char *) dictionnary_get_current_key(d));
+	}
 }

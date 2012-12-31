@@ -46,6 +46,7 @@ hashmap_pointer new_hashmap(hash_function h_f, equals_function e_f){
 	hm->map_size = INITIAL_SIZE;
 	hm->nb_elements = 0;
 	hm->map = malloc(INITIAL_SIZE * sizeof(linked_list_pointer));
+	hm->actual_indice = 0;
 	fill_map(hm->map, INITIAL_SIZE);
 	return hm;
 }
@@ -135,4 +136,48 @@ void hashmap_destroy(hashmap_pointer hm,
 	}
 	free(hm->map);
 	free(hm);
+}
+
+
+void hashmap_start_iteration(hashmap_pointer hm){
+	if (hm->nb_elements == 0){
+		hm->actual_indice = hm->map_size;
+		return;
+	}
+	hm->actual_indice = 0;
+	while(linked_list_size(hm->map[hm->actual_indice]) == 0)
+		hm->actual_indice++;
+	linked_list_restart(hm->map[hm->actual_indice]);
+}
+e_p hashmap_get_current_element(hashmap_pointer hm){
+	return linked_list_get(hm->map[hm->actual_indice]);
+}
+
+void * hashmap_get_current_key(hashmap_pointer hm){
+	return hashmap_get_current_element(hm)->key;
+}
+
+void * hashmap_get_current_value(hashmap_pointer hm){
+	return hashmap_get_current_element(hm)->data;
+}
+
+void hashmap_next_element(hashmap_pointer hm){
+	if (!linked_list_end(hm->map[hm->actual_indice])){
+		linked_list_next(hm->map[hm->actual_indice]);
+		return;
+	}
+	while(hm->actual_indice < hm->map_size - 1){
+		hm->actual_indice++;
+		if (linked_list_size(hm->map[hm->actual_indice]) > 0){
+			linked_list_restart(hm->map[hm->actual_indice]);
+			return;
+		}
+	}
+	hm->actual_indice = hm->map_size;
+	return;
+
+}
+
+bool hashmap_is_ended_iteration(hashmap_pointer hm){
+	return hm->actual_indice == hm->map_size;
 }
