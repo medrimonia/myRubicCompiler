@@ -36,10 +36,36 @@ context_pointer create_context_child(context_pointer parent){
 	return new;
 }
 
+bool is_declared_variable(context_pointer c, char * name){
+	// TODO handle constants
+	if (name[0] == '@')
+		return is_declared_global_variable(c, name);
+	else
+		return is_declared_local_variable(c, name);
+}
+
+void declare_variable(context_pointer c, char * name){
+	// TODO handle constants
+	if (name[0] == '@')
+		return declare_global_variable(c, name);
+	else
+		return declare_local_variable(c, name);
+}
+
+
+
 bool is_declared_local_variable(context_pointer c, char * name){
+	if (c->parent_context == NULL)
+		return dictionnary_exists(c->local_variables, name);
 	return (dictionnary_exists(c->local_variables, name) ||
 					is_declared_local_variable(c->parent_context, name));
 }
+
+void declare_local_variable(context_pointer c, char * name){
+	//TODO add control of variable, once parameter has changed
+	dictionnary_add(c->local_variables, name, NULL);
+}
+
 
 bool is_declared_global_variable(context_pointer c, char * name){
 	if (c->parent_context != NULL)

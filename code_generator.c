@@ -90,7 +90,6 @@ void generate_code_function(tn_pointer node){
 	// TODO handle type and parameters
 	printf("define i32 @%s(){\n",f->name);
 	generate_variable_allocation(f);
-	printf("%%test = alloca i32, align 4\n");//TODO Hack
 	generate_code(f->root);
 	printf("}\n");
 }
@@ -110,5 +109,6 @@ void generate_variable_allocation(function_p f){
 	while(!dictionnary_is_ended_iteration(d)){
 		printf("%%%s = alloca i32, align 4\n",
 					 (char *) dictionnary_get_current_key(d));
+		dictionnary_next_element(d);
 	}
 }

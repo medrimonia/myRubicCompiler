@@ -92,9 +92,9 @@ stmt		: IF expr THEN stmts terms END
                 | WHILE expr DO term stmts terms END 
                 | lhs '=' expr
 {
-	if (!is_declared_global_variable(actual_context,$1->content)){
+	if (!is_declared_variable(actual_context,$1->content)){
 		//printf("Declaring a variable named '%s'.\n", (char *) $1->content);
-		declare_global_variable(actual_context,$1->content);
+		declare_variable(actual_context,$1->content);
 	}
 	else{
 		//printf("Variable %s was already declared\n", (char *) $1->content);
@@ -111,14 +111,17 @@ stmt		: IF expr THEN stmts terms END
 	$$ = new_tree_node(RETURN_NODE);
 	$$->left_child = $2;
 }
-                | DEF ID opt_params term stmts terms END
-								{
+                | DEF ID opt_params
+								{ // Context switch is needed before term parsing
 									//TODO improve : handle opt params etc
 									actual_context = create_context_child(actual_context);
+								}
+								term stmts[code] terms END
+								{
 									function_p f = new_function(actual_context);
 									f->name = $2;
 									add_function_to_context(f, actual_context->parent_context);
-									f->root = $5; //stmts = code
+									f->root = $code;
 									$$ = new_tree_node(FUNCTION);
 									$$->content = f;
 								}

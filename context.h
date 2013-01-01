@@ -34,9 +34,15 @@ context_pointer new_context();
 
 context_pointer create_context_child(context_pointer parent);
 
+bool is_declared_variable(context_pointer c, char * name);
+
+void declare_variable(context_pointer c, char * name);
+
 bool is_declared_local_variable(context_pointer c, char * name);
 
 bool is_declared_global_variable(context_pointer c, char * name);
+
+void declare_local_variable(context_pointer c, char * name);
 
 void declare_global_variable(context_pointer c, char * name);
 
