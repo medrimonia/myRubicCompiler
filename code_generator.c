@@ -14,7 +14,10 @@ void generate_code_identifier(tn_pointer node);
 void generate_code_addition(tn_pointer node);
 void generate_code_function(tn_pointer node);
 void generate_code_return();
+
 void generate_variable_allocation(function_p f);
+void generate_parameters(function_p f);
+void load_parameters(function_p f);
 
 
 int generate_code(tn_pointer node){
@@ -70,7 +73,12 @@ void generate_code_list(tn_pointer node){
 }
 
 void generate_code_identifier(tn_pointer node){
-	printf("%%%d = load i32 * %%test\n", ++actual_register);
+	//TODO hack
+	node->reg_number = ++actual_register;
+	printf("%%%d = load i32 * %%%s\n", 
+				 actual_register,
+				 (char *) node->content);
+	
 }
 
 void generate_code_addition(tn_pointer node){
@@ -88,14 +96,19 @@ void generate_code_addition(tn_pointer node){
 void generate_code_function(tn_pointer node){
 	function_p f = (function_p) node->content;
 	// TODO handle type and parameters
-	printf("define i32 @%s(){\n",f->name);
+	printf("define i32 @%s(",f->name);
+	generate_parameters(f);
+	printf("){\n");
 	generate_variable_allocation(f);
+	load_parameters(f);
 	generate_code(f->root);
 	printf("}\n");
 }
 
-void generate_code_return(){
+void generate_code_return(tn_pointer node){
 	// TODO handle type
+	if (node->left_child != NULL)
+		generate_code(node->left_child);
 	printf("ret i32 %%%d\n", actual_register);
 	
 }
@@ -103,7 +116,6 @@ void generate_code_return(){
 // TODO variable not added to dictionnary
 void generate_variable_allocation(function_p f){
 	//TODO handle type
-	printf(";allocating\n");
 	dictionnary_pointer d = f->inner_context->local_variables;
 	dictionnary_start_iteration(d);
 	while(!dictionnary_is_ended_iteration(d)){
@@ -111,4 +123,46 @@ void generate_variable_allocation(function_p f){
 					 (char *) dictionnary_get_current_key(d));
 		dictionnary_next_element(d);
 	}
+	// ALLOCATION for parameters
+	if (f->parameters == NULL)
+		return;
+	linked_list_restart(f->parameters);
+	while (true){
+		// TODO handle type
+		printf("%%%s = alloca i32, align 4\n",
+					 (char *) linked_list_get(f->parameters));
+		if (linked_list_end(f->parameters))
+			break;
+		linked_list_next(f->parameters);
+	}
 }
+
+void generate_parameters(function_p f){
+	if (f->parameters == NULL)
+		return;
+	linked_list_restart(f->parameters);
+	while (true){
+		// TODO handle type
+		printf("i32 %%_%s",(char *) linked_list_get(f->parameters));
+		if (linked_list_end(f->parameters))
+			break;
+		printf(", ");
+		linked_list_next(f->parameters);
+	}
+}
+
+void load_parameters(function_p f){
+	if (f->parameters == NULL)
+		return;
+	linked_list_restart(f->parameters);
+	while (true){
+		// TODO handle type
+		printf("store i32 %%_%s, i32 * %%%s\n",
+					 (char *) linked_list_get(f->parameters),
+					 (char *) linked_list_get(f->parameters));
+		if (linked_list_end(f->parameters))
+			break;
+		linked_list_next(f->parameters);
+	}
+}
+

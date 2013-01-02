@@ -16,12 +16,14 @@
 }
 %code requires{
   #include "tree.h"
+  #include "linked_list.h"
 }
 %union{
 	int i;
 	float f;
 	char * s;
 	tn_pointer node;
+	linked_list_pointer l;
  }
 
 %token <s> STRING
@@ -49,6 +51,8 @@
 %type <node> topstmts
 %type <node> topstmt
 %type <node> stmts
+%type <l> opt_params
+%type <l> params
 
 %%
 
@@ -120,6 +124,7 @@ stmt		: IF expr THEN stmts terms END
 								{
 									function_p f = new_function(actual_context);
 									f->name = $2;
+									f->parameters = $opt_params;
 									add_function_to_context(f, actual_context->parent_context);
 									f->root = $code;
 									$$ = new_tree_node(FUNCTION);
@@ -128,11 +133,19 @@ stmt		: IF expr THEN stmts terms END
 ; 
 
 opt_params      : /* none */
-                | '(' ')'
-                | '(' params ')'
+                | '(' ')' { $$ = NULL;}
+                | '(' params ')' {$$ = $2;}
 ;
 params          : ID ',' params
+{
+	linked_list_insert($3, $ID);
+	$$ = $3;
+}
                 | ID
+{
+	$$ = new_linked_list();
+	linked_list_insert($$, $ID);
+}
 ; 
 lhs             : ID
 {

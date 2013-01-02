@@ -5,9 +5,11 @@ YACCFLAGS= #--debug --verbose #used to debug grammar issues
 
 all: rubic
 
+# LEX AND YACC PART
+
 lex.yy.c: scanner.l
 	lex $<
-y.tab.c: parse.y tree.h
+y.tab.c: parse.y tree.h linked_list.h
 	yacc $(YACCFLAGS) -d $<
 y.tab.o: y.tab.c y.tab.h context.h tree.h code_generator.h
 	$(CC) $(CFLAGS) -c $<
@@ -16,8 +18,20 @@ lex.yy.o: lex.yy.c
 rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o code_generator.o tree.o function.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
+# GENERIC RULES
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
+
 %.s: %.ll
 	llc $<
+
+%.ll: %.txt rubic
+	./rubic <$< >$@
+
+# SPECIFIC RULES
+
+test_appel : test_appel.s
 
 test.ll: test.txt rubic
 	./rubic <test.txt >test.ll
@@ -27,9 +41,6 @@ test: test.s
 
 hello_world: hello_world.s
 	$(CC) -o $@ $<
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $<
 
 function.o : function.h
 

@@ -60,7 +60,8 @@ bool linked_list_end(linked_list_pointer l){
 }
 
 void linked_list_restart(linked_list_pointer l){
-	l->actual = l->first;
+	if (l->size > 0)
+		l->actual = l->first;
 }
 
 void linked_list_remove(linked_list_pointer l){
