@@ -32,6 +32,7 @@ int generate_code(tn_pointer node){
 	case ADDITION : generate_code_addition(node); break;
 	case FUNCTION : generate_code_function(node); break;
 	case RETURN_NODE : generate_code_return(node); break;
+		//TODO handling call
 	default: break;
 	}
 	return 0;	

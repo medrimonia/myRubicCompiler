@@ -53,6 +53,7 @@
 %type <node> stmts
 %type <l> opt_params
 %type <l> params
+%type <l> exprs
 
 %%
 
@@ -132,7 +133,7 @@ stmt		: IF expr THEN stmts terms END
 								}
 ; 
 
-opt_params      : /* none */
+opt_params      : /* none */ { $$ = NULL;}
                 | '(' ')' { $$ = NULL;}
                 | '(' params ')' {$$ = $2;}
 ;
@@ -149,17 +150,27 @@ params          : ID ',' params
 ; 
 lhs             : ID
 {
-	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
-	$$->left_child = NULL;
-	$$->right_child = NULL;
-	$$->type = IDENTIFIER;
+	$$ = new_tree_node(IDENTIFIER);
 	$$->content = $1;
 }
                 | ID '.' primary
                 | ID '(' exprs ')'
+								{
+									$$ = new_tree_node(CALL);
+									$$->content = new_function_call($ID);
+									((function_call_p)$$->content)->parameters = $3;
+								}
 ;
 exprs           : exprs ',' expr
+{
+	linked_list_insert($$, $1);
+	$$ = $1;
+}
                 | expr
+{
+	$$ = new_linked_list();
+	linked_list_insert($$, $1);
+}
 ;
 primary         : lhs
                 | STRING
