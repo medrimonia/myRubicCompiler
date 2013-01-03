@@ -13,7 +13,8 @@ void generate_code_list(tn_pointer node);
 void generate_code_identifier(tn_pointer node);
 void generate_code_addition(tn_pointer node);
 void generate_code_function(tn_pointer node);
-void generate_code_return();
+void generate_code_return(tn_pointer node);
+void generate_code_call(tn_pointer node);
 
 void generate_variable_allocation(function_p f);
 void generate_parameters(function_p f);
@@ -32,7 +33,7 @@ int generate_code(tn_pointer node){
 	case ADDITION : generate_code_addition(node); break;
 	case FUNCTION : generate_code_function(node); break;
 	case RETURN_NODE : generate_code_return(node); break;
-		//TODO handling call
+	case CALL : generate_code_call(node); break;
 	default: break;
 	}
 	return 0;	
@@ -95,6 +96,8 @@ void generate_code_addition(tn_pointer node){
 }
 
 void generate_code_function(tn_pointer node){
+	// TODO fix in order to avoid problems when getting out of a function
+	actual_register = 0;
 	function_p f = (function_p) node->content;
 	// TODO handle type and parameters
 	printf("define i32 @%s(",f->name);
@@ -111,6 +114,36 @@ void generate_code_return(tn_pointer node){
 	if (node->left_child != NULL)
 		generate_code(node->left_child);
 	printf("ret i32 %%%d\n", actual_register);
+}
+
+void generate_code_call(tn_pointer node){
+	// TODO handle types
+	function_call_p fc = node->content;
+	//calculating parameters values
+	linked_list_restart(fc->parameters);
+	if (!linked_list_is_empty(fc->parameters))
+		while(true){
+			generate_code(linked_list_get(fc->parameters));
+			if (linked_list_end(fc->parameters))
+				break;
+			linked_list_next(fc->parameters);
+	}
+	actual_register++;
+	printf("%%%d = call i32 @%s(",
+				 actual_register,
+				 fc->f_name);
+	//using parameters results
+	linked_list_restart(fc->parameters);
+	if (!linked_list_is_empty(fc->parameters))
+		while(true){
+			tn_pointer param = linked_list_get(fc->parameters);
+			printf("i32 %%%d",param->reg_number);
+			if (linked_list_end(fc->parameters))
+				break;
+			linked_list_next(fc->parameters);
+			printf(", ");
+	}
+	printf(")\n");
 	
 }
 

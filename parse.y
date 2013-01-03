@@ -1,4 +1,5 @@
 %code top{
+	#include <stdlib.h>
   #include <stdio.h>
   #include "y.tab.h"
 	#include "context.h"
@@ -15,6 +16,7 @@
 
 }
 %code requires{
+	#include <assert.h>
   #include "tree.h"
   #include "linked_list.h"
 }
@@ -62,7 +64,7 @@ program		:  topstmts opt_terms
 	global_root = $1;
 }
 ;
-topstmts        :      
+topstmts        :      {$$ = NULL;}
 | topstmt { $$ = $1;}
 | topstmts terms topstmt
 {
@@ -72,12 +74,20 @@ topstmts        :
 	$$->type = LIST;
 }
 ;
-topstmt	        : CLASS ID term stmts END 
+topstmt	        : CLASS ID term stmts END
+{
+	//TODO not implemented
+	$$ = NULL;
+}
                 | CLASS ID '<' ID term stmts END
+{
+	//TODO not implemented
+	$$ = NULL;
+}
 | stmt { $$ = $1;}
 ;
 
-stmts	        : /* none */
+stmts	        : /* none */ {$$ = NULL;}
                 | stmt
 {
 	$$ = $1;
@@ -92,9 +102,26 @@ stmts	        : /* none */
                 ;
 
 stmt		: IF expr THEN stmts terms END
-                | IF expr THEN stmts terms ELSE stmts terms END 
+{
+	printf("Not implemented part\n");
+	exit(EXIT_FAILURE);
+}
+                | IF expr THEN stmts terms ELSE stmts terms END
+								{
+	printf("Not implemented part\n");
+	exit(EXIT_FAILURE);
+								}
+
                 | FOR ID IN expr TO expr term stmts terms END
+								{
+	printf("Not implemented part\n");
+	exit(EXIT_FAILURE);
+								}
                 | WHILE expr DO term stmts terms END 
+								{
+	printf("Not implemented part\n");
+	exit(EXIT_FAILURE);
+								}
                 | lhs '=' expr
 {
 	if (!is_declared_variable(actual_context,$1->content)){
@@ -154,6 +181,10 @@ lhs             : ID
 	$$->content = $1;
 }
                 | ID '.' primary
+								{
+	printf("Not implemented part\n");
+	exit(EXIT_FAILURE);
+								}
                 | ID '(' exprs ')'
 								{
 									$$ = new_tree_node(CALL);
@@ -163,7 +194,7 @@ lhs             : ID
 ;
 exprs           : exprs ',' expr
 {
-	linked_list_insert($$, $1);
+	linked_list_insert($1, $3);
 	$$ = $1;
 }
                 | expr
@@ -198,6 +229,10 @@ primary         : lhs
 	$$->content = value;
 }
                 | '(' expr ')'
+								{
+	printf("Not implemented part\n");
+	exit(EXIT_FAILURE);
+								}
 ;
 expr            : expr AND comp_expr
                 | expr OR comp_expr

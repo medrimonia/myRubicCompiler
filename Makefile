@@ -32,6 +32,7 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o code_gen
 # SPECIFIC RULES
 
 test_appel : test_appel.s
+	$(CC) -o $@ $<
 
 test.ll: test.txt rubic
 	./rubic <test.txt >test.ll
