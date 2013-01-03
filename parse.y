@@ -7,6 +7,10 @@
 	#include "code_generator.h"
 	#include "function.h"
 
+	// Declaring functions in order to avoid warnings
+	int yylex(void);
+	int yyerror(char *);
+
 	context_pointer global_context;
 	context_pointer actual_context;
 

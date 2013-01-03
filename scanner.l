@@ -4,6 +4,11 @@
 #include "y.tab.h"
 #include "tree.h"
 
+// declaring function earlier in order to avoid warnings
+char * strdup(char *);
+int fileno(FILE *);
+
+
 int column=0; int lineno=0;
 
 /* Function that counts the current column */
