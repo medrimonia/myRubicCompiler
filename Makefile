@@ -83,12 +83,13 @@ EXECUTABLES= \
 	hello_world \
 	rubic	\
 	test_hashmap \
-	test_linked_list
+	test_linked_list \
+	test_appel
 
 .PHONY: clean mrproper
 
 clean:
-	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output test.ll
+	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output test.ll compile_information
 
 mrproper: clean
 	rm -rf $(EXECUTABLES)
