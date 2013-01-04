@@ -218,11 +218,11 @@ exprs           : exprs ',' expr
 primary         : lhs
                 | STRING
 {
-	add_constant(strndup($1 + 1, strlen($1) - 2));
+	int n = add_constant(strndup($1 + 1, strlen($1) - 2));
 	$$ = new_tree_node(PRIMARY);
 	primary_p value = malloc(sizeof(struct primary));
 	value->t = PRIMARY_STRING;
-	value->s = $1;
+	value->s_id = n;
 	$$->content = value;
 }
                 | FLOAT

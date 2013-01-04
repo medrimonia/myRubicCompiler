@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "code_generator.h"
 #include "function.h"
 #include "variable.h"
 #include "type.h"
+#include "constant_string_handler.h"
 
 int actual_register = 0;
 
@@ -46,10 +48,18 @@ void generate_code_primary(tn_pointer node){
 	node->reg_number = ++actual_register;
 	switch(p->t){
 	case PRIMARY_STRING: //TODO : handle later
+		printf("%%%d = ", actual_register);
+		printf("i8* getelementptr inbounds ([%d x i8]* @%d, i32 0, i32 0)\n",
+					 get_constant_size(p->s_id),
+					 p->s_id);
 		break;
 	case PRIMARY_EXPR: //TODO : handle later
+		printf("PRIMARY_EXPR not handled\n");
+		exit(EXIT_FAILURE);
 		break;
 	case PRIMARY_FLOAT: //TODO : handle later
+		printf("PRIMARY_FLOAT not handled\n");
+		exit(EXIT_FAILURE);
 		break;
 	case PRIMARY_INT :
 		printf("%%%d = add i32 %d, 0\n", node->reg_number, p->i);

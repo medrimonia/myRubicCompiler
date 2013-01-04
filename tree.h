@@ -36,7 +36,7 @@ typedef struct tree_node * tn_pointer;
 struct primary{
 	primary_type t;
 	union{
-		char * s;         // for strings
+		int s_id;         // for strings
 		int i;            // for ints
 		float f;          // for floats
 		tn_pointer child; // for expr

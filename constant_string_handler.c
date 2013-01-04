@@ -19,11 +19,24 @@ int add_constant(const char * s){
 	return nb_constants - 1;
 }
 
+const char * get_constant(int id){
+	if (id >= nb_constants)
+		return NULL;
+	return constants[id];
+}
+
+int get_constant_size(int id){
+	if (id >= nb_constants)
+		return -1;
+	return strlen(constants[id]) + 1;
+}
+
 void print_constants(){
 	int i;
 	for (i = 0; i < nb_constants; i++){
-		printf("@%d = internal constant [20 x i8] c\"%s\\00\"\n",
+		printf("@%d = internal constant [%d x i8] c\"%s\\00\"\n",
 					 i,
+					 get_constant_size(i),
 					 constants[i]);
 	}
 }
