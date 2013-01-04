@@ -1,0 +1,3 @@
+def main()
+		toto = puts("Hello World!");
+end

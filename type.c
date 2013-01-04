@@ -11,6 +11,7 @@ linked_list_pointer all_types = NULL;
 void initialize_types(){
 	all_types  = new_linked_list();
 	add_new_type("i32");
+	add_new_type("string");
 }
 
 

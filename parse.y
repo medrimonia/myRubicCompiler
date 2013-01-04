@@ -1,6 +1,7 @@
 %code top{
 	#include <stdlib.h>
   #include <stdio.h>
+	#include <string.h>
   #include "y.tab.h"
 	#include "context.h"
 	#include "tree.h"
@@ -8,11 +9,13 @@
 	#include "function.h"
 	#include "type.h"
 	#include "type_handler.h"
+	#include "constant_string_handler.h"
 
 	// Declaring functions in order to avoid warnings
 	int yylex(void);
 	int yyerror(char *);
-
+	char *strndup(const char *s, size_t n);
+	
 	context_pointer global_context;
 	context_pointer actual_context;
 
@@ -215,6 +218,7 @@ exprs           : exprs ',' expr
 primary         : lhs
                 | STRING
 {
+	add_constant(strndup($1 + 1, strlen($1) - 2));
 	$$ = new_tree_node(PRIMARY);
 	primary_p value = malloc(sizeof(struct primary));
 	value->t = PRIMARY_STRING;
@@ -296,14 +300,12 @@ term            : ';'
 %%
 
 int main() {
-	printf("initializing types\n");
 	initialize_types();//add basic types to all_types
 	global_context = new_context();
 	actual_context = global_context;
-	printf("parsing\n");
   yyparse();
 	//printf("declare i32 @puts(i32*)\n"); //TODO Hack
-	printf("generating code\n");
+	print_constants();
 	generate_code(global_root);
 	destroy_context(global_context);
   return 0;

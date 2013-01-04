@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "variable.h"
 
 variable_p new_variable(linked_list_pointer possible_types){
