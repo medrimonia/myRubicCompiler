@@ -80,13 +80,13 @@ topstmts        :      {$$ = NULL;}
 ;
 topstmt	        : CLASS ID term stmts END
 {
-	//TODO not implemented
-	$$ = NULL;
+	printf("Not implemented part\n");
+	exit(EXIT_FAILURE);
 }
                 | CLASS ID '<' ID term stmts END
 {
-	//TODO not implemented
-	$$ = NULL;
+	printf("Not implemented part\n");
+	exit(EXIT_FAILURE);
 }
 | stmt { $$ = $1;}
 ;
