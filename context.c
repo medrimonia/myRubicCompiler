@@ -9,6 +9,8 @@
 #include <stdlib.h>
 
 #include "context.h"
+#include "variable.h"
+#include "type_handler.h"
 
 context_pointer new_context(){
 	context_pointer new = malloc(sizeof(struct context));
@@ -52,8 +54,6 @@ void declare_variable(context_pointer c, char * name){
 		return declare_local_variable(c, name);
 }
 
-
-
 bool is_declared_local_variable(context_pointer c, char * name){
 	if (c->parent_context == NULL)
 		return dictionnary_exists(c->local_variables, name);
@@ -63,7 +63,8 @@ bool is_declared_local_variable(context_pointer c, char * name){
 
 void declare_local_variable(context_pointer c, char * name){
 	//TODO add control of variable, once parameter has changed
-	dictionnary_add(c->local_variables, name, NULL);
+	variable_p v = new_variable(new_full_types_list());
+	dictionnary_add(c->local_variables, name, v);
 }
 
 
@@ -79,8 +80,8 @@ void declare_global_variable(context_pointer c, char * name){
 		declare_global_variable(c->parent_context, name);
 	}
 	else{
-		//TODO add control of variable, once parameter has changed
-		dictionnary_add(c->global_variables, name, NULL);
+		variable_p v = new_variable(new_full_types_list());
+		dictionnary_add(c->global_variables, name, v);
 	}
 }
 

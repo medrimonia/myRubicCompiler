@@ -15,7 +15,7 @@ y.tab.o: y.tab.c y.tab.h context.h tree.h code_generator.h
 	$(CC) $(CFLAGS) -c $<
 lex.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) -c $<
-rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o code_generator.o tree.o function.o
+rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o code_generator.o tree.o function.o type_handler.o type.o variable.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 # GENERIC RULES
@@ -65,6 +65,12 @@ test_hashmap: hashmap.o test_hashmap.o linked_list.o
 linked_list.o: linked_list.h
 
 test_linked_list.o: linked_list.h
+
+type.o : type.h
+
+variable.o : variable.h
+
+type_handler.o : type_handler.h
 
 test_linked_list: linked_list.o test_linked_list.o
 	$(CC) -o $@ $^

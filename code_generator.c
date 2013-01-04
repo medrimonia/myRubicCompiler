@@ -3,6 +3,8 @@
 
 #include "code_generator.h"
 #include "function.h"
+#include "variable.h"
+#include "type.h"
 
 int actual_register = 0;
 
@@ -147,7 +149,7 @@ void generate_code_call(tn_pointer node){
 	
 }
 
-// TODO variable not added to dictionnary
+
 void generate_variable_allocation(function_p f){
 	//TODO handle type
 	dictionnary_pointer d = f->inner_context->local_variables;
@@ -155,6 +157,19 @@ void generate_variable_allocation(function_p f){
 	while(!dictionnary_is_ended_iteration(d)){
 		printf("%%%s = alloca i32, align 4\n",
 					 (char *) dictionnary_get_current_key(d));
+		variable_p v = dictionnary_get_current_value(d);
+		int nb_types = linked_list_size(v->possible_types);
+		printf("\tnb_types = %d\n",nb_types);
+		linked_list_restart(v->possible_types);
+		if (!linked_list_is_empty(v->possible_types)){
+			while(true){
+				type_p t = linked_list_get(v->possible_types);
+				printf("\t\ttype : '%s'\n",type_get_name(t));
+				if (linked_list_end(v->possible_types))
+					break;
+				linked_list_next(v->possible_types);
+			}
+		}
 		dictionnary_next_element(d);
 	}
 	// ALLOCATION for parameters

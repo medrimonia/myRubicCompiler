@@ -6,6 +6,8 @@
 	#include "tree.h"
 	#include "code_generator.h"
 	#include "function.h"
+	#include "type.h"
+	#include "type_handler.h"
 
 	// Declaring functions in order to avoid warnings
 	int yylex(void);
@@ -128,13 +130,17 @@ stmt		: IF expr THEN stmts terms END
 								}
                 | lhs '=' expr
 {
+	if ($1->type == CALL){
+		fprintf(stderr, "Can't affect something to a function\n");
+		exit(EXIT_FAILURE);
+	}
 	if (!is_declared_variable(actual_context,$1->content)){
 		//printf("Declaring a variable named '%s'.\n", (char *) $1->content);
 		declare_variable(actual_context,$1->content);
 	}
 	else{
-		//printf("Variable %s was already declared\n", (char *) $1->content);
 		// variable won't be added to the dictionnary, access to it will be lost
+		// free might be needed
 	}
 	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
 	$$->left_child = $1;
@@ -149,7 +155,6 @@ stmt		: IF expr THEN stmts terms END
 }
                 | DEF ID opt_params
 								{ // Context switch is needed before term parsing
-									//TODO improve : handle opt params etc
 									actual_context = create_context_child(actual_context);
 								}
 								term stmts[code] terms END
@@ -260,7 +265,17 @@ additive_expr   : multiplicative_expr { $$ = $1;}
                 | additive_expr '-' multiplicative_expr
 ;
 multiplicative_expr : multiplicative_expr '*' primary
+{
+	$$ = new_tree_node(MULTIPLY);
+	$$->left_child = $1;
+	$$->right_child = $3;
+}
                     | multiplicative_expr '/' primary
+{
+	$$ = new_tree_node(DIVIDE);
+	$$->left_child = $1;
+	$$->right_child = $3;
+}
                     | primary
 {
 	$$ = $1;
@@ -281,10 +296,14 @@ term            : ';'
 %%
 
 int main() {
+	printf("initializing types\n");
+	initialize_types();//add basic types to all_types
 	global_context = new_context();
 	actual_context = global_context;
+	printf("parsing\n");
   yyparse();
 	//printf("declare i32 @puts(i32*)\n"); //TODO Hack
+	printf("generating code\n");
 	generate_code(global_root);
 	destroy_context(global_context);
   return 0;
