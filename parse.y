@@ -147,8 +147,8 @@ stmt		: IF expr THEN stmts terms END
 	$$ = new_tree_node(AFFECT);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	printf("$1_size : %d\n",linked_list_size($1->allowed_types));
-	printf("$3_size : %d\n",linked_list_size($3->allowed_types));
+	//printf("$1_size : %d\n",linked_list_size($1->allowed_types));
+	//printf("$3_size : %d\n",linked_list_size($3->allowed_types));
 	remove_types_not_shared($1->allowed_types, $3->allowed_types);
 	//remove_types_not_shared($3->allowed_types, $1->allowed_types);
 	$$->allowed_types = $1->allowed_types;
