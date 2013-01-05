@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "type_handler.h"
 
 linked_list_pointer new_full_types_list(){
@@ -42,7 +44,7 @@ linked_list_pointer remove_types_not_shared(linked_list_pointer src,
 	linked_list_restart(src);
 	while(true){
 		bool removed = false;
-		type_p t = linked_list_get(src);
+		//type_p t = linked_list_get(src);
 		//printf("Checking type %s\n", type_get_name(t));
 		if (!type_list_contains(cmp, linked_list_get(src))){
 			// data are not erased because all types are shared.
@@ -76,4 +78,11 @@ linked_list_pointer th_addition(linked_list_pointer l1,
 																linked_list_pointer l2){
 	//TODO handle better (restriction on l1 and l2 etc)
 	return types_shared(l1,l2);
+}
+
+type_p th_true_type(linked_list_pointer l){
+	if (linked_list_size(l) != 1)// all variables must have only one type
+		return NULL;
+	linked_list_restart(l);
+	return linked_list_get(l);
 }

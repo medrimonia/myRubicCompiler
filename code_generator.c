@@ -6,6 +6,7 @@
 #include "function.h"
 #include "variable.h"
 #include "type.h"
+#include "type_handler.h"
 #include "constant_string_handler.h"
 
 int actual_register = 0;
@@ -165,8 +166,10 @@ void generate_variable_allocation(function_p f){
 	dictionnary_pointer d = f->inner_context->local_variables;
 	dictionnary_start_iteration(d);
 	while(!dictionnary_is_ended_iteration(d)){
-		printf("%%%s = alloca i32, align 4\n",
-					 (char *) dictionnary_get_current_key(d));
+		variable_p v = dictionnary_get_current_value(d);
+		printf("%%%s = alloca %s, align 4\n",
+					 (char *) dictionnary_get_current_key(d),
+					 type_get_name(th_true_type(v->allowed_types)));
 		/*variable_p v = dictionnary_get_current_value(d);
 		int nb_types = linked_list_size(v->possible_types);
 		printf("\tnb_types = %d\n",nb_types);
@@ -188,8 +191,10 @@ void generate_variable_allocation(function_p f){
 	linked_list_restart(f->parameters);
 	while (true){
 		// TODO handle type
+		//variable_p v = linked_list_get(f->parameters);
 		printf("%%%s = alloca i32, align 4\n",
 					 (char *) linked_list_get(f->parameters));
+		//th_true_type();
 		if (linked_list_end(f->parameters))
 			break;
 		linked_list_next(f->parameters);

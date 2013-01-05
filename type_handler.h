@@ -34,4 +34,9 @@ linked_list_pointer types_shared(linked_list_pointer l1,
  */
 linked_list_pointer th_addition(linked_list_pointer l1,
 																linked_list_pointer l2);
+/* Return NULL if the list doesn't contain exactly one type
+ * and the only type if the list contains only one element
+ */
+type_p th_true_type(linked_list_pointer l);
+
 #endif
