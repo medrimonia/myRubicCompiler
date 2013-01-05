@@ -2,6 +2,7 @@
 #define TREE_H
 
 #include "linked_list.h"
+#include "context.h"
 
 typedef enum {
 	NOT_DECIDED,
@@ -32,6 +33,7 @@ struct tree_node{
 	int reg_number;
 	void * content;
 	linked_list_pointer allowed_types;
+	context_pointer context;
 };
 
 typedef struct tree_node * tn_pointer;

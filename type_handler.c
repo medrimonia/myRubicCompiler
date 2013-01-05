@@ -37,6 +37,12 @@ bool type_list_contains(linked_list_pointer tl, type_p t){
 	}
 }
 
+void type_list_add(linked_list_pointer tl, type_p t){
+	if (!type_list_contains(tl, t))
+		linked_list_insert(tl, t);
+}
+
+
 linked_list_pointer remove_types_not_shared(linked_list_pointer src,
 																						linked_list_pointer cmp){
 	if (linked_list_is_empty(src))

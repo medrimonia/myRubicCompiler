@@ -2,6 +2,8 @@
 
 #include "function.h"
 
+
+
 function_p new_function(context_pointer function_context){
 	function_p new = malloc(sizeof(struct function));
 	new->inner_context = function_context;

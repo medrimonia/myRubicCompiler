@@ -19,7 +19,11 @@ linked_list_pointer new_type_list_single(type_p t);
 
 linked_list_pointer new_type_list_single_from_name(char * type_name);
 
+/* compare pointers */
 bool type_list_contains(linked_list_pointer tl, type_p t);
+
+/* add the type specified to the list if the list didn't contain it */
+void type_list_add(linked_list_pointer tl, type_p t);
 
 /* Remove of src the types which can't be found in cmp */
 linked_list_pointer remove_types_not_shared(linked_list_pointer src,

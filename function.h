@@ -21,7 +21,7 @@ struct function{
 	char * name;
 	linked_list_pointer parameters;
 	tn_pointer root;
-	//TODO handle return type
+	linked_list_pointer possible_return_types;
 };
 
 typedef struct function * function_p;

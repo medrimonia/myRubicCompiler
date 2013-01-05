@@ -88,10 +88,12 @@ void generate_code_list(tn_pointer node){
 }
 
 void generate_code_identifier(tn_pointer node){
-	//TODO hack
 	node->reg_number = ++actual_register;
-	printf("%%%d = load i32 * %%%s\n", 
+	
+	type_p t = th_true_type(node->allowed_types);
+	printf("%%%d = load %s * %%%s\n", 
 				 actual_register,
+				 type_get_name(t),
 				 (char *) node->content);
 	
 }
@@ -100,10 +102,11 @@ void generate_code_addition(tn_pointer node){
 	generate_code(node->left_child);
 	generate_code(node->right_child);
 	node->reg_number = ++actual_register;
- 
-	//TODO handle type
-	printf("%%%d = add i32 %%%d, %%%d\n",
+	
+	type_p t = th_true_type(node->allowed_types);
+	printf("%%%d = add %s %%%d, %%%d\n",
 				 node->reg_number,
+				 type_get_name(t),
 				 node->left_child->reg_number,
 				 node->right_child->reg_number);
 }
@@ -126,7 +129,11 @@ void generate_code_return(tn_pointer node){
 	// TODO handle type
 	if (node->left_child != NULL)
 		generate_code(node->left_child);
-	printf("ret i32 %%%d\n", actual_register);
+
+	//type_p t = th_true_type(node->allowed_types);	
+	printf("ret i32 %%%d\n",
+				 //type_get_name(t),
+				 actual_register);
 }
 
 void generate_code_call(tn_pointer node){

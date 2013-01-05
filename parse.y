@@ -157,6 +157,7 @@ stmt		: IF expr THEN stmts terms END
 {
 	$$ = new_tree_node(RETURN_NODE);
 	$$->left_child = $2;
+	$$->allowed_types = $2->allowed_types;
 }
                 | DEF ID opt_params
 								{ // Context switch is needed before term parsing
@@ -286,12 +287,14 @@ multiplicative_expr : multiplicative_expr '*' primary
 	$$ = new_tree_node(MULTIPLY);
 	$$->left_child = $1;
 	$$->right_child = $3;
+	//TODO : type restriction
 }
                     | multiplicative_expr '/' primary
 {
 	$$ = new_tree_node(DIVIDE);
 	$$->left_child = $1;
 	$$->right_child = $3;
+	//TODO : type restriction
 }
                     | primary
 {
