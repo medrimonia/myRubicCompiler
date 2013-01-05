@@ -35,6 +35,10 @@ context_pointer new_context();
 
 context_pointer create_context_child(context_pointer parent);
 
+/* the list must be a list of char * with the name of the parameters */
+void declare_parameters_to_variables(context_pointer c,
+																		 linked_list_pointer l);
+
 bool is_declared_variable(context_pointer c, char * name);
 
 variable_p declare_variable(context_pointer c, char * name);

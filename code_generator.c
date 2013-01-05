@@ -167,6 +167,11 @@ void generate_variable_allocation(function_p f){
 	dictionnary_start_iteration(d);
 	while(!dictionnary_is_ended_iteration(d)){
 		variable_p v = dictionnary_get_current_value(d);
+		if (th_true_type(v->allowed_types) == NULL){
+			fprintf(stderr, "Impossible type choice for variable %s\n",
+							(char *) dictionnary_get_current_key(d));
+			exit(EXIT_FAILURE);
+		}
 		printf("%%%s = alloca %s, align 4\n",
 					 (char *) dictionnary_get_current_key(d),
 					 type_get_name(th_true_type(v->allowed_types)));
@@ -186,19 +191,21 @@ void generate_variable_allocation(function_p f){
 		dictionnary_next_element(d);
 	}
 	// ALLOCATION for parameters
-	if (f->parameters == NULL)
+	/*if (f->parameters == NULL)
 		return;
 	linked_list_restart(f->parameters);
 	while (true){
 		// TODO handle type
-		//variable_p v = linked_list_get(f->parameters);
-		printf("%%%s = alloca i32, align 4\n",
-					 (char *) linked_list_get(f->parameters));
+		variable_p v = get_variable(f->inner_context,
+																linked_list_get(f->parameters));
+		printf("%%%s = alloca %s, align 4\n",
+					 (char *) linked_list_get(f->parameters),
+					 type_get_name(th_true_type(v->allowed_types)));
 		//th_true_type();
 		if (linked_list_end(f->parameters))
 			break;
 		linked_list_next(f->parameters);
-	}
+		}*/
 }
 
 void generate_parameters(function_p f){

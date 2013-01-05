@@ -161,6 +161,8 @@ stmt		: IF expr THEN stmts terms END
                 | DEF ID opt_params
 								{ // Context switch is needed before term parsing
 									actual_context = create_context_child(actual_context);
+									declare_parameters_to_variables(actual_context,
+																									$opt_params);
 								}
 								term stmts[code] terms END
 								{
@@ -203,7 +205,6 @@ lhs             : ID
 }
                 | ID '.' primary
 								{
-	printf("Not implemented part\n");
 	exit(EXIT_FAILURE);
 								}
                 | ID '(' exprs ')'

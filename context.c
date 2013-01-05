@@ -41,6 +41,19 @@ context_pointer create_context_child(context_pointer parent){
 	return new;
 }
 
+void declare_parameters_to_variables(context_pointer c,
+																		 linked_list_pointer l){
+	if (l == NULL || linked_list_is_empty(l))
+		return;
+	linked_list_restart(l);
+	while(true){
+		declare_variable(c, linked_list_get(l));
+		if (linked_list_end(l))
+			return;
+		linked_list_next(l);
+	}
+}
+
 #define IS_GLOBAL(X) (X[0] == '@')
 
 bool is_declared_variable(context_pointer c, char * name){

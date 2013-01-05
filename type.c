@@ -8,18 +8,22 @@ struct type{
 };
 
 linked_list_pointer all_types = NULL;
+linked_list_pointer additionable_types = NULL;
 
 void initialize_types(){
 	all_types  = new_linked_list();
-	add_new_type("i32");
-	add_new_type("string");
+	additionable_types  = new_linked_list();
+	add_new_type("i32", true);
+	add_new_type("string", false);
 }
 
 
-type_p add_new_type(const char * name){
-	type_p new= malloc(sizeof(struct type));
+type_p add_new_type(const char * name, bool additionable){
+	type_p new = malloc(sizeof(struct type));
 	new->name = name;
 	linked_list_insert(all_types, new);
+	if (additionable)
+		linked_list_insert(additionable_types, new);
 	return new;
 }
 

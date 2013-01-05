@@ -8,10 +8,11 @@
 typedef struct type * type_p;
 
 extern linked_list_pointer all_types;
+extern linked_list_pointer additionable_types;
 
 void initialize_types();
 
-type_p add_new_type(const char * name);
+type_p add_new_type(const char * name, bool additionable);
 
 const char * type_get_name(type_p t);
 

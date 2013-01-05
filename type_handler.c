@@ -71,12 +71,15 @@ linked_list_pointer types_shared(linked_list_pointer l1,
 			linked_list_insert(new, t);
 		if (linked_list_end(l1))
 			return new;
+		linked_list_next(l1);
 	}	
 }
 
 linked_list_pointer th_addition(linked_list_pointer l1,
 																linked_list_pointer l2){
 	//TODO handle better (restriction on l1 and l2 etc)
+	remove_types_not_shared(l1, additionable_types);
+	remove_types_not_shared(l2, additionable_types);
 	return types_shared(l1,l2);
 }
 
