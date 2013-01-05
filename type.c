@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "type.h"
 
@@ -24,4 +25,19 @@ type_p add_new_type(const char * name){
 
 const char * type_get_name(type_p t){
 	return t->name;
+}
+
+type_p get_type_from_name(const char * name){
+	if (linked_list_is_empty(all_types))
+		return NULL;
+	linked_list_restart(all_types);
+	while(true){
+		type_p t = linked_list_get(all_types);
+		if (strcmp(t->name, name))
+			return t;
+		if (linked_list_end(all_types))
+			break;
+		linked_list_next(all_types);
+	}
+	return NULL;
 }

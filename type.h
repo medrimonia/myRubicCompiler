@@ -15,4 +15,7 @@ type_p add_new_type(const char * name);
 
 const char * type_get_name(type_p t);
 
+/* Restart and iterate on the all_types list */
+type_p get_type_from_name(const char * c);
+
 #endif

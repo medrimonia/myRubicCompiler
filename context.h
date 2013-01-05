@@ -12,6 +12,7 @@
 #include <stdbool.h>
 
 #include "dictionnary.h"
+#include "variable.h"
 
 
 typedef struct context * context_pointer;
@@ -36,15 +37,17 @@ context_pointer create_context_child(context_pointer parent);
 
 bool is_declared_variable(context_pointer c, char * name);
 
-void declare_variable(context_pointer c, char * name);
+variable_p declare_variable(context_pointer c, char * name);
+
+variable_p get_variable(context_pointer c, char * name);
 
 bool is_declared_local_variable(context_pointer c, char * name);
 
 bool is_declared_global_variable(context_pointer c, char * name);
 
-void declare_local_variable(context_pointer c, char * name);
+variable_p declare_local_variable(context_pointer c, char * name);
 
-void declare_global_variable(context_pointer c, char * name);
+variable_p declare_global_variable(context_pointer c, char * name);
 
 void destroy_context(context_pointer c);
 

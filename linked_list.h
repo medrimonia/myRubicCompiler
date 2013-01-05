@@ -44,6 +44,10 @@ bool linked_list_end(linked_list_pointer l);
 /* Return the iterator at the beginning of the list */
 void linked_list_restart(linked_list_pointer l);
 
+/* Remove the node currently pointed and optionnaly remove the data */
+void linked_list_remove_opt_erase(linked_list_pointer l, bool erase_data);
+
+/* Remove the node currently pointed and remove the data */
 void linked_list_remove(linked_list_pointer l);
 
 /* This function shouldn't be called if linked_list_end(l) is true 
@@ -56,6 +60,9 @@ int linked_list_size(linked_list_pointer l);
 
 /* Return the number of elements contained in the list */
 int linked_list_is_empty(linked_list_pointer l);
+
+/* Destroy the specified list and optionnaly free the data */
+void linked_list_destroy_opt_erase(linked_list_pointer l, bool free_data);
 
 /* Destroy the specified list */
 void linked_list_destroy(linked_list_pointer l);

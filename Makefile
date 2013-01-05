@@ -86,6 +86,18 @@ EXECUTABLES= \
 	test_linked_list \
 	test_appel
 
+
+### .h DEPENDENCIES
+
+type_handler.h : type.h linked_list.h
+
+type.h : linked_list.h
+
+tree.h : linked_list.h
+
+### CLEANING PART ###
+
+
 .PHONY: clean mrproper
 
 clean:

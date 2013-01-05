@@ -2,8 +2,8 @@
 
 #include "variable.h"
 
-variable_p new_variable(linked_list_pointer possible_types){
+variable_p new_variable(linked_list_pointer allowed_types){
 	variable_p new = malloc(sizeof(struct variable));
-	new->possible_types = possible_types;
+	new->allowed_types = allowed_types;
 	return new;
 }

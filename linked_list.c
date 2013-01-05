@@ -64,9 +64,10 @@ void linked_list_restart(linked_list_pointer l){
 		l->actual = l->first;
 }
 
-void linked_list_remove(linked_list_pointer l){
+void linked_list_remove_opt_erase(linked_list_pointer l, bool erase_data){
 	if (linked_list_size(l) == 1){
-		free(l->first->data);
+		if (erase_data)
+			free(l->first->data);
 		free(l->first);
 		l->first = NULL;
 		l->actual = NULL;
@@ -79,7 +80,8 @@ void linked_list_remove(linked_list_pointer l){
 	node_pointer next = l->actual->next;
 	if (next == NULL){
 		node_pointer removed = l->actual;
-		free(l->actual->data);
+		if (erase_data)
+			free(l->actual->data);
 		free(l->actual);
 		l->size--;
 		linked_list_restart(l);
@@ -87,12 +89,17 @@ void linked_list_remove(linked_list_pointer l){
 			l->actual = l->actual->next;
 		l->actual->next = NULL;
 	}else{
-		free(l->actual->data);
+		if (erase_data)
+			free(l->actual->data);
 		l->actual->next = next->next;
 		l->actual->data = next->data;
 		free(next);
 		l->size--;
 	}
+}
+
+void linked_list_remove(linked_list_pointer l){
+	linked_list_remove_opt_erase(l, true);
 }
 
 void linked_list_remove_next(linked_list_pointer l){
@@ -111,12 +118,13 @@ int linked_list_is_empty(linked_list_pointer l){
 	return l->size == 0;
 }
 
-void linked_list_destroy(linked_list_pointer l){
+void linked_list_destroy_opt_erase(linked_list_pointer l, bool free_data){
 	linked_list_restart(l);
 	while(l->size > 1)
-		linked_list_remove_next(l);
-	if(l->size != 0)
-		free(l->actual->data);
-	free(l->actual);
+		linked_list_remove_opt_erase(l, free_data);
 	free(l);
+}
+
+void linked_list_destroy(linked_list_pointer l){
+	linked_list_destroy_opt_erase(l, true);
 }

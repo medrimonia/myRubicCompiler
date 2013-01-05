@@ -77,10 +77,9 @@ topstmts        :      {$$ = NULL;}
 | topstmt { $$ = $1;}
 | topstmts terms topstmt
 {
-	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$ = new_tree_node(LIST);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	$$->type = LIST;
 }
 ;
 topstmt	        : CLASS ID term stmts END
@@ -103,10 +102,9 @@ stmts	        : /* none */ {$$ = NULL;}
 }
                 | stmts terms stmt
 {
-	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$ = new_tree_node(LIST);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	$$->type = LIST;
 }
                 ;
 
@@ -139,17 +137,21 @@ stmt		: IF expr THEN stmts terms END
 	}
 	if (!is_declared_variable(actual_context,$1->content)){
 		//printf("Declaring a variable named '%s'.\n", (char *) $1->content);
-		declare_variable(actual_context,$1->content);
+		variable_p v = declare_variable(actual_context,$1->content);
+		$$->allowed_types = v->allowed_types;
 	}
 	else{
 		// variable won't be added to the dictionnary, access to it will be lost
 		// free might be needed
 	}
-	$$ = (tn_pointer)malloc(sizeof(struct tree_node));
+	$$ = new_tree_node(AFFECT);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	$$->type = AFFECT;
-	
+	printf("$1_size : %d\n",linked_list_size($1->allowed_types));
+	printf("$3_size : %d\n",linked_list_size($3->allowed_types));
+	remove_types_not_shared($1->allowed_types, $3->allowed_types);
+	//remove_types_not_shared($3->allowed_types, $1->allowed_types);
+	$$->allowed_types = $1->allowed_types;
 }
                 | RETURN expr
 {
@@ -191,6 +193,13 @@ lhs             : ID
 {
 	$$ = new_tree_node(IDENTIFIER);
 	$$->content = $1;
+	// TODO load allowed parameters with ...
+	if (is_declared_variable(actual_context, $1)){
+		variable_p var = get_variable(actual_context, $1);
+		$$->allowed_types = var->allowed_types;
+	}else{
+		$$->allowed_types = NULL;
+	}
 }
                 | ID '.' primary
 								{
@@ -224,6 +233,7 @@ primary         : lhs
 	value->t = PRIMARY_STRING;
 	value->s_id = n;
 	$$->content = value;
+	$$->allowed_types = new_type_list_single_from_name("string");
 }
                 | FLOAT
 {
@@ -240,6 +250,7 @@ primary         : lhs
 	value->t = PRIMARY_INT;
 	value->i = $1;
 	$$->content = value;
+	$$->allowed_types = new_type_list_single_from_name("int");
 }
                 | '(' expr ')'
 								{
@@ -265,6 +276,7 @@ additive_expr   : multiplicative_expr { $$ = $1;}
 	$$ = new_tree_node(ADDITION);
 	$$->left_child = $1;
 	$$->right_child = $3;
+	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
 }
                 | additive_expr '-' multiplicative_expr
 ;

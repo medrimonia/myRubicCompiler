@@ -10,5 +10,6 @@ tn_pointer new_tree_node(node_type t){
 	new->reg_number = -1;
 	new->content = NULL;
 	new->type = t;
+	new->allowed_types = NULL;
 	return new;
 }

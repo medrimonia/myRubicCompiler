@@ -1,6 +1,8 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include "linked_list.h"
+
 typedef enum {
 	NOT_DECIDED,
 	PRIMARY,
@@ -29,6 +31,7 @@ struct tree_node{
 	node_type type;
 	int reg_number;
 	void * content;
+	linked_list_pointer allowed_types;
 };
 
 typedef struct tree_node * tn_pointer;

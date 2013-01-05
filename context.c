@@ -12,6 +12,9 @@
 #include "variable.h"
 #include "type_handler.h"
 
+variable_p get_local_variable(context_pointer c, char * name);
+variable_p get_global_variable(context_pointer c, char * name);
+
 context_pointer new_context(){
 	context_pointer new = malloc(sizeof(struct context));
 	new->parent_context = NULL;
@@ -38,20 +41,37 @@ context_pointer create_context_child(context_pointer parent){
 	return new;
 }
 
+#define IS_GLOBAL(X) (X[0] == '@')
+
 bool is_declared_variable(context_pointer c, char * name){
 	// TODO handle constants
-	if (name[0] == '@')
+	if (IS_GLOBAL(name))
 		return is_declared_global_variable(c, name);
 	else
 		return is_declared_local_variable(c, name);
 }
 
-void declare_variable(context_pointer c, char * name){
+variable_p declare_variable(context_pointer c, char * name){
 	// TODO handle constants
-	if (name[0] == '@')
+	if (IS_GLOBAL(name))
 		return declare_global_variable(c, name);
 	else
 		return declare_local_variable(c, name);
+}
+
+variable_p get_variable(context_pointer c, char * name){
+	// TODO handle constants
+	if (IS_GLOBAL(name))
+		return get_global_variable(c, name);
+	else
+		return get_local_variable(c, name);
+}
+
+variable_p get_local_variable(context_pointer c, char * name){
+	if (c->parent_context == NULL ||
+			dictionnary_exists(c->local_variables, name))
+		return dictionnary_get(c->local_variables, name);
+	return get_local_variable(c->parent_context, name);
 }
 
 bool is_declared_local_variable(context_pointer c, char * name){
@@ -61,10 +81,17 @@ bool is_declared_local_variable(context_pointer c, char * name){
 					is_declared_local_variable(c->parent_context, name));
 }
 
-void declare_local_variable(context_pointer c, char * name){
+variable_p declare_local_variable(context_pointer c, char * name){
 	//TODO add control of variable, once parameter has changed
 	variable_p v = new_variable(new_full_types_list());
 	dictionnary_add(c->local_variables, name, v);
+	return v;
+}
+
+variable_p get_global_variable(context_pointer c, char * name){
+	if (c->parent_context != NULL)
+		return get_global_variable(c->parent_context, name);
+	return dictionnary_get(c->global_variables, name);
 }
 
 
@@ -74,15 +101,13 @@ bool is_declared_global_variable(context_pointer c, char * name){
 	return dictionnary_exists(c->global_variables, name);
 }
 
-void declare_global_variable(context_pointer c, char * name){
+variable_p declare_global_variable(context_pointer c, char * name){
 	// if we're not on the global context, switch to a higher context
-	if (c->parent_context != NULL){
-		declare_global_variable(c->parent_context, name);
-	}
-	else{
-		variable_p v = new_variable(new_full_types_list());
-		dictionnary_add(c->global_variables, name, v);
-	}
+	if (c->parent_context != NULL)
+		return declare_global_variable(c->parent_context, name);
+	variable_p v = new_variable(new_full_types_list());
+	dictionnary_add(c->global_variables, name, v);
+	return v;
 }
 
 void destroy_context(context_pointer c){
