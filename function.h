@@ -8,14 +8,6 @@
 /* TODO hash function and equals function in order to be able to use multiple
  * functions sharing the same name but with different parameters
  */
-
-struct function_call{
-	char * f_name;
-	linked_list_pointer parameters;
-};
-
-typedef struct function_call * function_call_p;
-
 struct function{
 	context_pointer inner_context;
 	char * name;
@@ -26,10 +18,19 @@ struct function{
 
 typedef struct function * function_p;
 
+struct function_call{
+	function_p f_called;
+	linked_list_pointer parameters;
+};
+
+typedef struct function_call * function_call_p;
+
 function_p new_function(context_pointer function_context);
 
-function_call_p new_function_call(char * name);
+function_call_p new_function_call(function_p f_called);
 
 void add_function_to_context(function_p f, context_pointer c);
+
+function_p get_function(context_pointer c, char * name);
 
 #endif

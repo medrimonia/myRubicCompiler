@@ -25,6 +25,10 @@ bool type_list_contains(linked_list_pointer tl, type_p t);
 /* add the type specified to the list if the list didn't contain it */
 void type_list_add(linked_list_pointer tl, type_p t);
 
+/* add the types of the src list to the dst list if necessary */
+void type_list_add_type_list(linked_list_pointer dst,
+														 linked_list_pointer src);
+
 /* Remove of src the types which can't be found in cmp */
 linked_list_pointer remove_types_not_shared(linked_list_pointer src,
 																						linked_list_pointer cmp);
@@ -38,6 +42,7 @@ linked_list_pointer types_shared(linked_list_pointer l1,
  */
 linked_list_pointer th_addition(linked_list_pointer l1,
 																linked_list_pointer l2);
+
 /* Return NULL if the list doesn't contain exactly one type
  * and the only type if the list contains only one element
  */

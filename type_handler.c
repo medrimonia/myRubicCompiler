@@ -42,6 +42,18 @@ void type_list_add(linked_list_pointer tl, type_p t){
 		linked_list_insert(tl, t);
 }
 
+void type_list_add_type_list(linked_list_pointer dst,
+														 linked_list_pointer src){
+	if (linked_list_is_empty(src))
+		return;
+	linked_list_restart(src);
+	while(true){
+		type_list_add(dst, linked_list_get(src));
+		if (linked_list_end(src))
+			return;
+		linked_list_next(src);
+	}
+}
 
 linked_list_pointer remove_types_not_shared(linked_list_pointer src,
 																						linked_list_pointer cmp){

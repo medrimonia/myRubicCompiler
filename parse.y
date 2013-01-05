@@ -16,10 +16,12 @@
 	int yyerror(char *);
 	char *strndup(const char *s, size_t n);
 	
-	context_pointer global_context;
-	context_pointer actual_context;
+	context_pointer global_context = NULL;
+	context_pointer actual_context = NULL;
 
-	tn_pointer global_root;
+	function_p actual_function = NULL;
+
+	tn_pointer global_root = NULL;
 
 	int yydebug = 1;
 
@@ -155,25 +157,33 @@ stmt		: IF expr THEN stmts terms END
 }
                 | RETURN expr
 {
+	if (actual_function == NULL){
+		fprintf(stderr,"Return outside of a function\n");
+		exit(EXIT_FAILURE);
+	}
 	$$ = new_tree_node(RETURN_NODE);
 	$$->left_child = $2;
 	$$->allowed_types = $2->allowed_types;
+	//TODO might be handled differently if return type is already known
+	type_list_add_type_list(actual_function->possible_return_types,
+													$2->allowed_types);
 }
                 | DEF ID opt_params
 								{ // Context switch is needed before term parsing
 									actual_context = create_context_child(actual_context);
+									actual_function = new_function(actual_context);
 									declare_parameters_to_variables(actual_context,
 																									$opt_params);
 								}
 								term stmts[code] terms END
 								{
-									function_p f = new_function(actual_context);
-									f->name = $2;
-									f->parameters = $opt_params;
-									add_function_to_context(f, actual_context->parent_context);
-									f->root = $code;
+									actual_function->name = $2;
+									actual_function->parameters = $opt_params;
+									add_function_to_context(actual_function,
+																					actual_context->parent_context);
+									actual_function->root = $code;
 									$$ = new_tree_node(FUNCTION);
-									$$->content = f;
+									$$->content = actual_function;
 								}
 ; 
 
@@ -210,9 +220,15 @@ lhs             : ID
 								}
                 | ID '(' exprs ')'
 								{
+									function_p f_called = get_function(actual_context,$ID);
+									if (f_called == NULL){
+										fprintf(stderr, "No function called %s found.", $ID);
+										exit(EXIT_FAILURE);
+									}
 									$$ = new_tree_node(CALL);
-									$$->content = new_function_call($ID);
+									$$->content = new_function_call(f_called);
 									((function_call_p)$$->content)->parameters = $3;
+									$$->allowed_types = f_called->possible_return_types;
 								}
 ;
 exprs           : exprs ',' expr

@@ -10,6 +10,7 @@
 #include "constant_string_handler.h"
 
 int actual_register = 0;
+function_p cg_actual_function = NULL;
 
 void generate_code_primary(tn_pointer node);
 void generate_code_expr(tn_pointer node);
@@ -90,7 +91,11 @@ void generate_code_list(tn_pointer node){
 void generate_code_identifier(tn_pointer node){
 	node->reg_number = ++actual_register;
 	
-	type_p t = th_true_type(node->allowed_types);
+	type_p t = th_true_type(cg_actual_function->possible_return_types);
+	if (t == NULL){
+		fprintf(stderr, "the function has an unknown return type\n");
+		exit(EXIT_FAILURE);
+	}
 	printf("%%%d = load %s * %%%s\n", 
 				 actual_register,
 				 type_get_name(t),
@@ -115,6 +120,7 @@ void generate_code_function(tn_pointer node){
 	// TODO fix in order to avoid problems when getting out of a function
 	actual_register = 0;
 	function_p f = (function_p) node->content;
+	cg_actual_function = f;
 	// TODO handle type and parameters
 	printf("define i32 @%s(",f->name);
 	generate_parameters(f);
@@ -130,9 +136,9 @@ void generate_code_return(tn_pointer node){
 	if (node->left_child != NULL)
 		generate_code(node->left_child);
 
-	//type_p t = th_true_type(node->allowed_types);	
-	printf("ret i32 %%%d\n",
-				 //type_get_name(t),
+	type_p t = th_true_type(node->allowed_types);	
+	printf("ret %s %%%d\n",
+				 type_get_name(t),
 				 actual_register);
 }
 
@@ -151,7 +157,7 @@ void generate_code_call(tn_pointer node){
 	actual_register++;
 	printf("%%%d = call i32 @%s(",
 				 actual_register,
-				 fc->f_name);
+				 fc->f_called->name);
 	//using parameters results
 	linked_list_restart(fc->parameters);
 	if (!linked_list_is_empty(fc->parameters))
