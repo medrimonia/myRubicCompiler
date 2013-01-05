@@ -41,11 +41,19 @@ linked_list_pointer remove_types_not_shared(linked_list_pointer src,
 		return src;
 	linked_list_restart(src);
 	while(true){
-		if (!type_list_contains(cmp, linked_list_get(src)))
+		bool removed = false;
+		type_p t = linked_list_get(src);
+		printf("Checking type %s\n", type_get_name(t));
+		if (!type_list_contains(cmp, linked_list_get(src))){
 			// data are not erased because all types are shared.
+			printf("\tType not shared\n");
 			linked_list_remove_opt_erase(src, false);
+			removed = true;
+		}
 		if (linked_list_end(src))
 			return src;
+		if (!removed)
+			linked_list_next(src);
 	}
 }
 

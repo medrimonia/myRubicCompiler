@@ -250,7 +250,7 @@ primary         : lhs
 	value->t = PRIMARY_INT;
 	value->i = $1;
 	$$->content = value;
-	$$->allowed_types = new_type_list_single_from_name("int");
+	$$->allowed_types = new_type_list_single_from_name("i32");
 }
                 | '(' expr ')'
 								{

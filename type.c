@@ -33,7 +33,7 @@ type_p get_type_from_name(const char * name){
 	linked_list_restart(all_types);
 	while(true){
 		type_p t = linked_list_get(all_types);
-		if (strcmp(t->name, name))
+		if (strcmp(t->name, name) == 0)
 			return t;
 		if (linked_list_end(all_types))
 			break;
