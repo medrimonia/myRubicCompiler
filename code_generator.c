@@ -77,9 +77,16 @@ void generate_code_affect(tn_pointer node){
 	generate_code(node->left_child);
 	generate_code(node->right_child);
 	node->reg_number = actual_register;
-	//TODO handle type
-	printf("store i32 %%%d, i32 * %%%s\n",
+	//TODO check types
+	type_p t = th_true_type(node->right_child->allowed_types);
+	if (t == NULL){
+		fprintf(stderr, "the function has an unknown return type\n");
+		exit(EXIT_FAILURE);
+	}
+	printf("store %s %%%d, %s * %%%s\n",
+				 type_get_name(t),
 				 node->right_child->reg_number,
+				 type_get_name(t),
 				 (char *) node->left_child->content);
 } 
 
@@ -261,7 +268,6 @@ void load_parameters(function_p f){
 		return;
 	linked_list_restart(f->parameters);
 	while (true){
-		// TODO handle type
 		char * param_name = linked_list_get(f->parameters);
 		variable_p v = get_parameter(f, param_name);
 		type_p t = th_true_type(v->allowed_types);
