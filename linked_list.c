@@ -38,6 +38,25 @@ void linked_list_insert(linked_list_pointer l, void * element){
 	l->size++;		
 }
 
+//TODO merge two function with a boolean swap in order to share code
+void linked_list_insert_after(linked_list_pointer l, void * element){
+	node_pointer new_node =
+		(node_pointer)malloc(sizeof(struct linked_list_node));
+	if (l->size == 0){
+		new_node->data = element;
+		new_node->next = NULL;
+		l->first = new_node;
+		l->actual = new_node;
+		l->size++;
+		return;
+	}
+	// values aren't swapped
+	new_node->next = l->actual->next;
+	l->actual->next = new_node;
+	new_node->data = element;
+	l->size++;		
+}
+
 void linked_list_insert_in_head(linked_list_pointer l, void * element){
 	node_pointer new_node =
 		(node_pointer)malloc(sizeof(struct linked_list_node));

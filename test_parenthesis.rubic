@@ -1,0 +1,6 @@
+
+def main()
+		a = 3;
+		b = 7;
+		return 13 - (a + a + b);
+end

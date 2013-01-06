@@ -1,0 +1,7 @@
+def soustraction(a,b,c)
+		return a - b - c;
+end
+
+def main()
+		return soustraction(5,3,2);
+end

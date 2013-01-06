@@ -1,0 +1,6 @@
+
+def main()
+		a = 3;
+		b = 9;
+		return 3 - b / a;
+end

@@ -20,6 +20,8 @@ void generate_code_identifier(tn_pointer node);
 void generate_code_generic_operation(tn_pointer node, char * op);
 void generate_code_addition(tn_pointer node);
 void generate_code_substraction(tn_pointer node);
+void generate_code_multiplication(tn_pointer node);
+void generate_code_division(tn_pointer node);
 void generate_code_function(tn_pointer node);
 void generate_code_return(tn_pointer node);
 void generate_code_call(tn_pointer node);
@@ -40,6 +42,8 @@ int generate_code(tn_pointer node){
 	case IDENTIFIER : generate_code_identifier(node); break;
 	case ADDITION : generate_code_addition(node); break;
 	case SUBSTRACTION : generate_code_substraction(node); break;
+	case MULTIPLY : generate_code_multiplication(node); break;
+	case DIVIDE : generate_code_division(node); break;
 	case FUNCTION : generate_code_function(node); break;
 	case RETURN_NODE : generate_code_return(node); break;
 	case CALL : generate_code_call(node); break;
@@ -135,6 +139,14 @@ void generate_code_substraction(tn_pointer node){
 	generate_code_generic_operation(node, "sub");
 }
 
+void generate_code_multiplication(tn_pointer node){
+	generate_code_generic_operation(node, "mul");
+}
+
+void generate_code_division(tn_pointer node){
+	generate_code_generic_operation(node, "sdiv");
+}
+
 void generate_code_function(tn_pointer node){
 	// TODO fix in order to avoid problems when getting out of a function
 	actual_register = 0;
@@ -171,6 +183,7 @@ void generate_code_return(tn_pointer node){
 				 actual_register);
 }
 
+//TODO parameters added in reverse order
 void generate_code_call(tn_pointer node){
 	function_call_p fc = node->content;
 	//calculating parameters values

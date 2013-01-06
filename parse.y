@@ -193,7 +193,8 @@ opt_params      : /* none */ { $$ = NULL;}
 ;
 params          : ID ',' params
 {
-	linked_list_insert($3, $ID);
+	linked_list_insert_after($3, $ID);
+	linked_list_next($3);
 	$$ = $3;
 }
                 | ID
@@ -272,8 +273,8 @@ primary         : lhs
 }
                 | '(' expr ')'
 								{
-	printf("Not implemented part\n");
-	exit(EXIT_FAILURE);
+									$$ = new_tree_node(EXPR);
+									$$ = $2;
 								}
 ;
 expr            : expr AND comp_expr
@@ -310,15 +311,16 @@ multiplicative_expr : multiplicative_expr '*' primary
 	$$ = new_tree_node(MULTIPLY);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	//TODO : code generation
-	//TODO : type restriction
+	//TODO switch addition to multiplication or change function name
+	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
 }
                     | multiplicative_expr '/' primary
 {
 	$$ = new_tree_node(DIVIDE);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	//TODO : type restriction
+	//TODO switch addition to division or change function name
+	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
 }
                     | primary
 {
