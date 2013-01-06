@@ -34,3 +34,7 @@ function_p get_function(context_pointer c, char * name){
 		return NULL;
 	return get_function(c->parent_context, name);
 }
+
+variable_p get_parameter(function_p f, char * name){
+	return get_variable(f->inner_context, name);
+}

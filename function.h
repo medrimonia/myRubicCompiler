@@ -33,4 +33,6 @@ void add_function_to_context(function_p f, context_pointer c);
 
 function_p get_function(context_pointer c, char * name);
 
+variable_p get_parameter(function_p f, char * name);
+
 #endif

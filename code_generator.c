@@ -170,7 +170,13 @@ void generate_code_call(tn_pointer node){
 	if (!linked_list_is_empty(fc->parameters))
 		while(true){
 			tn_pointer param = linked_list_get(fc->parameters);
-			printf("i32 %%%d",param->reg_number);
+	
+			type_p t = th_true_type(fc->f_called->possible_return_types);
+			if (t == NULL){
+				fprintf(stderr, "A parameter of function have undecidable type\n");
+				exit(EXIT_FAILURE);
+			}
+			printf("%s %%%d", type_get_name(t), param->reg_number);
 			if (linked_list_end(fc->parameters))
 				break;
 			linked_list_next(fc->parameters);
@@ -234,7 +240,16 @@ void generate_parameters(function_p f){
 	linked_list_restart(f->parameters);
 	while (true){
 		// TODO handle type
-		printf("i32 %%_%s",(char *) linked_list_get(f->parameters));
+		char * param_name = linked_list_get(f->parameters);
+		variable_p v = get_parameter(f, param_name);
+		type_p t = th_true_type(v->allowed_types);
+		if (t == NULL){
+			fprintf(stderr, "A parameter has an undecidable type\n");
+			exit(EXIT_FAILURE);
+		}
+		printf("%s %%_%s",
+					 type_get_name(t),
+					 (char *)  linked_list_get(f->parameters));
 		if (linked_list_end(f->parameters))
 			break;
 		printf(", ");
