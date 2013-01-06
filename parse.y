@@ -297,12 +297,20 @@ additive_expr   : multiplicative_expr { $$ = $1;}
 	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
 }
                 | additive_expr '-' multiplicative_expr
+{
+	$$ = new_tree_node(SUBSTRACTION);
+	$$->left_child = $1;
+	$$->right_child = $3;
+	//TODO switch addition to substraction or change function name
+	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
+}
 ;
 multiplicative_expr : multiplicative_expr '*' primary
 {
 	$$ = new_tree_node(MULTIPLY);
 	$$->left_child = $1;
 	$$->right_child = $3;
+	//TODO : code generation
 	//TODO : type restriction
 }
                     | multiplicative_expr '/' primary

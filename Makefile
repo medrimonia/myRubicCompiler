@@ -33,6 +33,9 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 
 # SPECIFIC RULES
 
+test_substraction : test_substraction.s
+	$(CC) -o $@ $<
+
 test_appel : test_appel.s
 	$(CC) -o $@ $<
 
@@ -75,6 +78,13 @@ constant_string_handler.o : constant_string_handler.h
 
 test_linked_list: linked_list.o test_linked_list.o
 	$(CC) -o $@ $^
+
+TESTS=                   \
+	test			             \
+	test_appel             \
+	test_substraction
+
+tests : $(TESTS)
 
 EXECUTABLES=       \
 	hello_world      \

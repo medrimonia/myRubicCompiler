@@ -17,7 +17,9 @@ void generate_code_expr(tn_pointer node);
 void generate_code_affect(tn_pointer node); 
 void generate_code_list(tn_pointer node);
 void generate_code_identifier(tn_pointer node);
+void generate_code_generic_operation(tn_pointer node, char * op);
 void generate_code_addition(tn_pointer node);
+void generate_code_substraction(tn_pointer node);
 void generate_code_function(tn_pointer node);
 void generate_code_return(tn_pointer node);
 void generate_code_call(tn_pointer node);
@@ -37,6 +39,7 @@ int generate_code(tn_pointer node){
 	case LIST : generate_code_list(node); break;
 	case IDENTIFIER : generate_code_identifier(node); break;
 	case ADDITION : generate_code_addition(node); break;
+	case SUBSTRACTION : generate_code_substraction(node); break;
 	case FUNCTION : generate_code_function(node); break;
 	case RETURN_NODE : generate_code_return(node); break;
 	case CALL : generate_code_call(node); break;
@@ -110,17 +113,26 @@ void generate_code_identifier(tn_pointer node){
 	
 }
 
-void generate_code_addition(tn_pointer node){
+void generate_code_generic_operation(tn_pointer node, char * op){
 	generate_code(node->left_child);
 	generate_code(node->right_child);
 	node->reg_number = ++actual_register;
 	
 	type_p t = th_true_type(node->allowed_types);
-	printf("%%%d = add %s %%%d, %%%d\n",
+	printf("%%%d = %s %s %%%d, %%%d\n",
 				 node->reg_number,
+				 op,
 				 type_get_name(t),
 				 node->left_child->reg_number,
 				 node->right_child->reg_number);
+}
+
+void generate_code_addition(tn_pointer node){
+	generate_code_generic_operation(node, "add");
+}
+
+void generate_code_substraction(tn_pointer node){
+	generate_code_generic_operation(node, "sub");
 }
 
 void generate_code_function(tn_pointer node){

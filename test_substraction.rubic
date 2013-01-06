@@ -1,0 +1,5 @@
+def main()
+		test = 3 + 5;
+		test = test - 8;
+		return test;
+end
