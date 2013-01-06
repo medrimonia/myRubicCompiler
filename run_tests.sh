@@ -1,7 +1,12 @@
-#!/bin/sh
+#!/bin/bash
+
+FAILED="[\e[1;31mFAILED\e[0m]\n"
+PASSED="[\e[1;32mPASSED\e[0m]\n"
 
 make test >ci_test
-./test || echo "test passed"
+printf "test       :\t"
+./test && printf $PASSED || printf $FAILED
 
 make test_appel >ci_test_appel
-./test_appel || echo "test_appel passed"
+printf "test_appel :\t"
+./test_appel && printf $PASSED || printf $FAILED

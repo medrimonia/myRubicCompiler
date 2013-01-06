@@ -3,5 +3,5 @@ def addition(a,b)
 end
 
 def main()
-		return addition(3,5);
+		return addition(0,0);
 end

@@ -1,5 +1,5 @@
 def main()
 		test = 3 + 5;
-		test = 3 + 5;
+		test = 0 + 0;
 		return test;
 end
