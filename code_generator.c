@@ -155,8 +155,15 @@ void generate_code_call(tn_pointer node){
 			linked_list_next(fc->parameters);
 	}
 	actual_register++;
-	printf("%%%d = call i32 @%s(",
+	
+	type_p t = th_true_type(fc->f_called->possible_return_types);
+	if (t == NULL){
+		fprintf(stderr, "Calling a function with an undecidable type\n");
+		exit(EXIT_FAILURE);
+	}
+	printf("%%%d = call %s @%s(",
 				 actual_register,
+				 type_get_name(t),
 				 fc->f_called->name);
 	//using parameters results
 	linked_list_restart(fc->parameters);
