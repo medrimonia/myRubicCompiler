@@ -43,6 +43,10 @@ bool is_declared_variable(context_pointer c, char * name);
 
 variable_p declare_variable(context_pointer c, char * name);
 
+variable_p declare_typed_variable(context_pointer c,
+																	char * name,
+																	char * type_name);
+
 variable_p get_variable(context_pointer c, char * name);
 
 bool is_declared_local_variable(context_pointer c, char * name);

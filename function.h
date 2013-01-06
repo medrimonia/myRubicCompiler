@@ -11,6 +11,7 @@
 struct function{
 	context_pointer inner_context;
 	char * name;
+	/* linked list of char * containing the parameter name */
 	linked_list_pointer parameters;
 	tn_pointer root;
 	linked_list_pointer possible_return_types;
@@ -24,6 +25,8 @@ struct function_call{
 };
 
 typedef struct function_call * function_call_p;
+
+void initialize_built_ins(context_pointer root_context);
 
 function_p new_function(context_pointer function_context);
 

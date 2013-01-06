@@ -83,7 +83,7 @@ void generate_code_affect(tn_pointer node){
 	//TODO check types
 	type_p t = th_true_type(node->right_child->allowed_types);
 	if (t == NULL){
-		fprintf(stderr, "the function has an unknown return type\n");
+		fprintf(stderr, "the variable has an undecidable type\n");
 		exit(EXIT_FAILURE);
 	}
 	printf("store %s %%%d, %s * %%%s\n",
@@ -103,7 +103,7 @@ void generate_code_identifier(tn_pointer node){
 	
 	type_p t = th_true_type(cg_actual_function->possible_return_types);
 	if (t == NULL){
-		fprintf(stderr, "the function has an unknown return type\n");
+		fprintf(stderr, "the identifier to load has an undecidable type\n");
 		exit(EXIT_FAILURE);
 	}
 	printf("%%%d = load %s * %%%s\n", 
@@ -143,7 +143,7 @@ void generate_code_function(tn_pointer node){
 	
 	type_p t = th_true_type(f->possible_return_types);
 	if (t == NULL){
-		fprintf(stderr, "the function has an unknown return type\n");
+		fprintf(stderr, "the function has an undecidable return type\n");
 		exit(EXIT_FAILURE);
 	}	
 	printf("define %s @%s(",

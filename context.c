@@ -72,6 +72,15 @@ variable_p declare_variable(context_pointer c, char * name){
 		return declare_local_variable(c, name);
 }
 
+variable_p declare_typed_variable(context_pointer c,
+																	char * name,
+																	char * type_name){
+	variable_p v = declare_variable(c, name);
+	linked_list_destroy_opt_erase(v->allowed_types,false);
+	v->allowed_types = new_type_list_single_from_name(type_name);
+	return v;
+}
+
 variable_p get_variable(context_pointer c, char * name){
 	// TODO handle constants
 	if (IS_GLOBAL(name))

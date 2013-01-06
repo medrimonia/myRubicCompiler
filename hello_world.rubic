@@ -1,3 +1,4 @@
 def main()
 		toto = puts("Hello World!");
+		return 0;
 end

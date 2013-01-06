@@ -343,6 +343,7 @@ int main() {
 	initialize_types();//add basic types to all_types
 	global_context = new_context();
 	actual_context = global_context;
+	initialize_built_ins(actual_context);
   yyparse();
 	//printf("declare i32 @puts(i32*)\n"); //TODO Hack
 	print_constants();
