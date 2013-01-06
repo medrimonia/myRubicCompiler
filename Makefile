@@ -33,16 +33,7 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 
 # SPECIFIC RULES
 
-test_substraction : test_substraction.s
-	$(CC) -o $@ $<
-
-test_appel : test_appel.s
-	$(CC) -o $@ $<
-
-test: test.s
-	$(CC) -o $@ $<
-
-hello_world: hello_world.s
+%.test : %.s
 	$(CC) -o $@ $<
 
 function.o : function.h
@@ -79,20 +70,18 @@ constant_string_handler.o : constant_string_handler.h
 test_linked_list: linked_list.o test_linked_list.o
 	$(CC) -o $@ $^
 
-TESTS=                   \
-	test			             \
-	test_appel             \
-	test_substraction
+RUBICS_FILES=$(wildcard *.rubic)
+RUBICS_OBJS=$(RUBICS_FILES:.rubic=.ll)
+RUBICS_TESTS=$(RUBICS_FILES:.rubic=.test)
 
-tests : $(TESTS)
+tests : $(RUBICS_TESTS)
 
 EXECUTABLES=       \
 	hello_world      \
 	rubic	           \
 	test_hashmap     \
 	test_linked_list \
-	test             \
-	test_appel
+	$(RUBICS_TESTS)
 
 
 ### .h DEPENDENCIES
@@ -109,7 +98,7 @@ tree.h : linked_list.h
 .PHONY: clean mrproper
 
 clean:
-	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output test.ll compile_information
+	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS)
 
 mrproper: clean
 	rm -rf $(EXECUTABLES)
