@@ -17,8 +17,8 @@ void initialize_built_ins(context_pointer root_context){
 	linked_list_insert(f->parameters, "s");
 	declare_typed_variable(f->inner_context,
 												 "s",
-												 "string");
-	f->possible_return_types = new_type_list_single_from_name("string");
+												 "i8 *");
+	f->possible_return_types = new_type_list_single_from_name("i8 *");
 	dictionnary_add(built_ins,f->name,f);
 }
 

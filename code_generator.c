@@ -54,7 +54,7 @@ void generate_code_primary(tn_pointer node){
 	switch(p->t){
 	case PRIMARY_STRING: //TODO : handle later
 		printf("%%%d = ", actual_register);
-		printf("i8* getelementptr inbounds ([%d x i8]* @%d, i32 0, i32 0)\n",
+		printf("getelementptr inbounds [%d x i8]* @%d, i32 0, i32 0\n",
 					 get_constant_size(p->s_id),
 					 p->s_id);
 		break;
@@ -77,7 +77,7 @@ void generate_code_expr(tn_pointer node){
 }
 
 void generate_code_affect(tn_pointer node){
-	generate_code(node->left_child);
+	//generate_code(node->left_child);
 	generate_code(node->right_child);
 	node->reg_number = actual_register;
 	//TODO check types
@@ -193,6 +193,7 @@ void generate_code_call(tn_pointer node){
 				 actual_register,
 				 type_get_name(t),
 				 fc->f_called->name);
+	node->reg_number = actual_register;
 	//using parameters results
 	linked_list_restart(fc->parameters);
 	if (!linked_list_is_empty(fc->parameters))

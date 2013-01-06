@@ -251,7 +251,7 @@ primary         : lhs
 	value->t = PRIMARY_STRING;
 	value->s_id = n;
 	$$->content = value;
-	$$->allowed_types = new_type_list_single_from_name("string");
+	$$->allowed_types = new_type_list_single_from_name("i8 *");
 }
                 | FLOAT
 {
