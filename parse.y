@@ -287,6 +287,12 @@ comp_expr       : additive_expr '<' additive_expr
                 | additive_expr GEQ additive_expr
                 | additive_expr EQ additive_expr
                 | additive_expr NEQ additive_expr
+{
+	$$ = new_tree_node(NEQ_NODE);
+	$$->left_child = $1;
+	$$->right_child = $3;
+	$$->allowed_types = th_comparison($1->allowed_types, $3->allowed_types);
+}
                 | additive_expr { $$ = $1;}
 ;
 additive_expr   : multiplicative_expr { $$ = $1;}

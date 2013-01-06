@@ -17,7 +17,8 @@ typedef enum {
 	MULTIPLY,
 	FUNCTION,
 	RETURN_NODE,
-	CALL
+	CALL,
+	NEQ_NODE
 } node_type;
 
 typedef enum{

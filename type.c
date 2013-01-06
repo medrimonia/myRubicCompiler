@@ -9,22 +9,31 @@ struct type{
 
 linked_list_pointer all_types = NULL;
 linked_list_pointer additionable_types = NULL;
+linked_list_pointer comparable_types = NULL;
+linked_list_pointer logical_types = NULL;
 
 void initialize_types(){
 	all_types  = new_linked_list();
 	additionable_types  = new_linked_list();
-	add_new_type("i32", true);
-	add_new_type("i8 *", false);// string
-	add_new_type("i1", false);// bool
+	add_new_type("i32"  , true  , true  , false );
+	add_new_type("i8 *" , false , false , false );// string
+	add_new_type("i1"   , false , true  , true  );// bool
 }
 
 
-type_p add_new_type(const char * name, bool additionable){
+type_p add_new_type(const char * name,
+										bool additionable,
+										bool comparable,
+										bool logical){
 	type_p new = malloc(sizeof(struct type));
 	new->name = name;
 	linked_list_insert(all_types, new);
 	if (additionable)
 		linked_list_insert(additionable_types, new);
+	if (comparable)
+		linked_list_insert(comparable_types, new);
+	if (logical)
+		linked_list_insert(logical_types, new);
 	return new;
 }
 

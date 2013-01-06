@@ -96,10 +96,16 @@ linked_list_pointer types_shared(linked_list_pointer l1,
 
 linked_list_pointer th_addition(linked_list_pointer l1,
 																linked_list_pointer l2){
-	//TODO handle better (restriction on l1 and l2 etc)
 	remove_types_not_shared(l1, additionable_types);
 	remove_types_not_shared(l2, additionable_types);
 	return types_shared(l1,l2);
+}
+
+linked_list_pointer th_comparison(linked_list_pointer l1,
+																	linked_list_pointer l2){
+	remove_types_not_shared(l1, comparable_types);
+	remove_types_not_shared(l2, comparable_types);
+	return new_type_list_single_from_name("i1");
 }
 
 type_p th_true_type(linked_list_pointer l){
