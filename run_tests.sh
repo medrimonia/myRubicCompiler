@@ -3,10 +3,11 @@
 FAILED="[\e[1;31mFAILED\e[0m]\n"
 PASSED="[\e[1;32mPASSED\e[0m]\n"
 
-make test >ci_test
-printf "test       :\t"
-./test && printf $PASSED || printf $FAILED
+TESTS[0]="test      "
+TESTS[1]="test_appel"
 
-make test_appel >ci_test_appel
-printf "test_appel :\t"
-./test_appel && printf $PASSED || printf $FAILED
+for ((i = 0; i < ${#TESTS[@]} ; i++))
+do
+		printf "${TESTS[$i]} :\t" 
+		./${TESTS[$i]} && printf $PASSED || printf $FAILED
+done
