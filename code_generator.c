@@ -239,7 +239,6 @@ void generate_parameters(function_p f){
 		return;
 	linked_list_restart(f->parameters);
 	while (true){
-		// TODO handle type
 		char * param_name = linked_list_get(f->parameters);
 		variable_p v = get_parameter(f, param_name);
 		type_p t = th_true_type(v->allowed_types);
@@ -263,8 +262,17 @@ void load_parameters(function_p f){
 	linked_list_restart(f->parameters);
 	while (true){
 		// TODO handle type
-		printf("store i32 %%_%s, i32 * %%%s\n",
+		char * param_name = linked_list_get(f->parameters);
+		variable_p v = get_parameter(f, param_name);
+		type_p t = th_true_type(v->allowed_types);
+		if (t == NULL){
+			fprintf(stderr, "A parameter has an undecidable type\n");
+			exit(EXIT_FAILURE);
+		}
+		printf("store %s %%_%s, %s * %%%s\n",
+					 type_get_name(t),
 					 (char *) linked_list_get(f->parameters),
+					 type_get_name(t),
 					 (char *) linked_list_get(f->parameters));
 		if (linked_list_end(f->parameters))
 			break;
