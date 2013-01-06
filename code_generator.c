@@ -128,8 +128,15 @@ void generate_code_function(tn_pointer node){
 	actual_register = 0;
 	function_p f = (function_p) node->content;
 	cg_actual_function = f;
-	// TODO handle type and parameters
-	printf("define i32 @%s(",f->name);
+	
+	type_p t = th_true_type(f->possible_return_types);
+	if (t == NULL){
+		fprintf(stderr, "the function has an unknown return type\n");
+		exit(EXIT_FAILURE);
+	}	
+	printf("define %s @%s(",
+				 type_get_name(t),
+				 f->name);
 	generate_parameters(f);
 	printf("){\n");
 	generate_variable_allocation(f);
@@ -139,18 +146,20 @@ void generate_code_function(tn_pointer node){
 }
 
 void generate_code_return(tn_pointer node){
-	// TODO handle type
 	if (node->left_child != NULL)
 		generate_code(node->left_child);
 
 	type_p t = th_true_type(node->allowed_types);	
+	if (t == NULL){
+		fprintf(stderr, "Return followed by an undecidable type\n");
+		exit(EXIT_FAILURE);
+	}
 	printf("ret %s %%%d\n",
 				 type_get_name(t),
 				 actual_register);
 }
 
 void generate_code_call(tn_pointer node){
-	// TODO handle types
 	function_call_p fc = node->content;
 	//calculating parameters values
 	linked_list_restart(fc->parameters);
