@@ -14,7 +14,8 @@ void initialize_types(){
 	all_types  = new_linked_list();
 	additionable_types  = new_linked_list();
 	add_new_type("i32", true);
-	add_new_type("i8 *", false);
+	add_new_type("i8 *", false);// string
+	add_new_type("i1", false);// bool
 }
 
 

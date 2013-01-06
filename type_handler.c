@@ -62,6 +62,7 @@ linked_list_pointer remove_types_not_shared(linked_list_pointer src,
 	linked_list_restart(src);
 	while(true){
 		bool removed = false;
+		bool was_on_last = linked_list_end(src);
 		//type_p t = linked_list_get(src);
 		//printf("Checking type %s\n", type_get_name(t));
 		if (!type_list_contains(cmp, linked_list_get(src))){
@@ -70,7 +71,7 @@ linked_list_pointer remove_types_not_shared(linked_list_pointer src,
 			linked_list_remove_opt_erase(src, false);
 			removed = true;
 		}
-		if (linked_list_end(src))
+		if (was_on_last)
 			return src;
 		if (!removed)
 			linked_list_next(src);
