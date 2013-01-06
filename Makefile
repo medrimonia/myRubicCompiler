@@ -73,6 +73,8 @@ test_linked_list: linked_list.o test_linked_list.o
 RUBICS_FILES=$(wildcard *.rubic)
 RUBICS_OBJS=$(RUBICS_FILES:.rubic=.ll)
 RUBICS_TESTS=$(RUBICS_FILES:.rubic=.test)
+RUBICS_TESTS_OUTPUT=$(RUBICS_FILES:.rubic=.test.output)
+RUBICS_TESTS_ERROR=$(RUBICS_FILES:.rubic=.test.error)
 
 tests : $(RUBICS_TESTS)
 
@@ -98,7 +100,8 @@ tree.h : linked_list.h
 .PHONY: clean mrproper
 
 clean:
-	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS)
+	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS) \
+		$(RUBICS_TESTS_OUTPUT) $(RUBICS_TESTS_ERROR)
 
 mrproper: clean
 	rm -rf $(EXECUTABLES)

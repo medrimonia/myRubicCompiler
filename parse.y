@@ -347,6 +347,7 @@ int main() {
   yyparse();
 	//printf("declare i32 @puts(i32*)\n"); //TODO Hack
 	print_constants();
+	declare_built_ins();
 	generate_code(global_root);
 	destroy_context(global_context);
   return 0;
