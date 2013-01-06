@@ -222,7 +222,7 @@ lhs             : ID
 								{
 									function_p f_called = get_function(actual_context,$ID);
 									if (f_called == NULL){
-										fprintf(stderr, "No function called %s found.", $ID);
+										fprintf(stderr, "No function called %s found.\n", $ID);
 										exit(EXIT_FAILURE);
 									}
 									$$ = new_tree_node(CALL);
