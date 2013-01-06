@@ -28,16 +28,13 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 %.s: %.ll
 	llc $<
 
-%.ll: %.txt rubic
+%.ll: %.rubic rubic
 	./rubic <$< >$@
 
 # SPECIFIC RULES
 
 test_appel : test_appel.s
 	$(CC) -o $@ $<
-
-test.ll: test.txt rubic
-	./rubic <test.txt >test.ll
 
 test: test.s
 	$(CC) -o $@ $<
@@ -79,11 +76,12 @@ constant_string_handler.o : constant_string_handler.h
 test_linked_list: linked_list.o test_linked_list.o
 	$(CC) -o $@ $^
 
-EXECUTABLES= \
-	hello_world \
-	rubic	\
-	test_hashmap \
+EXECUTABLES=       \
+	hello_world      \
+	rubic	           \
+	test_hashmap     \
 	test_linked_list \
+	test             \
 	test_appel
 
 
