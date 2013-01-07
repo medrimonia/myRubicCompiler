@@ -286,6 +286,8 @@ void generate_code_conditional(tn_pointer node){
 	if (cond->false_case != NULL){
 		printf("LABEL%d:\n",id_label_false);
 		generate_code(cond->false_case);
+		//actual_register++;
+		printf("br label %%LABEL%d\n", id_label_end);
 	}
 	printf("LABEL%d:\n", id_label_end);
 	

@@ -1,0 +1,9 @@
+def main()
+		toto = 3;
+		if 3 == 3 then
+			  toto = 3;
+		else
+				return 1;
+		end
+		return 0;
+end

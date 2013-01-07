@@ -122,11 +122,11 @@ stmt		: if_expr stmts terms END
 	$$ = new_tree_node(IF_NODE);
 	$$->content = new_conditional_block($if_expr, $stmts, NULL);
 }
-                | if_expr stmts terms ELSE stmts terms END
-								{
-	printf("Not implemented part\n");
-	exit(EXIT_FAILURE);
-								}
+                | if_expr stmts[true_bl] terms ELSE stmts[false_bl] terms END
+{
+	$$ = new_tree_node(IF_NODE);
+	$$->content = new_conditional_block($if_expr, $true_bl, $false_bl);
+}
 
                 | FOR ID IN expr TO expr term stmts terms END
 								{
