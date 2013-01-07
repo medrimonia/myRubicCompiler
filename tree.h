@@ -23,7 +23,8 @@ typedef enum {
 	LESS_NODE,
 	GREATER_NODE,
 	LEQ_NODE,
-	GEQ_NODE
+	GEQ_NODE,
+	IF_NODE
 } node_type;
 
 typedef enum{
@@ -57,10 +58,22 @@ struct primary{
 
 typedef struct primary * primary_p;
 
+struct conditional_block{
+	tn_pointer condition;
+	tn_pointer true_case;
+	tn_pointer false_case;
+};
+
+typedef struct conditional_block * conditional_block_p;
+
 tn_pointer new_tree_node(node_type t);
 
 tn_pointer new_icmp_node(node_type t,
 												 tn_pointer left_child,
 												 tn_pointer right_child);
+
+conditional_block_p new_conditional_block(tn_pointer cond,
+																					tn_pointer true_case,
+																					tn_pointer false_case);
 
 #endif

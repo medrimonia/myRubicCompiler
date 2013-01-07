@@ -55,6 +55,7 @@
 
 %type <node> lhs
 %type <node> expr
+%type <node> if_expr
 %type <node> primary
 %type <node> stmt
 %type <node> comp_expr
@@ -109,12 +110,19 @@ stmts	        : /* none */ {$$ = NULL;}
 }
                 ;
 
-stmt		: IF expr THEN stmts terms END
+// needed because of a conflict if placed in stmt
+if_expr : IF expr THEN
 {
-	printf("Not implemented part\n");
-	exit(EXIT_FAILURE);
+	$$ = $2;
+	actual_context = create_context_child(actual_context);
 }
-                | IF expr THEN stmts terms ELSE stmts terms END
+
+stmt		: if_expr stmts terms END
+{
+	$$ = new_tree_node(IF_NODE);
+	$$->content = new_conditional_block($if_expr, $stmts, NULL);
+}
+                | if_expr stmts terms ELSE stmts terms END
 								{
 	printf("Not implemented part\n");
 	exit(EXIT_FAILURE);

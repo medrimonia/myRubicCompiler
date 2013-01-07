@@ -10,6 +10,7 @@
 #include "constant_string_handler.h"
 
 int actual_register = 0;
+int actual_label = 0;
 function_p cg_actual_function = NULL;
 
 void generate_code_primary(tn_pointer node);
@@ -25,6 +26,8 @@ void generate_code_multiplication(tn_pointer node);
 void generate_code_division(tn_pointer node);
 
 void generate_code_icmp(tn_pointer node, const char * cmp_type);
+
+void generate_code_conditional(tn_pointer node);
 
 void generate_code_function(tn_pointer node);
 void generate_code_return(tn_pointer node);
@@ -57,6 +60,7 @@ int generate_code(tn_pointer node){
 	case LEQ_NODE : generate_code_icmp(node,"sle"); break;
 	case GEQ_NODE : generate_code_icmp(node,"sge"); break;
 	case GREATER_NODE : generate_code_icmp(node,"sgt"); break;
+	case IF_NODE : generate_code_conditional(node); break;
 	default: break;
 	}
 	return 0;	
@@ -215,6 +219,7 @@ void generate_code_return(tn_pointer node){
 	printf("ret %s %%%d\n",
 				 type_get_name(t),
 				 actual_register);
+	actual_register++;
 }
 
 //TODO parameters added in reverse order
@@ -262,9 +267,32 @@ void generate_code_call(tn_pointer node){
 	
 }
 
+//TODO label might be more explicit
+void generate_code_conditional(tn_pointer node){
+	conditional_block_p  cond = node->content;
+	generate_code(cond->condition);
+	int id_label_true = actual_label++;
+	int id_label_false = -1;
+	if (cond->false_case != NULL)
+		id_label_false = actual_label++;
+	int id_label_end = actual_label++;
+	printf("br i1 %%%d, label %%LABEL%d, label %%LABEL%d\n",
+				 cond->condition->reg_number,
+				 id_label_true,
+				 (id_label_false != -1) ? id_label_false : id_label_end);
+	printf("LABEL%d:\n",id_label_true);
+	generate_code(cond->true_case);
+	printf("br label %%LABEL%d\n", id_label_end);
+	if (cond->false_case != NULL){
+		printf("LABEL%d:\n",id_label_false);
+		generate_code(cond->false_case);
+	}
+	printf("LABEL%d:\n", id_label_end);
+	
+}
+
 
 void generate_variable_allocation(function_p f){
-	//TODO handle type
 	dictionnary_pointer d = f->inner_context->local_variables;
 	dictionnary_start_iteration(d);
 	while(!dictionnary_is_ended_iteration(d)){

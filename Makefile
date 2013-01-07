@@ -104,4 +104,4 @@ clean:
 		$(RUBICS_TESTS_OUTPUT) $(RUBICS_TESTS_ERROR)
 
 mrproper: clean
-	rm -rf $(EXECUTABLES)
+	rm -rf $(EXECUTABLES) *~

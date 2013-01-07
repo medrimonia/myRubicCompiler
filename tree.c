@@ -25,3 +25,13 @@ tn_pointer new_icmp_node(node_type t,
 																		 right_child->allowed_types);
 	return new;	
 }
+
+conditional_block_p new_conditional_block(tn_pointer cond,
+																					tn_pointer true_case,
+																					tn_pointer false_case){
+	conditional_block_p new = malloc(sizeof(struct conditional_block));
+	new->condition = cond;
+	new->true_case = true_case;
+	new->false_case = false_case;
+	return new;
+}
