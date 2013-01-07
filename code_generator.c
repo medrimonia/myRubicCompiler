@@ -18,10 +18,14 @@ void generate_code_affect(tn_pointer node);
 void generate_code_list(tn_pointer node);
 void generate_code_identifier(tn_pointer node);
 void generate_code_generic_operation(tn_pointer node, char * op);
+
 void generate_code_addition(tn_pointer node);
 void generate_code_substraction(tn_pointer node);
 void generate_code_multiplication(tn_pointer node);
 void generate_code_division(tn_pointer node);
+
+void generate_code_icmp(tn_pointer node, const char * cmp_type);
+
 void generate_code_function(tn_pointer node);
 void generate_code_return(tn_pointer node);
 void generate_code_call(tn_pointer node);
@@ -47,6 +51,12 @@ int generate_code(tn_pointer node){
 	case FUNCTION : generate_code_function(node); break;
 	case RETURN_NODE : generate_code_return(node); break;
 	case CALL : generate_code_call(node); break;
+	case NEQ_NODE : generate_code_icmp(node,"ne"); break;
+	case EQ_NODE : generate_code_icmp(node,"eq"); break;
+	case LESS_NODE : generate_code_icmp(node,"slt"); break;
+	case LEQ_NODE : generate_code_icmp(node,"sle"); break;
+	case GEQ_NODE : generate_code_icmp(node,"sge"); break;
+	case GREATER_NODE : generate_code_icmp(node,"sgt"); break;
 	default: break;
 	}
 	return 0;	
@@ -123,6 +133,10 @@ void generate_code_generic_operation(tn_pointer node, char * op){
 	node->reg_number = ++actual_register;
 	
 	type_p t = th_true_type(node->allowed_types);
+	if (t == NULL){
+		fprintf(stderr, "the result type of operation is undecidable\n");
+		exit(EXIT_FAILURE);
+	}
 	printf("%%%d = %s %s %%%d, %%%d\n",
 				 node->reg_number,
 				 op,
@@ -145,6 +159,26 @@ void generate_code_multiplication(tn_pointer node){
 
 void generate_code_division(tn_pointer node){
 	generate_code_generic_operation(node, "sdiv");
+}
+
+void generate_code_icmp(tn_pointer node, const char * cmp_type){
+	generate_code(node->left_child);
+	generate_code(node->right_child);
+	node->reg_number = ++actual_register;
+
+	//TODO eventually pass through a tmp list with left and right child
+//linked_list_pointer l = compared_type(node->left_child, node->right_child);
+	type_p t = th_true_type(node->right_child->allowed_types);
+	if (t == NULL){
+		fprintf(stderr, "the type used for comparison is undecidable\n");
+		exit(EXIT_FAILURE);
+	}
+	printf("%%%d = icmp %s %s %%%d, %%%d\n",
+				 node->reg_number,
+				 cmp_type,
+				 type_get_name(t),
+				 node->left_child->reg_number,
+				 node->right_child->reg_number);
 }
 
 void generate_code_function(tn_pointer node){

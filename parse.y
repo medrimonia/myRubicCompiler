@@ -282,16 +282,28 @@ expr            : expr AND comp_expr
                 | comp_expr { $$ = $1;}
 ;
 comp_expr       : additive_expr '<' additive_expr
+{
+	$$ = new_icmp_node(LESS_NODE, $1, $3);
+}
                 | additive_expr '>' additive_expr
+{
+	$$ = new_icmp_node(GREATER_NODE, $1, $3);
+}
                 | additive_expr LEQ additive_expr
+{
+	$$ = new_icmp_node(LEQ_NODE, $1, $3);
+}
                 | additive_expr GEQ additive_expr
+{
+	$$ = new_icmp_node(GEQ_NODE, $1, $3);
+}
                 | additive_expr EQ additive_expr
+{
+	$$ = new_icmp_node(EQ_NODE, $1, $3);
+}
                 | additive_expr NEQ additive_expr
 {
-	$$ = new_tree_node(NEQ_NODE);
-	$$->left_child = $1;
-	$$->right_child = $3;
-	$$->allowed_types = th_comparison($1->allowed_types, $3->allowed_types);
+	$$ = new_icmp_node(NEQ_NODE, $1, $3);
 }
                 | additive_expr { $$ = $1;}
 ;

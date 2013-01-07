@@ -18,7 +18,12 @@ typedef enum {
 	FUNCTION,
 	RETURN_NODE,
 	CALL,
-	NEQ_NODE
+	NEQ_NODE,
+	EQ_NODE,
+	LESS_NODE,
+	GREATER_NODE,
+	LEQ_NODE,
+	GEQ_NODE
 } node_type;
 
 typedef enum{
@@ -53,5 +58,9 @@ struct primary{
 typedef struct primary * primary_p;
 
 tn_pointer new_tree_node(node_type t);
+
+tn_pointer new_icmp_node(node_type t,
+												 tn_pointer left_child,
+												 tn_pointer right_child);
 
 #endif
