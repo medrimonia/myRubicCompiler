@@ -1,0 +1,10 @@
+def fact(i)
+		if (i == 0 || i == 1) then
+			 return 1;
+	  end
+		return i * fact(i - 1)
+end
+
+def main()
+		return 24 - fact(4)
+end

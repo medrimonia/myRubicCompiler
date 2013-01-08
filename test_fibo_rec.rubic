@@ -1,0 +1,10 @@
+def fibonnaci(i)
+		if (i == 0 || i == 1) then
+			 return 1;
+	  end
+		return fibonnaci(i - 1) + fibonnaci(i - 2)
+end
+
+def main()
+		return 5 - fibonnaci(4)
+end

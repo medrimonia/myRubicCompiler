@@ -197,13 +197,13 @@ stmt		: if_expr stmts terms END
 									actual_function = new_function(actual_context);
 									declare_parameters_to_variables(actual_context,
 																									$opt_params);
-								}
-								term stmts[code] terms END
-								{
 									actual_function->name = $2;
 									actual_function->parameters = $opt_params;
 									add_function_to_context(actual_function,
 																					actual_context->parent_context);
+								}
+								term stmts[code] terms END
+								{
 									actual_function->root = $code;
 									$$ = new_tree_node(FUNCTION);
 									$$->content = actual_function;
