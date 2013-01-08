@@ -39,6 +39,7 @@ ID ([$@]?[a-zA-Z_][a-zA-Z_0-9]*)
 {S}      { yylval.s = strdup(yytext);count(); return(STRING); }
 "for"    { count(); return(FOR); }
 "while"  { count(); return(WHILE);}
+"do"  { count(); return(DO);}
 "if"     { count(); return(IF); }
 "then"   { count(); return(THEN); }
 "else"   { count(); return(ELSE); }

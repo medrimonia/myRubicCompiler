@@ -1,0 +1,7 @@
+def main()
+		test = 7;
+		while (test > 0) do
+					test = test - 1;
+		end
+		return test;
+end

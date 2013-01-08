@@ -192,6 +192,11 @@ void generate_code_while(tn_pointer node){
 	int id_label_cond = actual_label++;
 	int id_label_code = actual_label++;
 	int id_label_end = actual_label++;
+	/* It's forbidden to print a label if current block hasn't been terminated
+	 * cf : http://zanopia.wordpress.com/2010/09/14/understanding-llvm-assembly-with-fractals-part-i/
+	 * search for LOOPS 
+	 */
+	printf("br label %%LABEL%d\n", id_label_cond);
 	printf("LABEL%d:\n",id_label_cond);
 	generate_code(node->left_child);//left_child contain the code
 	printf("br i1 %%%d, label %%LABEL%d, label %%LABEL%d\n",
