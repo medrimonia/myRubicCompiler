@@ -1,0 +1,7 @@
+def main()
+		test = 6
+		for tmp in 0 .. 4 do
+				test = test - tmp;
+		end
+		return test
+end

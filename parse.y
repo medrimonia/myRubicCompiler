@@ -128,13 +128,28 @@ stmt		: if_expr stmts terms END
 	$$->content = new_conditional_block($if_expr, $true_bl, $false_bl);
 }
 
-                | FOR ID IN expr TO expr term stmts terms END
-								{
-	printf("Not implemented part\n");
-	exit(EXIT_FAILURE);
-								}
+    | FOR ID IN expr[from_expr] TO expr[to_expr] DO
+{
+	actual_context = create_context_child(actual_context);
+	declare_variable(actual_context, $ID);
+}
+      term stmts[code] terms END
+{
+	// ID in expr TO expr ?
+	type_p int_type = get_type_from_name("i32");
+	type_p from_type = th_true_type($4->allowed_types);
+	type_p dest_type = th_true_type($4->allowed_types);
+	if (int_type != from_type || int_type != dest_type){
+		fprintf(stderr,"invalid type used in for limits");
+		exit(EXIT_FAILURE);
+	}
+	$$ = new_tree_node(FOR_NODE);
+	$$->context = actual_context;
+	$$->content = new_for_block($ID, $from_expr, $to_expr, $code);
+}
                 | WHILE expr DO term stmts terms END 
 								{
+									//TODO sub_context
 	$$ = new_tree_node(WHILE_NODE);
 	$$->left_child = $expr;
 	$$->right_child = $stmts;

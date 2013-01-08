@@ -35,3 +35,15 @@ conditional_block_p new_conditional_block(tn_pointer cond,
 	new->false_case = false_case;
 	return new;
 }
+
+for_block_p new_for_block(char * var_id,
+													tn_pointer from_expr,
+													tn_pointer to_expr,
+													tn_pointer code){
+	for_block_p new = malloc(sizeof(struct for_block));
+	new->var_id = var_id;
+	new->from_expr = from_expr;
+	new->to_expr = to_expr;
+	new->code = code;
+	return new;
+}

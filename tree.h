@@ -25,7 +25,8 @@ typedef enum {
 	LEQ_NODE,
 	GEQ_NODE,
 	IF_NODE,
-	WHILE_NODE
+	WHILE_NODE,
+	FOR_NODE
 } node_type;
 
 typedef enum{
@@ -67,6 +68,15 @@ struct conditional_block{
 
 typedef struct conditional_block * conditional_block_p;
 
+struct for_block{
+	char * var_id;
+	tn_pointer from_expr;
+	tn_pointer to_expr;
+	tn_pointer code;
+};
+
+typedef struct for_block * for_block_p;
+
 tn_pointer new_tree_node(node_type t);
 
 tn_pointer new_icmp_node(node_type t,
@@ -76,5 +86,10 @@ tn_pointer new_icmp_node(node_type t,
 conditional_block_p new_conditional_block(tn_pointer cond,
 																					tn_pointer true_case,
 																					tn_pointer false_case);
+
+for_block_p new_for_block(char * var_id,
+													tn_pointer from_node,
+													tn_pointer to_node,
+													tn_pointer code);
 
 #endif

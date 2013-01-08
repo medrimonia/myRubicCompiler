@@ -30,6 +30,7 @@ void generate_code_icmp(tn_pointer node, const char * cmp_type);
 void generate_code_conditional(tn_pointer node);
 
 void generate_code_while(tn_pointer node);
+void generate_code_for(tn_pointer node);
 
 void generate_code_function(tn_pointer node);
 void generate_code_return(tn_pointer node);
@@ -64,6 +65,7 @@ int generate_code(tn_pointer node){
 	case GREATER_NODE : generate_code_icmp(node,"sgt"); break;
 	case IF_NODE : generate_code_conditional(node); break;
 	case WHILE_NODE : generate_code_while(node); break;
+	case FOR_NODE : generate_code_for(node); break;
 	default: break;
 	}
 	return 0;	
@@ -208,6 +210,56 @@ void generate_code_while(tn_pointer node){
 	generate_code(node->right_child);
 	printf("br label %%LABEL%d\n", id_label_cond);
 	printf("LABEL%d:\n",id_label_end);
+}
+
+void generate_code_for(tn_pointer node){
+	int id_label_start = actual_label++;
+	int id_label_code = actual_label++;
+	int id_label_end = actual_label++;
+	for_block_p content = node->content;
+	// generate from and to nodes
+	generate_code(content->from_expr);
+	generate_code(content->to_expr);
+	// first initialize variable
+	printf("%%%s = alloca i32, align 4\n", content->var_id);//alloc
+	printf("%%%d = add i32 %%%d, 0\n",
+				 ++actual_register,
+				 content->from_expr->reg_number);
+	printf("store i32 %%%d, i32 * %%%s\n",
+				 actual_register,
+				 content->var_id);//store value
+	printf("br label %%LABEL%d\n",id_label_start);
+	// START and cond
+	printf("LABEL%d:\n",id_label_start);
+	printf("%%%d = load i32 * %%%s\n",
+				 ++actual_register,
+				 content->var_id);
+	printf("%%%d = icmp uge i32 %%%d, %%%d\n",// unsigned greater or equal
+				 actual_register + 1,
+				 actual_register,
+				 content->to_expr->reg_number);
+	actual_register++;
+	printf("br i1 %%%d, label %%LABEL%d, label %%LABEL%d\n",
+				 actual_register,
+				 id_label_end,
+				 id_label_code);
+	// CODE
+	printf("LABEL%d:\n", id_label_code);
+	generate_code(content->code);
+	// increasing var values
+	printf("%%%d = load i32 * %%%s\n",
+				 ++actual_register,
+				 content->var_id);
+	printf("%%%d = add i32 %%%d, 1\n",
+				 actual_register + 1,
+				 actual_register);
+	actual_register++;
+	printf("store i32 %%%d, i32 * %%%s\n",
+				 actual_register,
+				 content->var_id);//store value
+	printf("br label %%LABEL%d\n", id_label_start);
+	// END
+	printf("LABEL%d:\n", id_label_end);
 }
 
 void generate_code_function(tn_pointer node){
