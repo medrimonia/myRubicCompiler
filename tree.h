@@ -24,7 +24,8 @@ typedef enum {
 	GREATER_NODE,
 	LEQ_NODE,
 	GEQ_NODE,
-	IF_NODE
+	IF_NODE,
+	WHILE_NODE
 } node_type;
 
 typedef enum{

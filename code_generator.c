@@ -29,6 +29,8 @@ void generate_code_icmp(tn_pointer node, const char * cmp_type);
 
 void generate_code_conditional(tn_pointer node);
 
+void generate_code_while(tn_pointer node);
+
 void generate_code_function(tn_pointer node);
 void generate_code_return(tn_pointer node);
 void generate_code_call(tn_pointer node);
@@ -61,6 +63,7 @@ int generate_code(tn_pointer node){
 	case GEQ_NODE : generate_code_icmp(node,"sge"); break;
 	case GREATER_NODE : generate_code_icmp(node,"sgt"); break;
 	case IF_NODE : generate_code_conditional(node); break;
+	case WHILE_NODE : generate_code_while(node); break;
 	default: break;
 	}
 	return 0;	
@@ -183,6 +186,23 @@ void generate_code_icmp(tn_pointer node, const char * cmp_type){
 				 type_get_name(t),
 				 node->left_child->reg_number,
 				 node->right_child->reg_number);
+}
+
+void generate_code_while(tn_pointer node){
+	int id_label_cond = actual_label++;
+	int id_label_code = actual_label++;
+	int id_label_end = actual_label++;
+	printf("LABEL%d:\n",id_label_cond);
+	generate_code(node->left_child);//left_child contain the code
+	printf("br i1 %%%d, label %%LABEL%d, label %%LABEL%d\n",
+				 node->left_child->reg_number,
+				 id_label_code,
+				 id_label_end);
+	printf("LABEL%d:\n",id_label_code);
+	//TODO variable first used in while not handled now
+	generate_code(node->right_child);
+	printf("br label %%LABEL%d\n", id_label_cond);
+	printf("LABEL%d:\n",id_label_end);
 }
 
 void generate_code_function(tn_pointer node){

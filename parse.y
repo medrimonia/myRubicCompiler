@@ -135,8 +135,9 @@ stmt		: if_expr stmts terms END
 								}
                 | WHILE expr DO term stmts terms END 
 								{
-	printf("Not implemented part\n");
-	exit(EXIT_FAILURE);
+	$$ = new_tree_node(WHILE_NODE);
+	$$->left_child = $expr;
+	$$->right_child = $stmts;
 								}
                 | lhs '=' expr
 {
