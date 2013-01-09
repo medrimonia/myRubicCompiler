@@ -301,7 +301,13 @@ primary         : lhs
 								}
 ;
 expr            : expr AND comp_expr
+{
+	$$ = new_logical_node(AND_NODE, $1, $3);
+}
                 | expr OR comp_expr
+{
+	$$ = new_logical_node(OR_NODE, $1, $3);
+}
                 | comp_expr { $$ = $1;}
 ;
 comp_expr       : additive_expr '<' additive_expr

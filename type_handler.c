@@ -108,6 +108,13 @@ linked_list_pointer th_comparison(linked_list_pointer l1,
 	return new_type_list_single_from_name("i1");
 }
 
+linked_list_pointer th_logical_operation(linked_list_pointer l1,
+																				 linked_list_pointer l2){
+	remove_types_not_shared(l1, logical_types);
+	remove_types_not_shared(l2, logical_types);
+	return new_type_list_single_from_name("i1");
+}
+
 type_p th_true_type(linked_list_pointer l){
 	if (linked_list_size(l) != 1)// all variables must have only one type
 		return NULL;

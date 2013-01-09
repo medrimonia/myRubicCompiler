@@ -26,7 +26,9 @@ typedef enum {
 	GEQ_NODE,
 	IF_NODE,
 	WHILE_NODE,
-	FOR_NODE
+	FOR_NODE,
+	OR_NODE,
+	AND_NODE
 } node_type;
 
 typedef enum{
@@ -78,6 +80,10 @@ struct for_block{
 typedef struct for_block * for_block_p;
 
 tn_pointer new_tree_node(node_type t);
+
+tn_pointer new_logical_node(node_type t,
+														tn_pointer left_child,
+														tn_pointer right_child);
 
 tn_pointer new_icmp_node(node_type t,
 												 tn_pointer left_child,

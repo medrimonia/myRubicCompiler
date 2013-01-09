@@ -53,6 +53,8 @@ int generate_code(tn_pointer node){
 	case ADDITION : generate_code_addition(node); break;
 	case SUBSTRACTION : generate_code_substraction(node); break;
 	case MULTIPLY : generate_code_multiplication(node); break;
+	case OR_NODE : generate_code_generic_operation(node, "or"); break;
+	case AND_NODE : generate_code_generic_operation(node, "and"); break;
 	case DIVIDE : generate_code_division(node); break;
 	case FUNCTION : generate_code_function(node); break;
 	case RETURN_NODE : generate_code_return(node); break;

@@ -49,6 +49,12 @@ linked_list_pointer th_addition(linked_list_pointer l1,
 linked_list_pointer th_comparison(linked_list_pointer l1,
 																	linked_list_pointer l2);
 
+/* handle a logical operation between two types list and return the type list
+ * corresponding to the allowed types for the result
+ */
+linked_list_pointer th_logical_operation(linked_list_pointer l1,
+																				 linked_list_pointer l2);
+
 /* Return NULL if the list doesn't contain exactly one type
  * and the only type if the list contains only one element
  */

@@ -15,6 +15,17 @@ tn_pointer new_tree_node(node_type t){
 	return new;
 }
 
+tn_pointer new_logical_node(node_type t,
+														tn_pointer left_child,
+														tn_pointer right_child){
+	tn_pointer new = new_tree_node(t);
+	new->left_child = left_child;
+	new->right_child = right_child;
+	new->allowed_types = th_logical_operation(left_child->allowed_types,
+																						right_child->allowed_types);
+	return new;
+}
+
 tn_pointer new_icmp_node(node_type t,
 												 tn_pointer left_child,
 												 tn_pointer right_child){
