@@ -1,5 +1,5 @@
 def fibonnaci(i)
-		if (i == 0 || i == 1) then
+		if (i <= 1) then
 			 return 1;
 	  end
 		return fibonnaci(i - 1) + fibonnaci(i - 2)
