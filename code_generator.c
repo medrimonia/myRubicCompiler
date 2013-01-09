@@ -77,15 +77,11 @@ void generate_code_primary(tn_pointer node){
 	primary_p p = (primary_p) node->content;
 	node->reg_number = ++actual_register;
 	switch(p->t){
-	case PRIMARY_STRING: //TODO : handle later
+	case PRIMARY_STRING:
 		printf("%%%d = ", actual_register);
 		printf("getelementptr inbounds [%d x i8]* @%d, i32 0, i32 0\n",
 					 get_constant_size(p->s_id),
 					 p->s_id);
-		break;
-	case PRIMARY_EXPR: //TODO : handle later
-		printf("PRIMARY_EXPR not handled\n");
-		exit(EXIT_FAILURE);
 		break;
 	case PRIMARY_FLOAT: //TODO : handle later
 		printf("PRIMARY_FLOAT not handled\n");
@@ -105,7 +101,6 @@ void generate_code_affect(tn_pointer node){
 	//generate_code(node->left_child);
 	generate_code(node->right_child);
 	node->reg_number = actual_register;
-	//TODO check types
 	type_p t = th_true_type(node->right_child->allowed_types);
 	if (t == NULL){
 		fprintf(stderr, "the variable has an undecidable type\n");
@@ -301,7 +296,6 @@ void generate_code_return(tn_pointer node){
 	actual_register++;
 }
 
-//TODO parameters added in reverse order
 void generate_code_call(tn_pointer node){
 	function_call_p fc = node->content;
 	//calculating parameters values
@@ -386,36 +380,7 @@ void generate_variable_allocation(function_p f){
 		printf("%%%s = alloca %s, align 4\n",
 					 (char *) dictionnary_get_current_key(d),
 					 type_get_name(th_true_type(v->allowed_types)));
-		/*variable_p v = dictionnary_get_current_value(d);
-		int nb_types = linked_list_size(v->possible_types);
-		printf("\tnb_types = %d\n",nb_types);
-		linked_list_restart(v->possible_types);
-		if (!linked_list_is_empty(v->possible_types)){
-			while(true){
-				type_p t = linked_list_get(v->possible_types);
-				printf("\t\ttype : '%s'\n",type_get_name(t));
-				if (linked_list_end(v->possible_types))
-					break;
-				linked_list_next(v->possible_types);
-			}
-			}*/
 		dictionnary_next_element(d);
 	}
-	// ALLOCATION for parameters
-	/*if (f->parameters == NULL)
-		return;
-	linked_list_restart(f->parameters);
-	while (true){
-		// TODO handle type
-		variable_p v = get_variable(f->inner_context,
-																linked_list_get(f->parameters));
-		printf("%%%s = alloca %s, align 4\n",
-					 (char *) linked_list_get(f->parameters),
-					 type_get_name(th_true_type(v->allowed_types)));
-		//th_true_type();
-		if (linked_list_end(f->parameters))
-			break;
-		linked_list_next(f->parameters);
-		}*/
 }
 

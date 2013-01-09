@@ -34,8 +34,7 @@ typedef enum {
 typedef enum{
 	PRIMARY_STRING,
 	PRIMARY_FLOAT,
-	PRIMARY_INT,
-	PRIMARY_EXPR
+	PRIMARY_INT
 } primary_type;
 
 struct tree_node{
