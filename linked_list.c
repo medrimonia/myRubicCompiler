@@ -39,6 +39,7 @@ void linked_list_insert(linked_list_pointer l, void * element){
 }
 
 //TODO merge two function with a boolean swap in order to share code
+// (linked_list insert or insert_after)
 void linked_list_insert_after(linked_list_pointer l, void * element){
 	node_pointer new_node =
 		(node_pointer)malloc(sizeof(struct linked_list_node));

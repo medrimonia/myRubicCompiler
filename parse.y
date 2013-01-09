@@ -84,15 +84,15 @@ topstmts        :      {$$ = NULL;}
 	$$->right_child = $3;
 }
 ;
-topstmt	        : CLASS ID term stmts END
+topstmt	        : CLASS ID term stmts terms END
 {
 	printf("Not implemented part\n");
-	exit(EXIT_FAILURE);
+	//exit(EXIT_FAILURE);
 }
-                | CLASS ID '<' ID term stmts END
+                | CLASS ID '<' ID term stmts terms END
 {
 	printf("Not implemented part\n");
-	exit(EXIT_FAILURE);
+	//exit(EXIT_FAILURE);
 }
 | stmt { $$ = $1;}
 ;
