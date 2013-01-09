@@ -1,0 +1,6 @@
+def main()
+		if 3 == 4 || 4 == 3 then
+			 return 1;
+		end
+		return 0;
+end
