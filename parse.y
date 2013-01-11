@@ -121,11 +121,13 @@ stmt		: if_expr stmts terms END
 {
 	$$ = new_tree_node(IF_NODE);
 	$$->content = new_conditional_block($if_expr, $stmts, NULL);
+	actual_context = actual_context->parent_context;
 }
                 | if_expr stmts[true_bl] terms ELSE stmts[false_bl] terms END
 {
 	$$ = new_tree_node(IF_NODE);
 	$$->content = new_conditional_block($if_expr, $true_bl, $false_bl);
+	actual_context = actual_context->parent_context;
 }
 
     | FOR ID IN expr[from_expr] TO expr[to_expr] DO
