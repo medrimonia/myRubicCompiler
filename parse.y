@@ -209,6 +209,7 @@ stmt		: if_expr stmts terms END
 									actual_function->root = $code;
 									$$ = new_tree_node(FUNCTION);
 									$$->content = actual_function;
+									actual_context = actual_context->parent_context;
 								}
 ; 
 
