@@ -58,6 +58,12 @@ void linked_list_insert_after(linked_list_pointer l, void * element){
 	l->size++;		
 }
 
+void linked_list_append(linked_list_pointer l, void * element){
+	linked_list_insert_after(l, element);
+	if (l->size != 1)
+		linked_list_next(l);
+}
+
 void linked_list_insert_in_head(linked_list_pointer l, void * element){
 	node_pointer new_node =
 		(node_pointer)malloc(sizeof(struct linked_list_node));

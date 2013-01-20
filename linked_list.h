@@ -29,8 +29,16 @@ void linked_list_insert(linked_list_pointer l, void * element);
 /* Insert the specified element after the actual value
  * The element must absolutely be copied before inserting it, because
  * it will be free at destroy
+ * at end, l->actual is the same as before
  */
 void linked_list_insert_after(linked_list_pointer l, void * element);
+
+/* Insert the specified element after the actual value
+ * The element must absolutely be copied before inserting it, because
+ * it will be free at destroy
+ * at end, l->actual is on the new element
+ */
+void linked_list_append(linked_list_pointer l, void * element);
 
 /* Insert the specified element at the head of the list 
  * The element must absolutely be copied before inserting it, because
