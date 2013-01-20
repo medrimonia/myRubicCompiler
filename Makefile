@@ -59,6 +59,10 @@ linked_list.o: linked_list.h
 
 test_linked_list.o: linked_list.h
 
+doubly_linked_list.o: doubly_linked_list.h
+
+test_doubly_linked_list.o: doubly_linked_list.h
+
 type.o : type.h
 
 variable.o : variable.h
@@ -68,6 +72,9 @@ type_handler.o : type_handler.h
 constant_string_handler.o : constant_string_handler.h
 
 test_linked_list: linked_list.o test_linked_list.o
+	$(CC) -o $@ $^
+
+test_doubly_linked_list: doubly_linked_list.o test_doubly_linked_list.o
 	$(CC) -o $@ $^
 
 RUBICS_FILES=$(wildcard *.rubic)
@@ -83,6 +90,7 @@ EXECUTABLES=       \
 	rubic	           \
 	test_hashmap     \
 	test_linked_list \
+	test_doubly_linked_list \
 	$(RUBICS_TESTS)
 
 
