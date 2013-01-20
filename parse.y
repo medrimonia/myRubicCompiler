@@ -10,6 +10,7 @@
 	#include "type.h"
 	#include "type_handler.h"
 	#include "constant_string_handler.h"
+	#include "validation.h"
 
 	// Declaring functions in order to avoid warnings
 	int yylex(void);
@@ -210,11 +211,13 @@ stmt		: if_expr stmts terms END
 									$$ = new_tree_node(FUNCTION);
 									$$->content = actual_function;
 									actual_context = actual_context->parent_context;
+									//TODO WORK IN PROGRESS
+									validate_function(actual_function);
 								}
 ; 
 
-opt_params      : /* none */ { $$ = NULL;}
-                | '(' ')' { $$ = NULL;}
+opt_params      : /* none */ { $$ = new_linked_list();}
+                | '(' ')' { $$ = new_linked_list();}
                 | '(' params ')' {$$ = $2;}
 ;
 params          : ID ',' params

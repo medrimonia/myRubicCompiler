@@ -38,6 +38,11 @@ void insert_with_place(doubly_linked_list_pointer l,
 		new_node->data = dest->data;
 		dest->data = element;
 	}
+	// Updating first and last
+	if (dest == l->sentinel)
+		l->last = new_node;
+	if (dest->previous == l->sentinel)
+		l->first = new_node;
 	// Updating links
 	new_node->previous = dest->previous;
 	new_node->next = dest;
@@ -46,15 +51,9 @@ void insert_with_place(doubly_linked_list_pointer l,
 	if (new_node->previous != l->sentinel)
 		new_node->previous->next = new_node;
 	// Updating first and last pointers
-	if (l->size == 0)
+	// TODO issues here
+	if (l->size == 0){
 		l->actual = new_node;
-	if (l->size == 0 ||
-			(dest == l->first && before)){
-		l->first = new_node;
-	}
-	if (l->size == 0 ||
-			(dest == l->last && !before)){
-		l->last = new_node;
 	}
 	l->size++;
 }

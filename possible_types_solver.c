@@ -1,6 +1,7 @@
 #include "possible_types_solver.h"
 #include "type.h"
 #include "type_handler.h"
+#include <stdio.h>
 
 type_solver_p new_type_solver(function_p f){
 	type_solver_p new = new_doubly_linked_list();
@@ -15,6 +16,8 @@ type_solver_p new_type_solver(function_p f){
 			break;
 		linked_list_next(f->parameters);
 	}	
+	printf("new type solver with %d parameters created\n",
+				 doubly_linked_list_size(new));
 	return new;
 }
 
@@ -74,6 +77,7 @@ linked_list_pointer get_combination(type_solver_p ts){
 	doubly_linked_list_last(ts);
 	while(true){
 		variable_p v = (variable_p)doubly_linked_list_get(ts);
+		printf("adding variable %s to combination\n", v->name);
 		type_p type = linked_list_get(v->allowed_types);
 		linked_list_insert(combination,
 											 new_variable(new_type_list_single(type),

@@ -383,4 +383,3 @@ void generate_variable_allocation(function_p f){
 		dictionnary_next_element(d);
 	}
 }
-

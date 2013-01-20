@@ -11,13 +11,14 @@ lex.yy.c: scanner.l
 	lex $<
 y.tab.c: parse.y tree.h linked_list.h
 	yacc $(YACCFLAGS) -d $<
-y.tab.o: y.tab.c y.tab.h context.h tree.h code_generator.h
+y.tab.o: y.tab.c y.tab.h context.h tree.h code_generator.h validation.h
 	$(CC) $(CFLAGS) -c $<
 lex.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) -c $<
 rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 			 code_generator.o tree.o function.o type_handler.o type.o variable.o \
-			 constant_string_handler.o doubly_linked_list.o possible_types_solver.o
+			 constant_string_handler.o doubly_linked_list.o \
+			 possible_types_solver.o validation.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 # GENERIC RULES
@@ -73,6 +74,8 @@ type_handler.o : type_handler.h
 
 constant_string_handler.o : constant_string_handler.h
 
+validation.o : validation.h
+
 test_linked_list: linked_list.o test_linked_list.o
 	$(CC) -o $@ $^
 
@@ -104,7 +107,9 @@ type.h : linked_list.h
 
 tree.h : linked_list.h
 
-possible_types_solver: doubly_linked_list.h function.h
+possible_types_solver.h: doubly_linked_list.h function.h
+
+validation.h: function.h possible_types_solver.h
 
 ### CLEANING PART ###
 
