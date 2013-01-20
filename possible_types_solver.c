@@ -10,14 +10,15 @@ type_solver_p new_type_solver(function_p f){
 	linked_list_restart(f->parameters);
 	while(true){
 		char * param_name = linked_list_get(f->parameters);
+		//printf("param : %s\n", param_name);
 		variable_p v = get_variable(f->inner_context, param_name);
 		doubly_linked_list_append(new, copy_variable(v));
 		if (linked_list_end(f->parameters))
 			break;
 		linked_list_next(f->parameters);
 	}	
-	printf("new type solver with %d parameters created\n",
-				 doubly_linked_list_size(new));
+	//printf("new type solver with %d parameters created\n",
+	//			 doubly_linked_list_size(new));
 	return new;
 }
 
@@ -77,7 +78,6 @@ linked_list_pointer get_combination(type_solver_p ts){
 	doubly_linked_list_last(ts);
 	while(true){
 		variable_p v = (variable_p)doubly_linked_list_get(ts);
-		printf("adding variable %s to combination\n", v->name);
 		type_p type = linked_list_get(v->allowed_types);
 		linked_list_insert(combination,
 											 new_variable(new_type_list_single(type),

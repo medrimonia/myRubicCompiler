@@ -222,8 +222,7 @@ opt_params      : /* none */ { $$ = new_linked_list();}
 ;
 params          : ID ',' params
 {
-	linked_list_insert_after($3, $ID);
-	linked_list_next($3);
+	linked_list_insert($3, $ID);
 	$$ = $3;
 }
                 | ID

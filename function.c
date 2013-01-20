@@ -96,7 +96,7 @@ variable_p get_parameter(function_p f, char * name){
 
 
 void generate_parameters(function_p f){
-	if (f->parameters == NULL)
+	if (linked_list_size(f->parameters) == 0)
 		return;
 	linked_list_restart(f->parameters);
 	while (true){
@@ -118,7 +118,7 @@ void generate_parameters(function_p f){
 }
 
 void load_parameters(function_p f){
-	if (f->parameters == NULL)
+	if (linked_list_size(f->parameters) == 0)
 		return;
 	linked_list_restart(f->parameters);
 	while (true){
