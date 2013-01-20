@@ -23,6 +23,10 @@ typedef struct doubly_linked_list * doubly_linked_list_pointer;
 /* Return a new doubly linked list */
 doubly_linked_list_pointer new_doubly_linked_list();
 
+/* Insert the specified element after the actual value and then jump on the
+	 new value */
+void doubly_linked_list_append(doubly_linked_list_pointer l, void * element);
+
 /* Insert the specified element before the actual value */
 void doubly_linked_list_insert(doubly_linked_list_pointer l, void * element);
 

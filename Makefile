@@ -17,7 +17,7 @@ lex.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) -c $<
 rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 			 code_generator.o tree.o function.o type_handler.o type.o variable.o \
-			 constant_string_handler.o
+			 constant_string_handler.o doubly_linked_list.o possible_types_solver.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 # GENERIC RULES
@@ -63,6 +63,8 @@ doubly_linked_list.o: doubly_linked_list.h
 
 test_doubly_linked_list.o: doubly_linked_list.h
 
+possible_types_solver.o: possible_types_solver.h type.h type_handler.h
+
 type.o : type.h
 
 variable.o : variable.h
@@ -101,6 +103,8 @@ type_handler.h : type.h linked_list.h
 type.h : linked_list.h
 
 tree.h : linked_list.h
+
+possible_types_solver: doubly_linked_list.h function.h
 
 ### CLEANING PART ###
 

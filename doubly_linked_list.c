@@ -59,6 +59,13 @@ void insert_with_place(doubly_linked_list_pointer l,
 	l->size++;
 }
 
+void doubly_linked_list_append(doubly_linked_list_pointer l,
+															 void * element){
+	insert_with_place(l, l->actual, element, false);//insert after
+	if (l->size > 1)
+		doubly_linked_list_next(l);
+}
+
 void doubly_linked_list_insert(doubly_linked_list_pointer l,
 															 void * element){
 	insert_with_place(l, l->actual, element, true);
