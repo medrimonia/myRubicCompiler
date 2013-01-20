@@ -105,7 +105,7 @@ bool is_declared_local_variable(context_pointer c, char * name){
 
 variable_p declare_local_variable(context_pointer c, char * name){
 	//TODO add control of variable, once parameter has changed
-	variable_p v = new_variable(new_full_types_list());
+	variable_p v = new_variable(new_full_types_list(), name);
 	dictionnary_add(c->local_variables, name, v);
 	return v;
 }
@@ -127,8 +127,8 @@ variable_p declare_global_variable(context_pointer c, char * name){
 	// if we're not on the global context, switch to a higher context
 	if (c->parent_context != NULL)
 		return declare_global_variable(c->parent_context, name);
-	variable_p v = new_variable(new_full_types_list());
-	dictionnary_add(c->global_variables, name, v);
+	variable_p v = new_variable(new_full_types_list(), name);
+	dictionnary_add(c->global_variables, v->name, v);
 	return v;
 }
 
