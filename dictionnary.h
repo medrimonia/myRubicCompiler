@@ -20,6 +20,8 @@
 
 #include "hashmap.h"
 
+int string_hash_function(const void * key);
+
 typedef hashmap_pointer dictionnary_pointer;
 
 /* Create a new dictionnary */

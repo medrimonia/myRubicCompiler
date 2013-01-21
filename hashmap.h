@@ -7,12 +7,12 @@
 
 /* A hash function is needed, this function should take a pointer in
  * parameter and return an int. */
-typedef int (*hash_function)(void *);
+typedef int (*hash_function)(const void *);
 
 /* A function is needed in order to compare keys, this function must
  * return true if the two pointers design the same key, and false if
  * they're not identical. */
-typedef bool (*equals_function)(void *, void *);
+typedef bool (*equals_function)(const void *, const void *);
 
 struct hashmap{
 	hash_function h_f;

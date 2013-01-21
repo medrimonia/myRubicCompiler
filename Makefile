@@ -18,7 +18,7 @@ lex.yy.o: lex.yy.c
 rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 			 code_generator.o tree.o function.o type_handler.o type.o variable.o \
 			 constant_string_handler.o doubly_linked_list.o \
-			 possible_types_solver.o validation.o
+			 possible_types_solver.o validation.o prototype.o function_set.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 # GENERIC RULES
@@ -76,6 +76,10 @@ constant_string_handler.o : constant_string_handler.h
 
 validation.o : validation.h
 
+prototype.o : prototype.h dictionnary.h type.h
+
+function_set.o : function_set.h
+
 test_linked_list: linked_list.o test_linked_list.o
 	$(CC) -o $@ $^
 
@@ -90,11 +94,11 @@ RUBICS_TESTS_ERROR=$(RUBICS_FILES:.rubic=.test.error)
 
 tests : $(RUBICS_TESTS)
 
-EXECUTABLES=       \
-	hello_world      \
-	rubic	           \
-	test_hashmap     \
-	test_linked_list \
+EXECUTABLES=              \
+	hello_world             \
+	rubic	                  \
+	test_hashmap            \
+	test_linked_list        \
 	test_doubly_linked_list \
 	$(RUBICS_TESTS)
 
@@ -107,9 +111,13 @@ type.h : linked_list.h
 
 tree.h : linked_list.h
 
-possible_types_solver.h: doubly_linked_list.h function.h
+possible_types_solver.h : doubly_linked_list.h function.h
 
-validation.h: function.h possible_types_solver.h
+validation.h : function.h possible_types_solver.h
+
+prototype.h : linked_list.h
+
+function_set.h : prototype.h hashmap.h function.h
 
 ### CLEANING PART ###
 

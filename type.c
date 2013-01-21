@@ -3,8 +3,11 @@
 
 #include "type.h"
 
+int next_type = 1;
+
 struct type{
 	const char * name;
+	int associated_int;
 };
 
 linked_list_pointer all_types = NULL;
@@ -30,6 +33,7 @@ type_p add_new_type(const char * name,
 										bool logical){
 	type_p new = malloc(sizeof(struct type));
 	new->name = name;
+	new->associated_int = next_type++;
 	linked_list_insert(all_types, new);
 	if (additionable)
 		linked_list_insert(additionable_types, new);
@@ -42,6 +46,10 @@ type_p add_new_type(const char * name,
 
 const char * type_get_name(type_p t){
 	return t->name;
+}
+
+int type_associated_int(type_p t){
+	return t->associated_int;
 }
 
 type_p get_type_from_name(const char * name){

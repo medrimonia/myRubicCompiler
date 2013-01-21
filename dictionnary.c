@@ -17,7 +17,7 @@
 int primes[] = {3,5,7,11};
 
 
-int string_hash_function(void * key){
+int string_hash_function(const void * key){
 	char * key_str = (char *) key;
 	int sum = 0;
 	int i = 0;

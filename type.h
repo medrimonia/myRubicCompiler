@@ -3,8 +3,6 @@
 
 #include "linked_list.h"
 
-//extern struct type;
-
 typedef struct type * type_p;
 
 extern linked_list_pointer all_types;
@@ -20,6 +18,8 @@ type_p add_new_type(const char * name,
 										bool logical);
 
 const char * type_get_name(type_p t);
+
+int type_associated_int(type_p t);
 
 /* Restart and iterate on the all_types list to get the type needed 
  * return NULL if no type with the given name can be found

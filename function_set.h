@@ -1,0 +1,67 @@
+#ifndef FUNCTION_SET_H
+#define FUNCTION_SET_H
+
+#include "hashmap.h"
+#include "function.h"
+#include "prototype.h"
+
+typedef hashmap_pointer function_set_p;
+
+function_set_p new_function_set();
+
+/* Get an element with the specified key, return NULL in two cases
+ * - The key can't be found  int the hashmap
+ * - The key is found but is associated with the data NULL
+ */
+function_p function_set_get(function_set_p fs, prototype_p p);
+
+/* Return true if the specified prototype can be found in the function set,
+ * false otherwise. */
+bool function_set_exists(function_set_p fs, prototype_p p);
+
+/* Add the specified function with the specified prototype in the function
+ * set.
+ * If the prototype is already in the specified function set, NULL is
+ * returned, if everything worked properly, returns the inserted function.
+ */
+function_p function_set_add(function_set_p fs, prototype_p p, function_p f);
+
+/* Remove the entry with the specified prototype.
+ * If no entry with the specified key can be found, nothing is done
+ * If the option free_prototype is specified :
+ * - The prototype of the entry found will be erased.
+ * If the option free_function is specified :
+ * - The function of the entry found will be erased.
+ */
+void function_set_remove(function_set_p fs,
+												 prototype_p key,
+												 bool free_prototype,
+												 bool free_function);
+
+/* Return the number of elements contained in the function_set. */
+int function_set_size(function_set_p fs);
+
+/* Remove all the entries and destroy the function_set.
+ * If the option free_key is specified :
+ * - The key of the object found will be erased.
+ *   (If it contains pointers of pointers, better use your own free)
+ * If the option free_data is specified :
+ * - The data of the object found will be erased.
+ *   (If it contains pointers of pointers, better use your own free)
+ */
+void function_set_destroy(function_set_p fs,
+										 bool free_keys,
+										 bool free_data);
+
+
+void function_set_start_iteration(function_set_p fs);
+
+prototype_p function_set_get_current_key(function_set_p fs);
+
+function_p function_set_get_current_value(function_set_p fs);
+
+void function_set_next_element(function_set_p fs);
+
+bool function_set_is_ended_iteration(function_set_p fs);
+
+#endif
