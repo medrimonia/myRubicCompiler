@@ -1,5 +1,12 @@
+#include <stdlib.h>
+
 #include "function_set.h"
 
+function_set_p global_fs = NULL;
+
+void initialize_global_function_set(){
+	global_fs = new_function_set();
+}
 
 function_set_p new_function_set(){
 	return new_hashmap(&prototype_hash_function, &prototype_equal);

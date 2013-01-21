@@ -28,7 +28,7 @@ int string_hash_function(const void * key){
 	return sum;	
 }
 
-bool str_equal_function(void * key_1, void * key_2){
+bool str_equal_function(const void * key_1, const void * key_2){
 	return strcmp((char *) key_1, (char *) key_2) == 0;
 }
 

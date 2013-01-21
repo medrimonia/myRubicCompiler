@@ -11,6 +11,7 @@
 	#include "type_handler.h"
 	#include "constant_string_handler.h"
 	#include "validation.h"
+	#include "function_set.h"
 
 	// Declaring functions in order to avoid warnings
 	int yylex(void);
@@ -249,6 +250,7 @@ lhs             : ID
 								}
                 | ID '(' exprs ')'
 								{
+									//TODO handle function must be adapted to new structure
 									function_p f_called = get_function(actual_context,$ID);
 									if (f_called == NULL){
 										fprintf(stderr, "No function called %s found.\n", $ID);
@@ -394,6 +396,7 @@ term            : ';'
 %%
 
 int main() {
+	initialize_global_function_set();
 	initialize_types();//add basic types to all_types
 	global_context = new_context();
 	actual_context = global_context;

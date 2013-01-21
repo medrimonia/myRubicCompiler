@@ -7,6 +7,10 @@
 
 typedef hashmap_pointer function_set_p;
 
+extern function_set_p global_fs;
+
+void initialize_global_function_set();
+
 function_set_p new_function_set();
 
 /* Get an element with the specified key, return NULL in two cases
