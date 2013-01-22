@@ -4,6 +4,7 @@
 #include "prototype.h"
 #include "dictionnary.h"//for string_hash_function
 #include "type.h"
+#include "type_handler.h"
 
 #define NB_PRIMES 4
 
@@ -54,5 +55,22 @@ bool prototype_equal(const void * key_1, const void * key_2){
 			return linked_list_end(p2->params);//equivalent to return true
 		linked_list_next(p1->params);
 		linked_list_next(p2->params);
+	}
+}
+
+bool prototype_matches(prototype_p target, linked_list_pointer l){
+	if (linked_list_size(target->params) != linked_list_size(l))
+		return false;
+	linked_list_restart(target->params);
+	linked_list_restart(l);
+	while(true){
+		type_p required = th_true_type(linked_list_get(target->params));
+		linked_list_pointer allowed = linked_list_get(l);
+		if (!type_list_contains(allowed, required))
+			return false;
+		if (linked_list_end(target->params))
+			return true;
+		linked_list_next(target->params);
+		linked_list_next(l);
 	}
 }

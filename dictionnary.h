@@ -31,17 +31,19 @@ dictionnary_pointer new_dictionnary();
  * - The key can't be found  int the hashmap
  * - The key is found but is associated with the data NULL
  */
-void * dictionnary_get(dictionnary_pointer d, char * key);
+void * dictionnary_get(dictionnary_pointer d, const char * key);
 
 /* Return true if the specified key can be found in the dictionnary,
  * false otherwise. */
-bool dictionnary_exists(dictionnary_pointer d, char * key);
+bool dictionnary_exists(dictionnary_pointer d, const char * key);
 
 /* Add the specified value with the specified key in the hashmap.
  * If the key is already in the specified map, NULL is returned,
  * If everything worked properly, returns the inserted value.
  */
-void * dictionnary_add(dictionnary_pointer hm, char * key, void * value);
+void * dictionnary_add(dictionnary_pointer hm,
+											 const char * key,
+											 void * value);
 
 /* Remove the entry with the specified key.
  * If no entry with the specified key can be found, nothing is done
@@ -53,7 +55,7 @@ void * dictionnary_add(dictionnary_pointer hm, char * key, void * value);
  *   (If it contains pointers of pointers, better use your own free)
  */
 void dictionnary_remove(dictionnary_pointer d,
-												void * key,
+												const char * key,
 												bool free_key,
 												bool free_data);
 

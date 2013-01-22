@@ -6,17 +6,17 @@
 #define INITIAL_SIZE 100
 
 struct hashmap_element{
-	void * key;
+	const void * key;
 	void * data;
 };
 
 typedef struct hashmap_element * e_p;
 
-int get_index(hashmap_pointer hm, void * key){
+int get_index(hashmap_pointer hm, const void * key){
 	return (*hm->h_f)(key) % hm->map_size;
 }
 
-e_p getElementByKey(hashmap_pointer hm, void * key){
+e_p getElementByKey(hashmap_pointer hm, const void * key){
 	// The key is in this list if it's in the map
 	linked_list_pointer l = hm->map[get_index(hm, key)];
 	if (linked_list_is_empty(l))
@@ -51,18 +51,18 @@ hashmap_pointer new_hashmap(hash_function h_f, equals_function e_f){
 	return hm;
 }
 
-void * hashmap_get(hashmap_pointer hm, void * key){
+void * hashmap_get(hashmap_pointer hm, const void * key){
 	e_p element = getElementByKey(hm, key);
 	if (element == NULL)
 		return NULL;	
 	return element->data;
 }
 
-bool hashmap_exists(hashmap_pointer hm, void * key){
+bool hashmap_exists(hashmap_pointer hm, const void * key){
 	return getElementByKey(hm, key) != NULL;
 }
 
-void * hashmap_add(hashmap_pointer hm, void * key, void * value){
+void * hashmap_add(hashmap_pointer hm, const void * key, void * value){
 	//TODO increase size if nb_elements > map_size
 	if (hashmap_exists(hm, key))
 		return NULL;
@@ -76,9 +76,9 @@ void * hashmap_add(hashmap_pointer hm, void * key, void * value){
 }
 
 void hashmap_remove(hashmap_pointer hm,
-										 void * key,
-										 bool free_key,
-										 bool free_data){
+										const void * key,
+										bool free_key,
+										bool free_data){
 	linked_list_pointer l = hm->map[get_index(hm, key)];
 	if (linked_list_is_empty(l))
 		return;
@@ -153,7 +153,7 @@ e_p hashmap_get_current_element(hashmap_pointer hm){
 	return linked_list_get(hm->map[hm->actual_indice]);
 }
 
-void * hashmap_get_current_key(hashmap_pointer hm){
+const void * hashmap_get_current_key(hashmap_pointer hm){
 	return hashmap_get_current_element(hm)->key;
 }
 

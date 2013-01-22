@@ -18,7 +18,8 @@ lex.yy.o: lex.yy.c
 rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 			 code_generator.o tree.o function.o type_handler.o type.o variable.o \
 			 constant_string_handler.o doubly_linked_list.o \
-			 possible_types_solver.o validation.o prototype.o function_set.o
+			 possible_types_solver.o validation.o prototype.o function_set.o \
+			 type_updater.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 # GENERIC RULES
@@ -39,7 +40,7 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 
 function.o : function.h
 
-tree.o : tree.h
+tree.o : tree.h type_handler.h
 
 context.o : dictionnary.h
 
@@ -74,11 +75,13 @@ type_handler.o : type_handler.h
 
 constant_string_handler.o : constant_string_handler.h
 
-validation.o : validation.h
+validation.o : validation.h type_handler.h type.h type_updater.h
 
-prototype.o : prototype.h dictionnary.h type.h
+prototype.o : prototype.h dictionnary.h type.h type_handler.h
 
 function_set.o : function_set.h
+
+type_updater.o : type_updater.h function.h linked_list.h function_set.h
 
 test_linked_list: linked_list.o test_linked_list.o
 	$(CC) -o $@ $^
@@ -117,7 +120,9 @@ validation.h : function.h possible_types_solver.h
 
 prototype.h : linked_list.h
 
-function_set.h : prototype.h hashmap.h function.h
+function_set.h : prototype.h dictionnary.h function.h
+
+type_updater.h : linked_list.h tree.h
 
 ### CLEANING PART ###
 

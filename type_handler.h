@@ -37,10 +37,10 @@ linked_list_pointer remove_types_not_shared(linked_list_pointer src,
 linked_list_pointer types_shared(linked_list_pointer l1,
 																 linked_list_pointer l2);
 
-/* handle an addition between two types list and return the type list
- * corresponding to the allowed types for the result
+/* handle an arithmetic operation between two types list and return the type
+ * list corresponding to the allowed types for the result
  */
-linked_list_pointer th_addition(linked_list_pointer l1,
+linked_list_pointer th_arithmetic(linked_list_pointer l1,
 																linked_list_pointer l2);
 
 /* handle a comparison between two types list and return the type list
@@ -52,8 +52,8 @@ linked_list_pointer th_comparison(linked_list_pointer l1,
 /* handle a logical operation between two types list and return the type list
  * corresponding to the allowed types for the result
  */
-linked_list_pointer th_logical_operation(linked_list_pointer l1,
-																				 linked_list_pointer l2);
+linked_list_pointer th_logical(linked_list_pointer l1,
+															 linked_list_pointer l2);
 
 /* Return NULL if the list doesn't contain exactly one type
  * and the only type if the list contains only one element

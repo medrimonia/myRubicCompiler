@@ -22,4 +22,8 @@ int prototype_hash_function(const void * key);
 /* key_1 et key_2 doivent être des prototype_p */
 bool prototype_equal(const void * key_1, const void * key_2);
 
+/* Return true if actual might fit the target prototype.
+ */
+bool prototype_matches(prototype_p target, linked_list_pointer args);
+
 #endif

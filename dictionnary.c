@@ -37,19 +37,21 @@ dictionnary_pointer new_dictionnary(){
 										 str_equal_function);
 }
 
-void * dictionnary_get(dictionnary_pointer d, char * key){
+void * dictionnary_get(dictionnary_pointer d, const char * key){
 	return hashmap_get(d, key);
 }
 
-bool dictionnary_exists(dictionnary_pointer d, char * key){
+bool dictionnary_exists(dictionnary_pointer d, const char * key){
 	return hashmap_exists(d, key);
 }
 
-void * dictionnary_add(dictionnary_pointer d, char * key, void * value){
+void * dictionnary_add(dictionnary_pointer d,
+											 const char * key,
+											 void * value){
 	return hashmap_add(d, key, value);
 }
 void dictionnary_remove(dictionnary_pointer d,
-												void * key,
+												const char * key,
 												bool free_key,
 												bool free_data){
 	hashmap_remove(d, key, free_key, free_data);

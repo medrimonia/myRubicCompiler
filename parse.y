@@ -139,7 +139,7 @@ stmt		: if_expr stmts terms END
 }
       term stmts[code] terms END
 {
-	// ID in expr TO expr ?
+	// ID in expr TO expr, id should maybe declared in an intern context
 	type_p int_type = get_type_from_name("i32");
 	type_p from_type = th_true_type($4->allowed_types);
 	type_p dest_type = th_true_type($4->allowed_types);
@@ -236,7 +236,7 @@ lhs             : ID
 {
 	$$ = new_tree_node(IDENTIFIER);
 	$$->content = $1;
-	// TODO load allowed parameters with ...
+	// TODO list should maybe be copied
 	if (is_declared_variable(actual_context, $1)){
 		variable_p var = get_variable(actual_context, $1);
 		$$->allowed_types = var->allowed_types;
@@ -291,6 +291,7 @@ primary         : lhs
 	value->t = PRIMARY_FLOAT;
 	value->f = $1;
 	$$->content = value;
+	$$->allowed_types = new_type_list_single_from_name("f32");
 }
                 | INT
 {
@@ -303,7 +304,6 @@ primary         : lhs
 }
                 | '(' expr ')'
 								{
-									$$ = new_tree_node(EXPR);
 									$$ = $2;
 								}
 ;
@@ -349,15 +349,14 @@ additive_expr   : multiplicative_expr { $$ = $1;}
 	$$ = new_tree_node(ADDITION);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
+	$$->allowed_types = th_arithmetic($1->allowed_types, $3->allowed_types);
 }
                 | additive_expr '-' multiplicative_expr
 {
 	$$ = new_tree_node(SUBSTRACTION);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	//TODO switch addition to substraction or change function name
-	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
+	$$->allowed_types = th_arithmetic($1->allowed_types, $3->allowed_types);
 }
 ;
 multiplicative_expr : multiplicative_expr '*' primary
@@ -365,16 +364,14 @@ multiplicative_expr : multiplicative_expr '*' primary
 	$$ = new_tree_node(MULTIPLY);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	//TODO switch addition to multiplication or change function name
-	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
+	$$->allowed_types = th_arithmetic($1->allowed_types, $3->allowed_types);
 }
                     | multiplicative_expr '/' primary
 {
 	$$ = new_tree_node(DIVIDE);
 	$$->left_child = $1;
 	$$->right_child = $3;
-	//TODO switch addition to division or change function name
-	$$->allowed_types = th_addition($1->allowed_types, $3->allowed_types);
+	$$->allowed_types = th_arithmetic($1->allowed_types, $3->allowed_types);
 }
                     | primary
 {

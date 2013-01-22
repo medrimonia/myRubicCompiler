@@ -21,8 +21,8 @@ tn_pointer new_logical_node(node_type t,
 	tn_pointer new = new_tree_node(t);
 	new->left_child = left_child;
 	new->right_child = right_child;
-	new->allowed_types = th_logical_operation(left_child->allowed_types,
-																						right_child->allowed_types);
+	new->allowed_types = th_logical(left_child->allowed_types,
+																	right_child->allowed_types);
 	return new;
 }
 

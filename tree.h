@@ -7,7 +7,6 @@
 typedef enum {
 	NOT_DECIDED,
 	PRIMARY,
-	EXPR,
 	AFFECT,
 	LIST,
 	IDENTIFIER,

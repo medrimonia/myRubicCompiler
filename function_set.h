@@ -1,11 +1,12 @@
 #ifndef FUNCTION_SET_H
 #define FUNCTION_SET_H
 
-#include "hashmap.h"
+#include "dictionnary.h"
 #include "function.h"
 #include "prototype.h"
 
-typedef hashmap_pointer function_set_p;
+/* A function set is : dictionnary<name,hashmap<prototype,function>> */
+typedef dictionnary_pointer function_set_p;
 
 extern function_set_p global_fs;
 
@@ -42,7 +43,10 @@ void function_set_remove(function_set_p fs,
 												 bool free_prototype,
 												 bool free_function);
 
-/* Return the number of elements contained in the function_set. */
+/* Return the number of function names contained in the function_set.
+ * Different prototypes are counted as only one function if they share the
+ * name.
+ */
 int function_set_size(function_set_p fs);
 
 /* Remove all the entries and destroy the function_set.
@@ -68,4 +72,8 @@ void function_set_next_element(function_set_p fs);
 
 bool function_set_is_ended_iteration(function_set_p fs);
 
+/* l is a list of type_list corresponding to the parameters */
+linked_list_pointer function_set_matching_functions(function_set_p fs,
+																										const char * name,
+																										linked_list_pointer l);
 #endif

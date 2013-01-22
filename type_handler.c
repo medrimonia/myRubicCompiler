@@ -94,8 +94,8 @@ linked_list_pointer types_shared(linked_list_pointer l1,
 	}	
 }
 
-linked_list_pointer th_addition(linked_list_pointer l1,
-																linked_list_pointer l2){
+linked_list_pointer th_arithmetic(linked_list_pointer l1,
+																	linked_list_pointer l2){
 	remove_types_not_shared(l1, additionable_types);
 	remove_types_not_shared(l2, additionable_types);
 	return types_shared(l1,l2);
@@ -108,8 +108,8 @@ linked_list_pointer th_comparison(linked_list_pointer l1,
 	return new_type_list_single_from_name("i1");
 }
 
-linked_list_pointer th_logical_operation(linked_list_pointer l1,
-																				 linked_list_pointer l2){
+linked_list_pointer th_logical(linked_list_pointer l1,
+															 linked_list_pointer l2){
 	remove_types_not_shared(l1, logical_types);
 	remove_types_not_shared(l2, logical_types);
 	return new_type_list_single_from_name("i1");

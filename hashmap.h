@@ -34,17 +34,17 @@ hashmap_pointer new_hashmap(hash_function h_f, equals_function e_f);
  * - The key can't be found  int the hashmap
  * - The key is found but is associated with the data NULL
  */
-void * hashmap_get(hashmap_pointer hm, void * key);
+void * hashmap_get(hashmap_pointer hm, const void * key);
 
 /* Return true if the specified key can be found in the map,
  * false otherwise. */
-bool hashmap_exists(hashmap_pointer hm, void * key);
+bool hashmap_exists(hashmap_pointer hm, const void * key);
 
 /* Add the specified value with the specified key in the hashmap.
  * If the key is already in the specified map, NULL is returned,
  * If everything worked properly, returns the inserted value.
  */
-void * hashmap_add(hashmap_pointer hm, void * key, void * value);
+void * hashmap_add(hashmap_pointer hm, const void * key, void * value);
 
 /* Remove the entry with the specified key.
  * If no entry with the specified key can be found, nothing is done
@@ -56,9 +56,9 @@ void * hashmap_add(hashmap_pointer hm, void * key, void * value);
  *   (If it contains pointers of pointers, better use your own free)
  */
 void hashmap_remove(hashmap_pointer hm,
-										 void * key,
-										 bool free_key,
-										 bool free_data);
+										const void * key,
+										bool free_key,
+										bool free_data);
 
 /* Return the number of elements contained in the hashmap. */
 int hashmap_size(hashmap_pointer hm);
@@ -78,7 +78,7 @@ void hashmap_destroy(hashmap_pointer hm,
 
 void hashmap_start_iteration(hashmap_pointer hm);
 
-void * hashmap_get_current_key(hashmap_pointer hm);
+const void * hashmap_get_current_key(hashmap_pointer hm);
 
 void * hashmap_get_current_value(hashmap_pointer hm);
 

@@ -14,7 +14,6 @@ int actual_label = 0;
 function_p cg_actual_function = NULL;
 
 void generate_code_primary(tn_pointer node);
-void generate_code_expr(tn_pointer node);
 void generate_code_affect(tn_pointer node); 
 void generate_code_list(tn_pointer node);
 void generate_code_identifier(tn_pointer node);
@@ -46,7 +45,6 @@ int generate_code(tn_pointer node){
 		return 1;
 	switch(node->type){
 	case PRIMARY : generate_code_primary(node); break;
-	case EXPR : generate_code_expr(node); break;
 	case AFFECT : generate_code_affect(node); break;
 	case LIST : generate_code_list(node); break;
 	case IDENTIFIER : generate_code_identifier(node); break;
@@ -92,20 +90,12 @@ void generate_code_primary(tn_pointer node){
 		break;
 	}
 }
-void generate_code_expr(tn_pointer node){
-	generate_code(node->left_child);
-	generate_code(node->right_child);
-}
 
 void generate_code_affect(tn_pointer node){
 	//generate_code(node->left_child);
 	generate_code(node->right_child);
 	node->reg_number = actual_register;
 	type_p t = th_true_type(node->right_child->allowed_types);
-	if (t == NULL){
-		fprintf(stderr, "the variable has an undecidable type\n");
-		exit(EXIT_FAILURE);
-	}
 	printf("store %s %%%d, %s * %%%s\n",
 				 type_get_name(t),
 				 node->right_child->reg_number,
@@ -139,10 +129,6 @@ void generate_code_generic_operation(tn_pointer node, char * op){
 	node->reg_number = ++actual_register;
 	
 	type_p t = th_true_type(node->allowed_types);
-	if (t == NULL){
-		fprintf(stderr, "the result type of operation is undecidable\n");
-		exit(EXIT_FAILURE);
-	}
 	printf("%%%d = %s %s %%%d, %%%d\n",
 				 node->reg_number,
 				 op,
@@ -172,13 +158,7 @@ void generate_code_icmp(tn_pointer node, const char * cmp_type){
 	generate_code(node->right_child);
 	node->reg_number = ++actual_register;
 
-	//TODO eventually pass through a tmp list with left and right child
-//linked_list_pointer l = compared_type(node->left_child, node->right_child);
 	type_p t = th_true_type(node->right_child->allowed_types);
-	if (t == NULL){
-		fprintf(stderr, "the type used for comparison is undecidable\n");
-		exit(EXIT_FAILURE);
-	}
 	printf("%%%d = icmp %s %s %%%d, %%%d\n",
 				 node->reg_number,
 				 cmp_type,
