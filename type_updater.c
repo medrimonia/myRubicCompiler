@@ -104,6 +104,11 @@ void update_type_call(tn_pointer node){
 	}
 	//printf(";a function matching the specified prototype was found\n");
 	// adding return_types
+	linked_list_pointer matching_proto;
+	matching_proto = function_set_matching_prototypes(global_fs,
+																										call->f_called->name,
+																										args);
+	call->valid_prototypes = matching_proto;
 	linked_list_restart(matching);
 	while(true){
 		function_p f = (function_p)linked_list_get(matching);

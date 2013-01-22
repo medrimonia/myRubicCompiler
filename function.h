@@ -24,6 +24,8 @@ typedef struct function * function_p;
 struct function_call{
 	function_p f_called;
 	linked_list_pointer parameters;
+	/* all the valid prototypes */
+	linked_list_pointer valid_prototypes;
 };
 
 typedef struct function_call * function_call_p;

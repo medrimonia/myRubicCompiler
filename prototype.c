@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "prototype.h"
@@ -76,3 +77,32 @@ bool prototype_matches(prototype_p target, linked_list_pointer l){
 		linked_list_next(l);
 	}
 }
+
+void print_prototype_prefix(prototype_p p){
+	if (linked_list_size(p->params) == 0)
+		return;
+	linked_list_restart(p->params);
+	while(true){
+		variable_p v = linked_list_get(p->params);
+		type_p t = th_true_type(v->allowed_types);
+		printf("%s_", type_get_name(t));
+		if (linked_list_end(p->params))
+			return;
+		linked_list_next(p->params);
+	}
+}
+/*
+void print_type_list_prefix(linked_list_pointer l){
+	if (linked_list_size(l) == 0)
+		return;
+	linked_list_restart(l);
+	while(true){
+		linked_list_pointer types = linked_list_get(l);
+		type_p t = th_true_type(types);
+		printf("%s_", type_get_name(t));
+		if (linked_list_end(l))
+			return;
+		linked_list_next(l);
+	}
+}
+*/

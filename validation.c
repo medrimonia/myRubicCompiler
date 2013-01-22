@@ -92,7 +92,11 @@ bool validate_node_call(tn_pointer node){
 			linked_list_next(fc->parameters);
 		}
 	}
+	// only one prototype should match at this point
+	if (linked_list_size(fc->valid_prototypes) != 1)
+		return false;
 
+	// call should have an unique type
 	type_p t = th_true_type(node->allowed_types);	
 	if (t == NULL){
 		//fprintf(stderr, "Return followed by an undecidable type\n");

@@ -76,4 +76,9 @@ bool function_set_is_ended_iteration(function_set_p fs);
 linked_list_pointer function_set_matching_functions(function_set_p fs,
 																										const char * name,
 																										linked_list_pointer l);
+
+/* l is a list of type_list corresponding to the parameters */
+linked_list_pointer function_set_matching_prototypes(function_set_p fs,
+																										 const char * name,
+																										 linked_list_pointer l);
 #endif

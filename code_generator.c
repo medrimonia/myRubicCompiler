@@ -264,8 +264,9 @@ void generate_code_function(tn_pointer node){
 		update_function(f);
 	
 		type_p t = th_true_type(f->possible_return_types);
-		printf("define %s @%s(",
-					 type_get_name(t),
+		printf("define %s @", type_get_name(t));
+		print_prototype_prefix(p);
+		printf("%s(",
 					 f->name);
 		generate_parameters(f);
 		printf("){\n");
@@ -313,9 +314,14 @@ void generate_code_call(tn_pointer node){
 		fprintf(stderr, "Calling a function with an undecidable type\n");
 		exit(EXIT_FAILURE);
 	}
-	printf("%%%d = call %s @%s(",
+	printf("%%%d = call %s @",
 				 actual_register,
-				 type_get_name(t),
+				 type_get_name(t));
+	// there should be one and only one prototype matching
+	linked_list_restart(fc->valid_prototypes);
+	prototype_p p = (prototype_p)linked_list_get(fc->valid_prototypes);
+	print_prototype_prefix(p);
+	printf("%s(",
 				 fc->f_called->name);
 	node->reg_number = actual_register;
 	//using parameters results

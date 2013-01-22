@@ -103,9 +103,11 @@ bool function_set_is_ended_iteration(function_set_p fs){
 					hashmap_is_ended_iteration(hm));
 }
 
-linked_list_pointer function_set_matching_functions(function_set_p fs,
-																										const char * name,
-																										linked_list_pointer l){
+// if key = false, then values are added to the list
+linked_list_pointer function_set_matching(function_set_p fs,
+																					const char * name,
+																					linked_list_pointer l,
+																					bool key){
 	linked_list_pointer result = new_linked_list();
 	hashmap_pointer hm = (hashmap_pointer)dictionnary_get(fs, name);
 	if (hm == NULL)//no functions with the specified name
@@ -114,12 +116,28 @@ linked_list_pointer function_set_matching_functions(function_set_p fs,
 	while(!hashmap_is_ended_iteration(hm)){
 		prototype_p p = (prototype_p)hashmap_get_current_key(hm);
 		if (prototype_matches(p, l)){
-			function_p to_add = (function_p)hashmap_get_current_value(hm);
-			linked_list_insert(result, to_add);
+			if (key)
+				linked_list_insert(result, p);
+			else{
+				function_p to_add = (function_p)hashmap_get_current_value(hm);
+				linked_list_insert(result, to_add);
+			}
 		}
 		if (hashmap_is_ended_iteration(hm))
 			break;
 		hashmap_next_element(hm);
 	}
 	return  result;
+}
+
+linked_list_pointer function_set_matching_functions(function_set_p fs,
+																										const char * name,
+																										linked_list_pointer l){
+	return function_set_matching(fs, name, l, false);
+}
+
+linked_list_pointer function_set_matching_prototypes(function_set_p fs,
+																										 const char * name,
+																										 linked_list_pointer l){
+	return function_set_matching(fs, name, l, true);
 }
