@@ -132,8 +132,10 @@ void generate_code_generic_operation(tn_pointer node, char * op){
 	node->reg_number = ++actual_register;
 	
 	type_p t = th_true_type(node->allowed_types);
-	printf("%%%d = %s %s %%%d, %%%d\n",
-				 node->reg_number,
+	printf("%%%d = ",node->reg_number);
+	if (t == get_type_from_name("float"))
+		printf("f");//fadd, fsub, etc...
+	printf("%s %s %%%d, %%%d\n",
 				 op,
 				 type_get_name(t),
 				 node->left_child->reg_number,
