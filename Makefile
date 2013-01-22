@@ -28,15 +28,15 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 	$(CC) $(CFLAGS) -c $<
 
 %.s: %.ll
-	llc $<
+	-llc $<
 
 %.ll: %.rubic rubic
-	./rubic <$< >$@
+	-./rubic <$< >$@
 
 # SPECIFIC RULES
 
 %.test : %.s
-	$(CC) -o $@ $<
+	-$(CC) -o $@ $<
 
 function.o : function.h
 
