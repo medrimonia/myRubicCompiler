@@ -244,7 +244,6 @@ void generate_code_for(tn_pointer node){
 
 void generate_code_function(tn_pointer node){
 	// TODO fix in order to avoid problems when getting out of a function
-	actual_register = 0;
 	function_p f = (function_p) node->content;
 	cg_actual_function = f;
 
@@ -257,6 +256,7 @@ void generate_code_function(tn_pointer node){
  
 	linked_list_restart(f->valid_prototypes);
 	while(true){
+	actual_register = 0;
 		prototype_p p = (prototype_p)linked_list_get(f->valid_prototypes);
 		apply_combination(f, p->params);
 		update_function(f);
