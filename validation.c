@@ -8,6 +8,12 @@
 #include "type_handler.h"
 #include "type_updater.h"
 
+
+/* return true if the node is valid with current context, false otherwise */
+bool validate_node(tn_pointer node);
+
+
+
 bool validate_type_equality(type_p t1, type_p t2){
 	if (t1 == NULL ||
 			t1 != t2)
@@ -15,8 +21,10 @@ bool validate_type_equality(type_p t1, type_p t2){
 	return true;
 }
 
-/* return true if the node is valid with current context, false otherwise */
-bool validate_node(tn_pointer node);
+bool validate_node_childs(tn_pointer node){
+	return (validate_node(node->left_child) &&
+					validate_node(node->right_child));
+}
 
 bool validate_node_affect(tn_pointer node){
 	validate_node(node->right_child);
@@ -28,8 +36,7 @@ bool validate_node_affect(tn_pointer node){
 }
 
 bool validate_node_list(tn_pointer node){
-	return (validate_node(node->left_child) &&
-					validate_node(node->right_child));
+	return validate_node_childs(node);
 }
 
 bool validate_node_identifier(tn_pointer node){
@@ -42,8 +49,7 @@ bool validate_node_identifier(tn_pointer node){
 }
 
 bool validate_node_arithmetic(tn_pointer node){
-	if (!validate_node(node->left_child) ||
-			!validate_node(node->right_child))
+	if (!validate_node_childs(node))
 		return false;
 
 	type_p t = th_true_type(node->allowed_types);
@@ -55,8 +61,7 @@ bool validate_node_arithmetic(tn_pointer node){
 }
 
 bool validate_node_logical(tn_pointer node){
-	if (!validate_node(node->left_child) ||
-			!validate_node(node->right_child))
+	if (!validate_node_childs(node))
 		return false;
 
 	//TODO eventually pass through a tmp list with left and right child
@@ -105,6 +110,26 @@ bool validate_node_call(tn_pointer node){
 	return true;
 }
 
+bool validate_node_icmp(tn_pointer node){
+	if (!validate_node_childs(node))
+		return false;
+
+	type_p t = th_true_type(node->allowed_types);
+	if (t == NULL){
+		//fprintf(stderr, "the result type of icmp is undecidable\n");
+		return false;
+	}
+	type_p t_l = th_true_type(node->left_child->allowed_types);
+	type_p t_r= th_true_type(node->right_child->allowed_types);
+	return validate_type_equality(t_l,t_r);
+}
+bool validate_node_conditional(tn_pointer node){
+	conditional_block_p cond = node->content;
+	return (validate_node(cond->condition) ||
+					validate_node(cond->true_case) ||
+					validate_node(cond->false_case));
+}
+
 bool validate_node(tn_pointer node){
 	if (node == NULL)
 		return true;
@@ -126,14 +151,14 @@ bool validate_node(tn_pointer node){
 	case FUNCTION :     return true;
 	case RETURN_NODE :  return validate_node_return(node);
 	case CALL :         return validate_node_call(node);
-		/*case NEQ_NODE : validate_node_icmp(node,"ne"); break;
-	case EQ_NODE : validate_node_icmp(node,"eq"); break;
-	case LESS_NODE : validate_node_icmp(node,"slt"); break;
-	case LEQ_NODE : validate_node_icmp(node,"sle"); break;
-	case GEQ_NODE : validate_node_icmp(node,"sge"); break;
-	case GREATER_NODE : validate_node_icmp(node,"sgt"); break;
-	case IF_NODE : validate_node_conditional(node); break;
-	case WHILE_NODE : validate_node_while(node); break;
+	case NEQ_NODE :     return validate_node_icmp(node);
+	case EQ_NODE :      return validate_node_icmp(node);
+	case LESS_NODE :    return validate_node_icmp(node);
+	case LEQ_NODE :     return validate_node_icmp(node);
+	case GEQ_NODE :     return validate_node_icmp(node);
+	case GREATER_NODE : return validate_node_icmp(node);
+	case IF_NODE :      return validate_node_conditional(node);
+		/*case WHILE_NODE : validate_node_while(node); break;
 	case FOR_NODE : validate_node_for(node); break;*/
 	default: return false; // unknown type
 	}

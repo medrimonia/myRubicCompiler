@@ -120,6 +120,13 @@ void update_type_call(tn_pointer node){
 	}
 }
 
+void update_type_conditional(tn_pointer node){
+	conditional_block_p cond = node->content;
+	update_type(cond->condition);
+	update_type(cond->true_case);
+	update_type(cond->false_case);
+}
+
 void update_type(tn_pointer node){
 	if (node == NULL)
 		return;
@@ -144,8 +151,8 @@ void update_type(tn_pointer node){
 	case LEQ_NODE :      update_type_cmp(node);        break;
 	case GEQ_NODE :      update_type_cmp(node);        break;
 	case GREATER_NODE :  update_type_cmp(node);        break;
-		/*case IF_NODE : update_type_conditional(node); break;
-	case WHILE_NODE : update_type_while(node); break;
+	case IF_NODE : update_type_conditional(node); break;
+		/*case WHILE_NODE : update_type_while(node); break;
 	case FOR_NODE : update_type_for(node); break;*/
 	default: break;
 	}
