@@ -51,16 +51,27 @@ void update_type_identifier(tn_pointer node){
 }
 
 void update_type_arithmetic(tn_pointer node){
+	update_type_childs(node);
 	node->allowed_types = th_arithmetic(node->left_child->allowed_types,
 																			node->right_child->allowed_types);
 }
 
 void update_type_logical(tn_pointer node){
+	update_type_childs(node);
 	node->allowed_types = th_logical(node->left_child->allowed_types,
 																	 node->right_child->allowed_types);
 }
 
+void update_type_cmp(tn_pointer node){
+	update_type_childs(node);
+	node->allowed_types = th_comparison(node->left_child->allowed_types,
+																			node->right_child->allowed_types);
+}
+
 void update_type_return(tn_pointer node){
+	update_type(node->left_child);
+	remove_types_not_shared(node->allowed_types,
+													node->left_child->allowed_types);
 }
 
 void update_type_call(tn_pointer node){
@@ -87,6 +98,7 @@ void update_type_call(tn_pointer node){
 		fprintf(stderr, "no functions matching the specified prototype\n");
 		exit(EXIT_FAILURE);
 	}
+	printf(";a function matching the specified prototype was found\n");
 	// adding return_types
 	linked_list_restart(matching);
 	while(true){
@@ -114,15 +126,15 @@ void update_type(tn_pointer node){
 	case OR_NODE :       update_type_logical(node);    break;
 	case AND_NODE :      update_type_logical(node);    break;
 		// function should be updated on it's own
-	case FUNCTION :      break;
-	case RETURN_NODE : update_type_return(node); break;
-	case CALL : update_type_call(node); break;
-	case NEQ_NODE : update_type_cmp(node); break;
-	case EQ_NODE : update_type_cmp(node); break;
-	case LESS_NODE : update_type_cmp(node); break;
-	case LEQ_NODE : update_type_cmp(node); break;
-	case GEQ_NODE : update_type_cmp(node); break;
-	case GREATER_NODE : update_type_icmp(node); break;
+	case FUNCTION :                                    break;
+	case RETURN_NODE :   update_type_return(node);     break;
+	case CALL :          update_type_call(node);       break;
+	case NEQ_NODE :      update_type_cmp(node);        break;
+	case EQ_NODE :       update_type_cmp(node);        break;
+	case LESS_NODE :     update_type_cmp(node);        break;
+	case LEQ_NODE :      update_type_cmp(node);        break;
+	case GEQ_NODE :      update_type_cmp(node);        break;
+	case GREATER_NODE :  update_type_cmp(node);        break;
 		/*case IF_NODE : update_type_conditional(node); break;
 	case WHILE_NODE : update_type_while(node); break;
 	case FOR_NODE : update_type_for(node); break;*/

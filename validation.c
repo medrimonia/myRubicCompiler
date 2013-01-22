@@ -2,6 +2,8 @@
 
 #include "validation.h"
 
+#include "function_set.h"
+#include "prototype.h"
 #include "type.h"
 #include "type_handler.h"
 #include "type_updater.h"
@@ -31,7 +33,7 @@ bool validate_node_list(tn_pointer node){
 }
 
 bool validate_node_identifier(tn_pointer node){
-	type_p t = NULL;//th_true_type(cg_actual_function->possible_return_types);
+	type_p t = th_true_type(node->allowed_types);
 	if (t == NULL){
 		//fprintf(stderr, "the identifier to load has an undecidable type\n");
 		return false;
@@ -115,7 +117,7 @@ bool validate_node(tn_pointer node){
  */
 void apply_combination(function_p f, linked_list_pointer combination){
 
-		printf(";function %s (%d parameters)(",f->name, linked_list_size(combination));
+		printf("\t;function %s (%d parameters)(",f->name, linked_list_size(combination));
 	// applying parameters type
 	if (linked_list_size(combination)){
 		linked_list_restart(combination);
@@ -138,6 +140,7 @@ void apply_combination(function_p f, linked_list_pointer combination){
 
 
 void validate_function(function_p f){
+	printf(";validating function\n");
 	type_solver_p ts = new_type_solver(f);
 	first_combination(ts);
 	// if the function has no parameter, the only combination will be an empty
@@ -146,9 +149,14 @@ void validate_function(function_p f){
 		// getting the combination
 		linked_list_pointer combination = get_combination(ts);
 		apply_combination(f, combination);
+		// combination doesn't seem to be really applied
+		printf("\t\t;updating types\n");
 		update_type(f->root);
-		if (validate_node(f->root))
-			printf(";valid prototype");
+		if (validate_node(f->root)){
+			printf("\t\t;valid prototype\n");
+			prototype_p accepted_proto = new_prototype(f->name, combination);
+			function_set_add(global_fs, accepted_proto, f);
+		}
 		if (is_last_combination(ts))
 			break;
 		next_combination(ts);		

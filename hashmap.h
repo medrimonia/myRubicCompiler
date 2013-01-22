@@ -84,6 +84,7 @@ void * hashmap_get_current_value(hashmap_pointer hm);
 
 void hashmap_next_element(hashmap_pointer hm);
 
+/* return true if actual is after last_element */
 bool hashmap_is_ended_iteration(hashmap_pointer hm);
 
 #endif

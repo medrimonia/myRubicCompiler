@@ -28,8 +28,10 @@ bool function_set_exists(function_set_p fs, prototype_p p){
 
 function_p function_set_add(function_set_p fs, prototype_p p, function_p f){
 	hashmap_pointer hm = (hashmap_pointer)dictionnary_get(fs, p->name);
-	if (hm == NULL)
+	if (hm == NULL){
 		hm = new_hashmap(&prototype_hash_function,&prototype_equal);
+		dictionnary_add(fs, p->name, hm);
+	}
 	return (function_p)hashmap_add(hm, p, f);
 }
 
@@ -109,10 +111,10 @@ linked_list_pointer function_set_matching_functions(function_set_p fs,
 	if (hm == NULL)//no functions with the specified name
 		return result;
 	hashmap_start_iteration(hm);
-	while(true){
+	while(!hashmap_is_ended_iteration(hm)){
 		prototype_p p = (prototype_p)hashmap_get_current_key(hm);
 		if (prototype_matches(p, l)){
-			function_p to_add = (function_p)hashmap_get_current_value(fs);
+			function_p to_add = (function_p)hashmap_get_current_value(hm);
 			linked_list_insert(result, to_add);
 		}
 		if (hashmap_is_ended_iteration(hm))

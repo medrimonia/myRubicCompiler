@@ -5,6 +5,7 @@
 #include "dictionnary.h"//for string_hash_function
 #include "type.h"
 #include "type_handler.h"
+#include "variable.h"
 
 #define NB_PRIMES 4
 
@@ -64,7 +65,8 @@ bool prototype_matches(prototype_p target, linked_list_pointer l){
 	linked_list_restart(target->params);
 	linked_list_restart(l);
 	while(true){
-		type_p required = th_true_type(linked_list_get(target->params));
+		variable_p v = linked_list_get(target->params);
+		type_p required = th_true_type(v->allowed_types);
 		linked_list_pointer allowed = linked_list_get(l);
 		if (!type_list_contains(allowed, required))
 			return false;

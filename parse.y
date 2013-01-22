@@ -212,7 +212,6 @@ stmt		: if_expr stmts terms END
 									$$ = new_tree_node(FUNCTION);
 									$$->content = actual_function;
 									actual_context = actual_context->parent_context;
-									//TODO WORK IN PROGRESS
 									validate_function(actual_function);
 								}
 ; 
@@ -235,6 +234,7 @@ params          : ID ',' params
 lhs             : ID
 {
 	$$ = new_tree_node(IDENTIFIER);
+	$$->context = actual_context;
 	$$->content = $1;
 	// TODO list should maybe be copied
 	if (is_declared_variable(actual_context, $1)){

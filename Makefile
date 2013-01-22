@@ -75,9 +75,10 @@ type_handler.o : type_handler.h
 
 constant_string_handler.o : constant_string_handler.h
 
-validation.o : validation.h type_handler.h type.h type_updater.h
+validation.o : validation.h type_handler.h type.h type_updater.h \
+							 prototype.h function_set.h
 
-prototype.o : prototype.h dictionnary.h type.h type_handler.h
+prototype.o : prototype.h dictionnary.h type.h type_handler.h variable.h
 
 function_set.o : function_set.h
 

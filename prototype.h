@@ -7,7 +7,7 @@
 
 struct prototype{
 	const char * name;
-	// params is a list of type_p, the position of each type matters
+	// params is a list of variables, the position of each type matters
 	linked_list_pointer params;
 };
 
