@@ -102,7 +102,7 @@ void update_type_call(tn_pointer node){
 		fprintf(stderr, "no functions matching the specified prototype\n");
 		exit(EXIT_FAILURE);
 	}
-	printf(";a function matching the specified prototype was found\n");
+	//printf(";a function matching the specified prototype was found\n");
 	// adding return_types
 	linked_list_restart(matching);
 	while(true){

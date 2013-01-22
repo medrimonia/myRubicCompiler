@@ -78,6 +78,29 @@ bool validate_node_return(tn_pointer node){
 	return true;
 }
 
+bool validate_node_call(tn_pointer node){
+	// validating all parameters
+	function_call_p fc = (function_call_p)node->content;
+	if (linked_list_size(fc->parameters) > 0){
+		linked_list_restart(fc->parameters);
+		while(true){
+			tn_pointer arg_node = linked_list_get(fc->parameters);
+			if (!validate_node(arg_node))
+				return false;
+			if (linked_list_end(fc->parameters))
+				break;
+			linked_list_next(fc->parameters);
+		}
+	}
+
+	type_p t = th_true_type(node->allowed_types);	
+	if (t == NULL){
+		//fprintf(stderr, "Return followed by an undecidable type\n");
+		return false;
+	}
+	return true;
+}
+
 bool validate_node(tn_pointer node){
 	if (node == NULL)
 		return true;
@@ -85,20 +108,21 @@ bool validate_node(tn_pointer node){
 	// Variables allowed_types may change, so allowed_types must be updated
 	// each time
 	switch(node->type){
-	case PRIMARY : return true;
-	case AFFECT : return validate_node_affect(node);
-	case LIST : return validate_node_list(node);
-	case IDENTIFIER : return validate_node_identifier(node);
-	case ADDITION : return validate_node_arithmetic(node);
+	case PRIMARY :      return true;
+	case AFFECT :       return validate_node_affect(node);
+	case LIST :         return validate_node_list(node);
+	case IDENTIFIER :   return validate_node_identifier(node);
+	case ADDITION :     return validate_node_arithmetic(node);
 	case SUBSTRACTION : return validate_node_arithmetic(node);
-	case MULTIPLY : return validate_node_arithmetic(node);
-	case DIVIDE : return validate_node_arithmetic(node);
-	case OR_NODE : return validate_node_logical(node);
-	case AND_NODE : return validate_node_logical(node);
-	case FUNCTION : return true;//function should already have been validated
-	case RETURN_NODE : return validate_node_return(node);
-		/*case CALL : validate_node_call(node); break;
-	case NEQ_NODE : validate_node_icmp(node,"ne"); break;
+	case MULTIPLY :     return validate_node_arithmetic(node);
+	case DIVIDE :       return validate_node_arithmetic(node);
+	case OR_NODE :      return validate_node_logical(node);
+	case AND_NODE :     return validate_node_logical(node);
+		//function should already have been validated
+	case FUNCTION :     return true;
+	case RETURN_NODE :  return validate_node_return(node);
+	case CALL :         return validate_node_call(node);
+		/*case NEQ_NODE : validate_node_icmp(node,"ne"); break;
 	case EQ_NODE : validate_node_icmp(node,"eq"); break;
 	case LESS_NODE : validate_node_icmp(node,"slt"); break;
 	case LEQ_NODE : validate_node_icmp(node,"sle"); break;
@@ -117,7 +141,7 @@ bool validate_node(tn_pointer node){
  */
 void apply_combination(function_p f, linked_list_pointer combination){
 
-		printf("\t;function %s (%d parameters)(",f->name, linked_list_size(combination));
+	//printf("\t;function %s (%d parameters)(",f->name, linked_list_size(combination));
 	// applying parameters type
 	if (linked_list_size(combination)){
 		linked_list_restart(combination);
@@ -128,19 +152,19 @@ void apply_combination(function_p f, linked_list_pointer combination){
 			variable_p v_func = get_variable(f->inner_context, v->name);
 			linked_list_destroy_opt_erase(v_func->allowed_types,false);
 			v_func->allowed_types = new_type_list_single(type);
-			printf("%s %s",type_get_name(type),v->name);
+			//printf("%s %s",type_get_name(type),v->name);
 			if (linked_list_end(combination))
 				break;
-			printf(",");
+			//printf(",");
 			linked_list_next(combination);
 		}
 	}
-	printf(")\n");
+	//printf(")\n");
 }
 
 
 void validate_function(function_p f){
-	printf(";validating function\n");
+	//printf(";validating function\n");
 	type_solver_p ts = new_type_solver(f);
 	first_combination(ts);
 	// if the function has no parameter, the only combination will be an empty
@@ -149,12 +173,11 @@ void validate_function(function_p f){
 		// getting the combination
 		linked_list_pointer combination = get_combination(ts);
 		apply_combination(f, combination);
-		// combination doesn't seem to be really applied
-		printf("\t\t;updating types\n");
+		//printf("\t\t;updating types\n");
 		update_function(f);
 		if (validate_node(f->root) &&
 				th_true_type(f->possible_return_types) != NULL){
-			printf("\t\t;valid prototype\n");
+			//printf("\t\t;valid prototype\n");
 			prototype_p accepted_proto = new_prototype(f->name, combination);
 			function_set_add(global_fs, accepted_proto, f);
 			linked_list_insert(f->valid_prototypes, accepted_proto);
