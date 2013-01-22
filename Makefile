@@ -46,7 +46,9 @@ context.o : dictionnary.h
 
 context.o : context.h
 
-code_generator.o : code_generator.h
+code_generator.o : code_generator.h constant_string_handler.h function.h \
+									 prototype.h type.h type_handler.h type_updater.h \
+									 validation.h variable.h
 
 dictionnary.o : dictionnary.h
 
@@ -117,7 +119,7 @@ tree.h : linked_list.h
 
 possible_types_solver.h : doubly_linked_list.h function.h
 
-validation.h : function.h possible_types_solver.h
+validation.h : function.h possible_types_solver.h linked_list.h
 
 prototype.h : linked_list.h
 

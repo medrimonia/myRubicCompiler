@@ -69,7 +69,7 @@ bool is_last_combination(type_solver_p ts){
 	}
 }
 
-//TODO destroy combination
+//TODO destroy combination if not keeped
 linked_list_pointer get_combination(type_solver_p ts){
 	linked_list_pointer combination = new_linked_list();
 	// names with associated type

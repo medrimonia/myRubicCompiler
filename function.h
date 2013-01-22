@@ -15,6 +15,8 @@ struct function{
 	linked_list_pointer parameters;
 	tn_pointer root;
 	linked_list_pointer possible_return_types;
+	/* linked list of prototypes */
+	linked_list_pointer valid_prototypes;
 };
 
 typedef struct function * function_p;

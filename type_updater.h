@@ -1,10 +1,11 @@
 #ifndef TYPE_UPDATER_H
 #define TYPE_UPDATER_H
 
+#include "function.h"
 #include "linked_list.h"
 #include "tree.h"
 
-/* This function works recursively on all children */
-void update_type(tn_pointer node);
+/* Also update the nodes of the function code */
+void update_function(function_p f);
 
 #endif

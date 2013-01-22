@@ -151,11 +151,13 @@ void validate_function(function_p f){
 		apply_combination(f, combination);
 		// combination doesn't seem to be really applied
 		printf("\t\t;updating types\n");
-		update_type(f->root);
-		if (validate_node(f->root)){
+		update_function(f);
+		if (validate_node(f->root) &&
+				th_true_type(f->possible_return_types) != NULL){
 			printf("\t\t;valid prototype\n");
 			prototype_p accepted_proto = new_prototype(f->name, combination);
 			function_set_add(global_fs, accepted_proto, f);
+			linked_list_insert(f->valid_prototypes, accepted_proto);
 		}
 		if (is_last_combination(ts))
 			break;

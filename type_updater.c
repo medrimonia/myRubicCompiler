@@ -10,6 +10,8 @@
 
 function_p ut_current_function = NULL;
 
+void update_type(tn_pointer node);
+
 void update_type_primary(tn_pointer node){
 	primary_p value = (primary_p) node->content;
 	//TODO destroy_linked_list(node->allowed_types)
@@ -70,7 +72,9 @@ void update_type_cmp(tn_pointer node){
 
 void update_type_return(tn_pointer node){
 	update_type(node->left_child);
-	remove_types_not_shared(node->allowed_types,
+	type_list_add_type_list(node->allowed_types,
+													node->left_child->allowed_types);
+	type_list_add_type_list(ut_current_function->possible_return_types,
 													node->left_child->allowed_types);
 }
 
@@ -141,4 +145,11 @@ void update_type(tn_pointer node){
 	default: break;
 	}
 	return;	
+}
+
+void update_function(function_p f){
+	ut_current_function = f;
+	f->possible_return_types = new_linked_list();
+	f->root->allowed_types = new_linked_list();
+	update_type(f->root);
 }

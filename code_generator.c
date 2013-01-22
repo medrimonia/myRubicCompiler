@@ -3,11 +3,14 @@
 #include <string.h>
 
 #include "code_generator.h"
+#include "constant_string_handler.h"
 #include "function.h"
-#include "variable.h"
+#include "prototype.h"
 #include "type.h"
 #include "type_handler.h"
-#include "constant_string_handler.h"
+#include "type_updater.h"
+#include "validation.h"
+#include "variable.h"
 
 int actual_register = 0;
 int actual_label = 0;
@@ -244,21 +247,31 @@ void generate_code_function(tn_pointer node){
 	actual_register = 0;
 	function_p f = (function_p) node->content;
 	cg_actual_function = f;
-	
-	type_p t = th_true_type(f->possible_return_types);
-	if (t == NULL){
-		fprintf(stderr, "the function has an undecidable return type\n");
+
+	if (linked_list_size(f->valid_prototypes) == 0){
+		fprintf(stderr,
+						"No valid prototypes has been validated for %s\n",
+						f->name);
 		exit(EXIT_FAILURE);
-	}	
-	printf("define %s @%s(",
-				 type_get_name(t),
-				 f->name);
-	generate_parameters(f);
-	printf("){\n");
-	generate_variable_allocation(f);
-	load_parameters(f);
-	generate_code(f->root);
-	printf("}\n");
+	}
+ 
+	linked_list_restart(f->valid_prototypes);
+	while(true){
+		prototype_p p = (prototype_p)linked_list_get(f->valid_prototypes);
+		apply_combination(f, p->params);
+		update_function(f);
+	
+		type_p t = th_true_type(f->possible_return_types);
+		printf("define %s @%s(",
+					 type_get_name(t),
+					 f->name);
+		generate_parameters(f);
+		printf("){\n");
+		generate_variable_allocation(f);
+		load_parameters(f);
+		generate_code(f->root);
+		printf("}\n");
+	}
 }
 
 void generate_code_return(tn_pointer node){

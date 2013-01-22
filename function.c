@@ -61,6 +61,7 @@ function_p new_function(context_pointer function_context){
 	new->parameters = NULL;
 	new->root = NULL;
 	new->possible_return_types = new_linked_list();//empty at start
+	new->valid_prototypes = new_linked_list();
 	return new;
 }
 
