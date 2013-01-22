@@ -271,6 +271,10 @@ void generate_code_function(tn_pointer node){
 		load_parameters(f);
 		generate_code(f->root);
 		printf("}\n");
+		// When there's no more prototypes available, get out of loop
+		if (linked_list_end(f->valid_prototypes))
+			break;
+		linked_list_next(f->valid_prototypes);
 	}
 }
 
