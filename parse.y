@@ -174,6 +174,7 @@ stmt		: if_expr stmts terms END
 		// free might be needed
 	}
 	$$ = new_tree_node(AFFECT);
+	$$->context = actual_context;
 	$$->left_child = $1;
 	$$->right_child = $3;
 	//printf("$1_size : %d\n",linked_list_size($1->allowed_types));
