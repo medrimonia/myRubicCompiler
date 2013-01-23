@@ -22,14 +22,14 @@
 \vspace{\stretch{1}}
 
 \begin{center}
-	\Huge{\textbf{Rapport de projet Compilation :}}
+	\Huge{\textbf{Rapport de projet de Compilation :}}
 \end{center}
 
 \vspace{\stretch{2}}
 
 \begin{tabular}{r@{:~}l}
 	\textbf{Auteur} & \textit{HOFER Ludovic}\\
- \textbf{Encadrant} & \textit{BARTHOU Denis}\\
+  \textbf{Encadrant} & \textit{BARTHOU Denis}\\
 \end{tabular}
 
 \vspace{\stretch{1}}
@@ -42,22 +42,154 @@
 \newpage
 
 \section{Introduction}
+Ce travail s'inscrit dans le cadre du cours de compilation dispensé à
+l'enseirb-matmeca. Le but qui nous a été donné est de réaliser un compilateur
+capable de transformer un programme écrit en rubic\footnote{Une version
+simplifiée du langage Ruby} en une version du programme respectant les
+spécifications du langage llvm\footnote{http://llvm.org/}.\\
+
+Afin de nous faciliter le travail, l'analyse lexicale et syntaxique étaient
+déjà disponibles sous la forme d'un fichier lex et d'un fichier yacc. Le
+travail à fournir était donc plus axé sur la génération de code.\\
+
+Outre le travail classique à fournir lors de l'implémentation d'un
+compilateur pour un langage simplifié, plusieurs difficultés techniques
+étaient présentes dans ce langage :
+
+\begin{itemize}
+\item Résolution du types des variables\footnote{Le type de celles-ci
+  n'étant pas fourni, il est nécessaire de le déterminer à la compilation}
+\item Gestion de la surcharge\footnote{Il est possible d'écrire plusieurs
+  fonctions ayant le même nom, si elles diffèrent par leurs paramètres}
+\item Gestion des classes\footnote{rubic étant un langage objet,
+  il doit être possible de déclarer des classes et de les utiliser}
+\item Génération de fonction ambigues\footnote{Lorsque les types de certains
+  paramètres d'une fonction ne peuvent pas être résolus directement, il faut
+  générer le code de plusieurs fonctions pour une seule définition}
+\end{itemize}
+
+Certaines de ces tâches étant d'une complexité non négligeable, il est
+intéressant de noter comment elles ont été traitées ainsi que les raisons
+de certains choix d'implémentation.\\
+
+Au vu de l'ampleur de la tâche\footnote{Bien que ce soit le projet du premier
+semestre sur lequel j'aie le plus travaillé, PFA excepté, je suis loin de
+remplir de façon satisfaisante les objectifs qui ont été donnés.}, il m'a
+semblé évident qu'un minimum d'organisation était nécessaire et que le choix
+des méthodes de développement utilisées était primordial. La méthode utilisée
+sera donc détaillée dans ce document.\\
+
+Ayant déjà fait un travail\footnote{http://code.google.com/p/my-c-compiler/}
+un peu similaire lors de ma scolarité à l'université de Bordeaux 1
+\footnote{Le projet mentionné ici ne comportait pas les mêmes difficultés,
+puisque le langage d'entrée était typé et ne permettait pas la surcharge.},
+j'ai décidé de rester en c plutôt que de choisir le java\footnote{C'est le
+choix que j'avais pour mon projet précédent, y utilisant jflex et cup.}. Les
+principales difficultés engendrées par ce changement étaient les suivantes :
+
+\begin{itemize}
+\item L'utilisation de type abstrait de données\footnote{En java ceux-ci sont
+déjà fournis, alors qu'en c, il est plus difficile de trouver la version
+adaptée, j'ai donc écrit mes conteneurs moi-même.}
+\item La gestion de la mémoire\footnote{Celle-ci étant de loin plus facile en
+java.}
+\end{itemize}
 
 \section{Organisation du travail}
 
+Sachant pertinemment que j'avais peu de chance d'arriver à remplir toutes les
+exigences du projet en étant seul dans mon groupe et qu'il m'était difficile
+d'appréhender directement tout le contenu du projet, j'ai préféré m'orienter
+vers une approche de construction progressive du projet en ajoutant une à une
+des fonctionnalité plutôt que de concevoir le projet en entier puis de passer
+à une phase d'implémentation et de me retrouver coincé par des problèmes que
+je n'avais pas envisagé.
+
 \subsection{Développement brique par brique}
+Le principe de l'ordre de développement choisi est assez simple, il consiste
+à se fixer comme objectif la compilation d'un certain programme rubic
+\footnote{En commençant évidemment par les plus simples.}, puis d'ajouter le
+code manquant. Ainsi, le développement alterne à un rythme assez élevé les
+phases de conception, de codage et de débuguage.\\
+
+Cette méthode présente les avantages suivants :
+\begin{itemize}
+\item Une stimulation par une visualisation de progression aisée.
+\item L'assurance qu'à la fin du projet, la conception sera à peu près au
+  même niveau que l'implémentation.
+\item La conception d'une notion complexe se basera sur l'implémentation de
+  notions plus simples au lieu de se baser sur la conception de celle-ci.
+\end{itemize}
+
+Cependant, elle possède aussi des désavantages :
+\begin{itemize}
+\item L'ajout de nouvelles fonctionnalités peut obliger à retravailler de
+  manière plus ou moins marquée le code existant.
+\item En implémentant de nouvelles fonctionnalités, il est possible de
+  dégrader celles déjà présentes sans s'en apercevoir.
+\end{itemize}
+
+Afin de pallier le premier problème, j'ai essayé de garder à l'esprit les
+fonctionnalités complexes lorsque j'implémentais celles qui étaient plus
+simple.\\
+
+Pour éviter d'introduire des bugs lors du développement, j'ai fait évoluer
+en parallèle un module de tests me permettant d'assurer la transformation de
+code rubic en code exécutable.
 
 \subsection{Tests}
 
+Ma première approche des tests a été de chercher à maitriser la
+transformation de code llvm en exécutable, cette partie n'étant pas
+directement reliée au projet, il n'était pas nécessaire d'écrire le moindre
+code pour celle-ci. Il suffisait de prendre en main les outils de compilation
+existants, j'en ai profité pour ajouter les instructions génériques
+nécessaires dans le Makefile afin de transformer facilement n'importe quel
+fichier rubic en exécutable.\\
+
+Une fois que le projet avait un peu plus pris forme, j'ai écrit un script
+permettant de compiler tous les fichiers {\em.rubic}, de les lancer et de
+vérifier que leur valeur de retour est bien égale à zéro. Ceci permet de bien
+s'assurer de ne pas avoir introduit de bug.\\
+
+Dans un second temps, un affichage du nombre de tests total et du nombre de
+tests ayant compilé a été ajouté afin de déceler plus facilement si des
+problèmes surviennent à la compilation des fichiers rubics.
+
 \section{Les conteneurs}
 
+Étant donné qu'une grande partie des données que le compilateur doit stocker
+ne sont pas de taille fixée, il semble évident qu'utiliser uniquement des
+tableaux ne sera pas adapté. Les conteneurs génériques étant difficiles à
+trouver en c, j'ai donc implémenté les miens en essayant de les rendre
+réutilisable afin de pouvoir m'en servir à nouveau pour d'autres projets.
+
 \subsection{Hashmap}
+Ce choix s'est imposé comme étant indispensable pour la gestion du stockage
+de différentes données telles que les fonctions ou les variables. Il est
+beaucoup plus aisé d'utiliser une structure permettant un accès et une
+insertion rapide.\\
+
+Dans une première approche, je souhaitais effacer automatiquement les clés et
+les objets contenus, mais je me suis rapidement rendu compte qu'il valait
+souvent mieux laisser l'utilisateur du conteneur faire ses free.\\
+
+J'ai aussi du ajouter un moyen d'itérer sur ces conteneurs afin d'allouer
+toutes les variables par exemple.
 
 \subsection{Dictionnary}
+Comme de nombreuses Hashmap auraient prit comme clé des chaînes de caractère,
+j'ai préféré créer un conteneur qui simplifie les pointeur renvoyés et
+qui fournit dans le même temps une fonction de hachage et une fonction
+vérifiant l'égalité de deux chaînes de caractère tout en respectant le
+prototype souhaité par les Hashmap.
 
 \subsection{LinkedList}
 
 \subsection{La structure arborescente}
+
+\subsection{DoublyLinkedList}
+Nécessaire ?
 
 \section{Les aspects de la compilation}
 
@@ -86,6 +218,8 @@
 \subsection{Gestion de la surcharge}
 
 \subsection{La gestion des classes}
+
+\section{La gestion de la mémoire}
 
 \section{Conclusion}
 
