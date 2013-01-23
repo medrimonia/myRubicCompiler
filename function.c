@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "function.h"
-#include "dictionnary.h"
-#include "type_handler.h"
 #include "code_generator.h"
+#include "dictionnary.h"
+#include "function.h"
+#include "function_set.h"
+#include "prototype.h"
+#include "type_handler.h"
 
 dictionnary_pointer built_ins = NULL;
 dictionnary_pointer used_built_ins = NULL;
@@ -16,8 +18,11 @@ void initialize_built_ins(context_pointer root_context){
 		return;
 	built_ins = new_dictionnary();
 	used_built_ins = new_dictionnary();
-	//
-	function_p f = new_function(create_context_child(root_context));
+	function_p f;
+	prototype_p p;
+	linked_list_pointer vars;
+	//Adding puts
+	f = new_function(create_context_child(root_context));
 	f->name = "puts";
 	f->parameters = new_linked_list();
 	linked_list_insert(f->parameters, "s");
@@ -25,7 +30,12 @@ void initialize_built_ins(context_pointer root_context){
 												 "s",
 												 "i8 *");
 	f->possible_return_types = new_type_list_single_from_name("i8 *");
+	vars = new_linked_list();
+	linked_list_append(vars, get_variable(f->inner_context, "s"));
+	p = new_prototype(f->name, vars);
 	dictionnary_add(built_ins,f->name,f);
+	function_set_add(global_fs, p, f);
+	linked_list_insert(f->valid_prototypes, p);
 }
 
 void declare_built_ins(){
@@ -139,4 +149,8 @@ void load_parameters(function_p f){
 			break;
 		linked_list_next(f->parameters);
 	}
+}
+
+bool is_built_in(function_p f){
+	return dictionnary_exists(built_ins, f->name);
 }

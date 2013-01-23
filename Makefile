@@ -38,7 +38,8 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 %.test : %.s
 	-$(CC) -o $@ $<
 
-function.o : function.h
+function.o : code_generator.h dictionnary.h function.h function_set.h \
+					   prototype.h type_handler.h
 
 tree.o : tree.h type_handler.h
 

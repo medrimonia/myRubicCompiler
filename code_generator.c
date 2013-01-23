@@ -320,7 +320,8 @@ void generate_code_call(tn_pointer node){
 	// there should be one and only one prototype matching
 	linked_list_restart(fc->valid_prototypes);
 	prototype_p p = (prototype_p)linked_list_get(fc->valid_prototypes);
-	print_prototype_prefix(p);
+	if (!is_built_in(fc->f_called))
+		print_prototype_prefix(p);
 	printf("%s(",
 				 fc->f_called->name);
 	node->reg_number = actual_register;

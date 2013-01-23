@@ -48,4 +48,6 @@ void generate_parameters(function_p f);
 
 void load_parameters(function_p f);
 
+bool is_built_in(function_p f);
+
 #endif
