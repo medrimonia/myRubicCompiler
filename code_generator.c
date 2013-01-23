@@ -261,7 +261,7 @@ void generate_code_function(tn_pointer node){
 	actual_register = 0;
 		prototype_p p = (prototype_p)linked_list_get(f->valid_prototypes);
 		apply_combination(f, p->params);
-		update_function(f);
+		update_function(f, p);
 	
 		type_p t = th_true_type(f->possible_return_types);
 		printf("define %s @", type_get_name(t));

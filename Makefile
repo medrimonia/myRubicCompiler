@@ -125,7 +125,7 @@ prototype.h : linked_list.h
 
 function_set.h : prototype.h dictionnary.h function.h
 
-type_updater.h : linked_list.h tree.h
+type_updater.h : linked_list.h function.h prototype.h
 
 ### CLEANING PART ###
 

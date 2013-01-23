@@ -9,6 +9,7 @@
 #include "linked_list.h"
 
 function_p ut_current_function = NULL;
+prototype_p ut_current_p = NULL;
 
 void update_type(tn_pointer node);
 
@@ -98,9 +99,15 @@ void update_type_call(tn_pointer node){
 	matching = function_set_matching_functions(global_fs,
 																						 call->f_called->name,
 																						 args);
+	bool valid_recursion = false;
+	if (prototype_matches(ut_current_p,args)){
+		printf(";recursion found\n");
+		valid_recursion = true;
+		linked_list_append(matching, ut_current_function);
+	}
 	if (linked_list_size(matching) == 0){
-		fprintf(stderr, "no functions matching the specified prototype\n");
-		exit(EXIT_FAILURE);
+		printf(";No functions matching the specified prototype\n");
+		return;
 	}
 	//printf(";a function matching the specified prototype was found\n");
 	// adding return_types
@@ -108,6 +115,9 @@ void update_type_call(tn_pointer node){
 	matching_proto = function_set_matching_prototypes(global_fs,
 																										call->f_called->name,
 																										args);
+	if (valid_recursion){
+			linked_list_append(matching_proto, ut_current_p);		
+	}
 	call->valid_prototypes = matching_proto;
 	linked_list_restart(matching);
 	while(true){
@@ -170,8 +180,9 @@ void update_type(tn_pointer node){
 	return;	
 }
 
-void update_function(function_p f){
+void update_function(function_p f, prototype_p p){
 	ut_current_function = f;
+	ut_current_p = p;
 	f->possible_return_types = new_linked_list();
 	f->root->allowed_types = new_linked_list();
 	update_type(f->root);
