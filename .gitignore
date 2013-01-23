@@ -25,6 +25,11 @@ rubic
 y.tab.c
 y.tab.h
 
+# Generated report files
+rapport/*.aux
+rapport/*.log
+rapport/*.pdf
+
 # Tests builded files but not tests
 tests/*
 !tests/*.rubic
