@@ -127,33 +127,44 @@ void update_type_conditional(tn_pointer node){
 	update_type(cond->false_case);
 }
 
+void update_type_while(tn_pointer node){
+	update_type_childs(node);
+}
+
+void update_type_for(tn_pointer node){
+	for_block_p content = (for_block_p)node->content;
+	update_type(content->from_expr);
+	update_type(content->to_expr);
+	update_type(content->code);
+}
+
 void update_type(tn_pointer node){
 	if (node == NULL)
 		return;
 	switch(node->type){
-	case PRIMARY :       update_type_primary(node);    break;
-	case AFFECT :        update_type_affect(node);     break;
-	case LIST :          update_type_childs(node);     break;
-	case IDENTIFIER :    update_type_identifier(node); break;
-	case ADDITION :      update_type_arithmetic(node); break;
-	case SUBSTRACTION :  update_type_arithmetic(node); break;
-	case MULTIPLY :      update_type_arithmetic(node); break;
-	case DIVIDE :        update_type_arithmetic(node); break;
-	case OR_NODE :       update_type_logical(node);    break;
-	case AND_NODE :      update_type_logical(node);    break;
-		// function should be updated on it's own
-	case FUNCTION :                                    break;
-	case RETURN_NODE :   update_type_return(node);     break;
-	case CALL :          update_type_call(node);       break;
-	case NEQ_NODE :      update_type_cmp(node);        break;
-	case EQ_NODE :       update_type_cmp(node);        break;
-	case LESS_NODE :     update_type_cmp(node);        break;
-	case LEQ_NODE :      update_type_cmp(node);        break;
-	case GEQ_NODE :      update_type_cmp(node);        break;
-	case GREATER_NODE :  update_type_cmp(node);        break;
-	case IF_NODE : update_type_conditional(node); break;
-		/*case WHILE_NODE : update_type_while(node); break;
-	case FOR_NODE : update_type_for(node); break;*/
+	case PRIMARY :       update_type_primary(node);     break;
+	case AFFECT :        update_type_affect(node);      break;
+	case LIST :          update_type_childs(node);      break;
+	case IDENTIFIER :    update_type_identifier(node);  break;
+	case ADDITION :      update_type_arithmetic(node);  break;
+	case SUBSTRACTION :  update_type_arithmetic(node);  break;
+	case MULTIPLY :      update_type_arithmetic(node);  break;
+	case DIVIDE :        update_type_arithmetic(node);  break;
+	case OR_NODE :       update_type_logical(node);     break;
+	case AND_NODE :      update_type_logical(node);     break;
+		// function should be updated on it's own				  
+	case FUNCTION :                                     break;
+	case RETURN_NODE :   update_type_return(node);      break;
+	case CALL :          update_type_call(node);        break;
+	case NEQ_NODE :      update_type_cmp(node);         break;
+	case EQ_NODE :       update_type_cmp(node);         break;
+	case LESS_NODE :     update_type_cmp(node);         break;
+	case LEQ_NODE :      update_type_cmp(node);         break;
+	case GEQ_NODE :      update_type_cmp(node);         break;
+	case GREATER_NODE :  update_type_cmp(node);         break;
+	case IF_NODE :       update_type_conditional(node); break;
+	case WHILE_NODE :    update_type_while(node);       break;
+	case FOR_NODE :      update_type_for(node);         break;
 	default: break;
 	}
 	return;	

@@ -130,6 +130,17 @@ bool validate_node_conditional(tn_pointer node){
 					validate_node(cond->false_case));
 }
 
+bool validate_node_while(tn_pointer node){
+	return validate_node_childs(node);
+}
+
+bool validate_node_for(tn_pointer node){
+	for_block_p content = (for_block_p)node->content;
+	return (validate_node(content->from_expr) &&
+					validate_node(content->to_expr) &&
+					validate_node(content->code));
+}
+
 bool validate_node(tn_pointer node){
 	if (node == NULL)
 		return true;
@@ -158,8 +169,8 @@ bool validate_node(tn_pointer node){
 	case GEQ_NODE :     return validate_node_icmp(node);
 	case GREATER_NODE : return validate_node_icmp(node);
 	case IF_NODE :      return validate_node_conditional(node);
-		/*case WHILE_NODE : validate_node_while(node); break;
-	case FOR_NODE : validate_node_for(node); break;*/
+	case WHILE_NODE :   return validate_node_while(node);
+	case FOR_NODE :     return validate_node_for(node);
 	default: return false; // unknown type
 	}
 }

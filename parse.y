@@ -264,7 +264,7 @@ lhs             : ID
 ;
 exprs           : exprs ',' expr
 {
-	linked_list_insert($1, $3);
+	linked_list_append($1, $3);
 	$$ = $1;
 }
                 | expr
