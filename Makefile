@@ -93,7 +93,7 @@ test_linked_list: linked_list.o test_linked_list.o
 test_doubly_linked_list: doubly_linked_list.o test_doubly_linked_list.o
 	$(CC) -o $@ $^
 
-RUBICS_FILES=$(wildcard *.rubic)
+RUBICS_FILES=$(wildcard tests/*.rubic)
 RUBICS_OBJS=$(RUBICS_FILES:.rubic=.ll)
 RUBICS_TESTS=$(RUBICS_FILES:.rubic=.test)
 RUBICS_TESTS_OUTPUT=$(RUBICS_FILES:.rubic=.test.output)
