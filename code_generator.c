@@ -27,7 +27,7 @@ void generate_code_substraction(tn_pointer node);
 void generate_code_multiplication(tn_pointer node);
 void generate_code_division(tn_pointer node);
 
-void generate_code_icmp(tn_pointer node, const char * cmp_type);
+void generate_code_cmp(tn_pointer node, const char * cmp_type);
 
 void generate_code_conditional(tn_pointer node);
 
@@ -60,12 +60,12 @@ int generate_code(tn_pointer node){
 	case FUNCTION : generate_code_function(node); break;
 	case RETURN_NODE : generate_code_return(node); break;
 	case CALL : generate_code_call(node); break;
-	case NEQ_NODE : generate_code_icmp(node,"ne"); break;
-	case EQ_NODE : generate_code_icmp(node,"eq"); break;
-	case LESS_NODE : generate_code_icmp(node,"slt"); break;
-	case LEQ_NODE : generate_code_icmp(node,"sle"); break;
-	case GEQ_NODE : generate_code_icmp(node,"sge"); break;
-	case GREATER_NODE : generate_code_icmp(node,"sgt"); break;
+	case NEQ_NODE : generate_code_cmp(node,"ne"); break;
+	case EQ_NODE : generate_code_cmp(node,"eq"); break;
+	case LESS_NODE : generate_code_cmp(node,"slt"); break;
+	case LEQ_NODE : generate_code_cmp(node,"sle"); break;
+	case GEQ_NODE : generate_code_cmp(node,"sge"); break;
+	case GREATER_NODE : generate_code_cmp(node,"sgt"); break;
 	case IF_NODE : generate_code_conditional(node); break;
 	case WHILE_NODE : generate_code_while(node); break;
 	case FOR_NODE : generate_code_for(node); break;
@@ -85,8 +85,9 @@ void generate_code_primary(tn_pointer node){
 					 p->s_id);
 		break;
 	case PRIMARY_FLOAT: //TODO : handle later
-		printf("PRIMARY_FLOAT not handled\n");
-		exit(EXIT_FAILURE);
+		printf("%%%d = fadd float 0x%8.8x00000000, 0.0\n",
+					 node->reg_number,
+					 *(long*)&(p->f));
 		break;
 	case PRIMARY_INT :
 		printf("%%%d = add i32 %d, 0\n", node->reg_number, p->i);
@@ -114,7 +115,9 @@ void generate_code_list(tn_pointer node){
 void generate_code_identifier(tn_pointer node){
 	node->reg_number = ++actual_register;
 	
-	type_p t = th_true_type(cg_actual_function->possible_return_types);
+	variable_p var = get_variable(node->context, node->content);
+	type_p t = th_true_type(var->allowed_types);
+		//th_true_type(cg_actual_function->possible_return_types);
 	if (t == NULL){
 		fprintf(stderr, "the identifier to load has an undecidable type\n");
 		exit(EXIT_FAILURE);
@@ -158,14 +161,20 @@ void generate_code_division(tn_pointer node){
 	generate_code_generic_operation(node, "sdiv");
 }
 
-void generate_code_icmp(tn_pointer node, const char * cmp_type){
+void generate_code_cmp(tn_pointer node, const char * cmp_type){
 	generate_code(node->left_child);
 	generate_code(node->right_child);
 	node->reg_number = ++actual_register;
 
 	type_p t = th_true_type(node->right_child->allowed_types);
-	printf("%%%d = icmp %s %s %%%d, %%%d\n",
+
+	char type_char = 'i';
+	if (t == get_type_from_name("float"))
+		type_char = 'f';
+	
+	printf("%%%d = %ccmp %s %s %%%d, %%%d\n",
 				 node->reg_number,
+				 type_char,
 				 cmp_type,
 				 type_get_name(t),
 				 node->left_child->reg_number,

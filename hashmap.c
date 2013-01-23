@@ -88,7 +88,7 @@ void hashmap_remove(hashmap_pointer hm,
 		element = linked_list_get(l);
 		if ((*hm->e_f)(element->key, key)){
 			if (free_key)
-				free(element->key);
+				free((void *)element->key);
 			if (free_data)
 				free(element->data);
 			linked_list_remove(l);
@@ -99,7 +99,7 @@ void hashmap_remove(hashmap_pointer hm,
 	element = linked_list_get(l);
 	if ((*hm->e_f)(element->key, key)){
 		if (free_key)
-			free(element->key);
+			free((void*)element->key);
 		if (free_data)
 			free(element->data);
 		linked_list_remove(l);
@@ -120,7 +120,7 @@ void hashmap_destroy(hashmap_pointer hm,
 		while(!linked_list_end(l)){
 			e_p element = linked_list_get(l);
 			if (free_keys)
-				free(element->key);
+				free((void*)element->key);
 			if (free_data)
 				free(element->data);
 			linked_list_next(l);
@@ -128,7 +128,7 @@ void hashmap_destroy(hashmap_pointer hm,
 		if (!linked_list_is_empty(l)){
 			e_p element = linked_list_get(l);
 			if (free_keys)
-				free(element->key);
+				free((void *)element->key);
 			if (free_data)
 				free(element->data);
 		}

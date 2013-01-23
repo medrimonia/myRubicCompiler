@@ -78,7 +78,7 @@ void dictionnary_destroy(dictionnary_pointer d,
 
 void dictionnary_start_iteration(dictionnary_pointer d);
 
-void * dictionnary_get_current_key(dictionnary_pointer d);
+const void * dictionnary_get_current_key(dictionnary_pointer d);
 
 void * dictionnary_get_current_value(dictionnary_pointer d);
 

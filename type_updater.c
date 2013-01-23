@@ -23,7 +23,7 @@ void update_type_primary(tn_pointer node){
 		break;
 	}
 	case PRIMARY_FLOAT :{
-		type_list =  new_type_list_single_from_name("f32");
+		type_list =  new_type_list_single_from_name("float");
 		break;
 	}
 	case PRIMARY_INT :{

@@ -292,7 +292,7 @@ primary         : lhs
 	value->t = PRIMARY_FLOAT;
 	value->f = $1;
 	$$->content = value;
-	$$->allowed_types = new_type_list_single_from_name("f32");
+	$$->allowed_types = new_type_list_single_from_name("float");
 }
                 | INT
 {

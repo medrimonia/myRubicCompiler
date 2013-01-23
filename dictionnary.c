@@ -71,7 +71,7 @@ void dictionnary_start_iteration(dictionnary_pointer d){
 	hashmap_start_iteration(d);
 }
 
-void * dictionnary_get_current_key(dictionnary_pointer d){
+const void * dictionnary_get_current_key(dictionnary_pointer d){
 	return hashmap_get_current_key(d);
 }
 
