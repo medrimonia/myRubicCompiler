@@ -18,3 +18,13 @@
 
 # Temporary files
 *~
+
+# Generated files
+lex.yy.c
+rubic
+y.tab.c
+y.tab.h
+
+# Tests builded files but not tests
+tests/*
+!tests/*.rubic
