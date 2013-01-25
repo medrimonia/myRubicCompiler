@@ -408,5 +408,6 @@ int main() {
 	destroy_tree(global_root);
 	destroy_type_lists();
 	function_set_destroy(global_fs);
+	destroy_built_ins();
   return 0;
 }
