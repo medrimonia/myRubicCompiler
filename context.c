@@ -25,6 +25,7 @@ context_pointer new_context(){
 	new->types = new_dictionnary();
 	new->classes = new_dictionnary();
 	new->functions = new_dictionnary();
+	new->child_contexts = new_linked_list();
 	return new;
 }
 
@@ -38,6 +39,8 @@ context_pointer create_context_child(context_pointer parent){
 	new->types = new_dictionnary();
 	new->classes = new_dictionnary();
 	new->functions = new_dictionnary();
+	new->child_contexts = new_linked_list();
+	linked_list_append(parent->child_contexts, new);
 	return new;
 }
 
@@ -133,8 +136,20 @@ variable_p declare_global_variable(context_pointer c, char * name){
 }
 
 void destroy_context(context_pointer c){
-	hashmap_destroy(c->global_variables, true, true);
-	hashmap_destroy(c->local_variables, true, true);
+	if (linked_list_size(c->child_contexts) > 0){
+		linked_list_restart(c->child_contexts);
+		while(true){
+			context_pointer child = linked_list_get(c->child_contexts);
+			destroy_context(child);
+			if (linked_list_end(c->child_contexts))
+				break;
+			linked_list_next(c->child_contexts);
+		}
+	}
+	linked_list_destroy_opt_erase(c->child_contexts, false);
+	if (c->global_variables != NULL)
+		hashmap_destroy(c->global_variables, true, true);
+	hashmap_destroy(c->local_variables, false, true);
 	hashmap_destroy(c->instance_variables, true, true);
 	hashmap_destroy(c->constants, true, true);
 	hashmap_destroy(c->types, true, true);

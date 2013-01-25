@@ -154,3 +154,7 @@ void load_parameters(function_p f){
 bool is_built_in(function_p f){
 	return dictionnary_exists(built_ins, f->name);
 }
+
+void function_destroy(function_p f){
+	free(f);
+}

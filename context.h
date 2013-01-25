@@ -27,6 +27,7 @@ struct context{
 	dictionnary_pointer types;
 	dictionnary_pointer classes;
 	dictionnary_pointer functions;
+	linked_list_pointer child_contexts;
 };
 
 typedef struct context * context_pointer;

@@ -50,4 +50,6 @@ void load_parameters(function_p f);
 
 bool is_built_in(function_p f);
 
+void function_destroy(function_p f);
+
 #endif
