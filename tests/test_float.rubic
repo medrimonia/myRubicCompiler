@@ -1,7 +1,8 @@
 def main()
 		a = 5.3;
 		b = 3.3;
-		if 2.0 == a - b then
+		c = a - b;
+		if 1.99 < c && 2.01 > c then
 			 return 0;
 		end
 		return 1;		

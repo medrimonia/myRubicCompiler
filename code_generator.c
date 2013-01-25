@@ -84,10 +84,10 @@ void generate_code_primary(tn_pointer node){
 					 get_constant_size(p->s_id),
 					 p->s_id);
 		break;
-	case PRIMARY_FLOAT: //TODO : handle later
-		printf("%%%d = fadd float 0x%8.8x00000000, 0.0\n",
+	case PRIMARY_DOUBLE: //TODO : handle later
+		printf("%%%d = fadd double %f, 0.0\n",
 					 node->reg_number,
-					 *(long*)&(p->f));
+					 p->d);
 		break;
 	case PRIMARY_INT :
 		printf("%%%d = add i32 %d, 0\n", node->reg_number, p->i);
@@ -136,7 +136,7 @@ void generate_code_generic_operation(tn_pointer node, char * op){
 	
 	type_p t = th_true_type(node->allowed_types);
 	printf("%%%d = ",node->reg_number);
-	if (t == get_type_from_name("float"))
+	if (t == get_type_from_name("double"))
 		printf("f");//fadd, fsub, etc...
 	printf("%s %s %%%d, %%%d\n",
 				 op,
@@ -169,7 +169,7 @@ void generate_code_cmp(tn_pointer node, const char * cmp_type){
 	type_p t = th_true_type(node->right_child->allowed_types);
 
 	char type_char = 'i';
-	if (t == get_type_from_name("float"))
+	if (t == get_type_from_name("double"))
 		type_char = 'f';
 	
 	printf("%%%d = %ccmp %s %s %%%d, %%%d\n",

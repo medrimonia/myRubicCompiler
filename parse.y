@@ -34,7 +34,7 @@
 }
 %union{
 	int i;
-	float f;
+	double d;
 	char * s;
 	tn_pointer node;
 	linked_list_pointer l;
@@ -44,7 +44,7 @@
 
 
 %token <s> ID
-%token <f> FLOAT
+%token <d> FLOAT
 %token <i> INT
 
 %token AND OR CLASS IF THEN ELSE END WHILE DO DEF LEQ GEQ 
@@ -289,10 +289,10 @@ primary         : lhs
 {
 	$$ = new_tree_node(PRIMARY);
 	primary_p value = malloc(sizeof(struct primary));
-	value->t = PRIMARY_FLOAT;
-	value->f = $1;
+	value->t = PRIMARY_DOUBLE;
+	value->d= $1;
 	$$->content = value;
-	$$->allowed_types = new_type_list_single_from_name("float");
+	$$->allowed_types = new_type_list_single_from_name("double");
 }
                 | INT
 {

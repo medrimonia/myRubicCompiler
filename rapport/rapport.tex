@@ -175,7 +175,11 @@ les objets contenus, mais je me suis rapidement rendu compte qu'il valait
 souvent mieux laisser l'utilisateur du conteneur faire ses free.\\
 
 J'ai aussi du ajouter un moyen d'itérer sur ces conteneurs afin d'allouer
-toutes les variables par exemple.
+toutes les variables par exemple.\\
+
+La possibilité d'ajuster la taille d'une hashmap a été laissée de côté
+pour l'instant, les problèmes de temps d'accès n'étant pas cruciaux dans le
+cadre actuel.
 
 \subsection{Dictionnary}
 Comme de nombreuses Hashmap auraient prit comme clé des chaînes de caractère,
@@ -185,29 +189,129 @@ vérifiant l'égalité de deux chaînes de caractère tout en respectant le
 prototype souhaité par les Hashmap.
 
 \subsection{LinkedList}
+Afin de simuler différentes données n'ayant pas de clé, mais dont le nombre
+reste tout de même inconnu\footnote{La possibilité de créer de nouveau types
+étant offerte en rubic via les classes, le nombre de types possibles est
+inconnu par exemple.}, j'ai décidé de choisir des listes chaînées, celles-ci
+étant relativement simple à implémenter et agréable d'utilisation. De plus,
+il m'était nécessaire d'avoir une structure semblable, afin de garantir que
+les insertions dans la hashmap fonctionnent.
 
 \subsection{La structure arborescente}
+Étant donné que l'on parle d'arbre syntaxique, il est assez naturel que j'ai
+utilisé des arbres pour représenter le résultat de l'analyse syntaxique. Fait
+pratique, comme tout noeud représente un arbre et que je n'avais pas besoin
+de retirer des noeuds de l'arbre, il ne m'était pas nécessaire de fournir
+de nombreuse primitives pour le maniement de cette structure. Au contraire,
+je l'ai gardée assez explicite avec de nombreux champs spécifique faisant
+partie des noeuds, cela m'a permit une écriture simplifiée dans certains cas.
 
 \subsection{DoublyLinkedList}
-Nécessaire ?
+Estimant nécessaire d'avoir à disposition une liste pouvant être parcourue
+dans les deux sens, j'ai ajouté à ces conteneurs une implémentation de liste
+doublement chaînée utilisant le principe de sentinelles.\\
+
+Cependant, avec le recul, je me demande s'il était réellement nécessaire de
+disposer de ces fonctionnalités ou si une liste chaînée n'aurait pas suffit
+pour gérer le polymorphisme.
 
 \section{Les aspects de la compilation}
+Compiler un programme rubic en programme llvm pouvant être perçu comme un
+ensemble de fonctionnalités à implémenter et donc comme un ensemble de
+problèmes. Dans cette optique, je vais expliquer les méthodes utilisées pour
+chacun des sous-problèmes.\\
+
+Il est à noter qu'afin de simplifier un maximum les problèmes, j'ai commencé
+par considérer que le seul type accepté était les int, ainsi toutes mes
+opérations pouvaient être codée plus facilement.
 
 \subsection{Les allocations mémoires}
+Afin d'allouer de la mémoire à toutes les différentes variables qui en
+nécessitaient, j'ai décidé de simpler allouer l'espace à toutes les
+variables au début de chaque fonction, cependant, je n'ai pas vérifié si
+ces espaces mémoires étaient bien libérés à la sortie de chaque fonction.
 
 \subsection{Les fonctions}
+Pour traiter les fonctions, il était nécessaire de distinguer leurs
+paramètres des simples variables locales, les premiers appartennant à la
+signature tandis que les secondes n'ont qu'une visibilité locale.\\
+
+Traité d'une manière similaire aux variables, les fonctions étaient
+simplement ajoutées à un dictionnaire et pour déterminer si l'appel était
+valide, il fallait simplement vérifier si la fonction était présente dans le
+dictionnaire et si les paramètres correspondaient à ce qui était attendu.
+
+\subsubsection{Les built-in}
+L'utilisation de certains {\em built-in} comme {\em puts} nécessitait que les
+fonctions soient déclarées, même si elles n'étaient pas définies. Afin que
+cela reste le plus simple pour l'utilisateur, j'ai simplement ajouté un
+dictionnaire contenant les {\em built-in}, ainsi qu'un autre contenant les
+{\em built-in} utilisé\footnote{Celui-ci étant évidemment initialisé comme
+vide}. Ainsi à chaque fois qu'une utilisation de {\em built-in} était
+détectée, il était assuré que le built-in serait déclaré dans le fichier
+généré. Cette procédure m'a permit de garantir que si de nouveaux
+{\em built-in} étaient ajouté, il n'y aurait pas un nombre de lignes inutiles
+grandissant au début de chaque fichier généré.
 
 \subsection{Les opérateurs}
 
+
 \subsection{Première gestion des types}
+Afin de travailler dans un environnement simplifié, j'ai commencé par
+considérer comme types possibles uniquement les int et les chaînes de
+caractère, l'ambiguité entre ces deux types étant peu probable. Ainsi,
+j'ajoutai malgré tout la prise en charge de plusieurs types, sans pour autant
+m'heurter à des problèmes plus complexes\footnote{L'ajout de float engendrait
+en effet une obligation de traiter (de manière plus ou moins complète) le cas
+du polymorphisme}.
 
 \subsubsection{Des listes de types autorisés}
+Afin de déterminer de quel type est une variable, j'ai pensé qu'il était plus
+simple de commencer par affirmer qu'elle pouvait être de tous les types
+connus, puis de restreindre ces types lorsqu'une contrainte était découverte
+\footnote{Que ce soit sous la forme d'un opérateur, d'un appel à une fonction
+ou n'importe quel autre type de contrainte}. Lorsqu'un nouveau noeud était
+créé, les types qui lui étaient autorisé dépendait donc du type de ses fils.
+Le nouveau noeud exerçait aussi une contrainte sur les noeuds qui étaient
+directement ses fils, mais pas sur toute sa descendance\footnote{Ceci afin
+d'éviter de faire exploser la complexité. La compilation étant sensé être une
+opération assez rapide.}.
 
 \subsubsection{Contraintes lors du parcours de l'arbre}
+En parcourant l'arbre plusieurs fois, il devenait donc possible de répéter
+les contraintes plusieurs fois et d'ainsi affiner le résultat dans des cas
+particuliers un peu litigieux. Cependant, étant donné qu'il est difficile
+de borner le nombre de passages nécessaires, un seul passage était effectué
+au début\footnote{Les changements seront plus détaillés lors de la phase
+gestion du polymorphisme}. Le choix pris à ce moment était de déclencher une
+erreur de compilation lorsque le type des paramètres d'une fonction n'étaient
+pas déterminés après le premier passage.
 
 \subsubsection{Choix du type lors de la génération de code}
+Lors de la passe sur l'arbre servant à effectuer la génération de code,
+il m'était nécessaire de décider quel type allait être utilisé pour le noeud,
+étant donné que celui-ci déterminait le nom de l'opération à appliquer
+\footnote{add, fadd ou icmp, fcmp etc...}. Pour ceci, j'ai décidé d'utiliser
+une logique extrêment simple, s'il restait un seul type alloué, c'est celui
+qui était utilisé et dans le cas contraire, il y avait une erreur de
+compilation\footnote{Le type de la variable étant ambigu ou impossible
+à définir}.
 
 \subsection{Les conditionnelles}
+Afin d'implémenter les structures de code conditionnelles\footnote{blocs if
+et blocs if/else}, il a été évidemment nécessaire de supporter les booléens,
+ce qui s'est fait assez facilement, puisqu'avec la manière dont j'avais
+implémenté mon gestionnaire de type, cela ne représentait que quelques lignes
+à ajouter.\\
+
+Afin de simplifier un peu l'implémentation, j'ai décidé que les deux formes
+de blocs conditionnels seraient représentés par le même noeud. Le contenu de
+celui-ci serait simplement représenter par trois noeuds, la condition, la
+liste d'instructions à exécuter dans le cas vrai et celle dans le cas faux
+\footnote{Cette dernière sera donc mise à nulle dans les cas où le elsen'est
+pas utilisé}\\
+
+La présence des conditionnelles a aussi grandement facilité
 
 \subsection{Les boucles}
 
@@ -215,7 +319,7 @@ Nécessaire ?
 
 \subsubsection{La boucle \em{for}}
 
-\subsection{Gestion de la surcharge}
+\subsection{Gestion du polymorphisme}
 
 \subsection{La gestion des classes}
 

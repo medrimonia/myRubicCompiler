@@ -20,10 +20,10 @@ void initialize_types(){
 	additionable_types  = new_linked_list();
 	comparable_types = new_linked_list();
 	logical_types = new_linked_list();
-	add_new_type("i32"  , true  , true  , false );// int
-	add_new_type("float", true  , true  , false );// float
-	add_new_type("i8 *" , false , false , false );// string
-	add_new_type("i1"   , false , true  , true  );// bool
+	add_new_type("i32"   , true  , true  , false );// int
+	add_new_type("double", true  , true  , false );// double
+	add_new_type("i8 *"  , false , false , false );// string
+	add_new_type("i1"    , false , true  , true  );// bool
 }
 
 

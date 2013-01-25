@@ -22,8 +22,8 @@ void update_type_primary(tn_pointer node){
 		type_list =  new_type_list_single_from_name("i8 *");
 		break;
 	}
-	case PRIMARY_FLOAT :{
-		type_list =  new_type_list_single_from_name("float");
+	case PRIMARY_DOUBLE :{
+		type_list =  new_type_list_single_from_name("double");
 		break;
 	}
 	case PRIMARY_INT :{

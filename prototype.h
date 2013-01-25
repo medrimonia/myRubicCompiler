@@ -26,10 +26,10 @@ bool prototype_equal(const void * key_1, const void * key_2);
  */
 bool prototype_matches(prototype_p target, linked_list_pointer args);
 
-/* print the list of var true types, as : i32_float_i32 */
+/* print the list of var true types, as : i32_double_i32 */
 void print_prototype_prefix(prototype_p p);
 
-/* print the list of true types associated, as : i32_float_i32 */
+/* print the list of true types associated, as : i32_double_i32 */
 //void print_type_list_prefix(linked_list_pointer l);
 
 

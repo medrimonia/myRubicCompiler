@@ -32,7 +32,7 @@ typedef enum {
 
 typedef enum{
 	PRIMARY_STRING,
-	PRIMARY_FLOAT,
+	PRIMARY_DOUBLE,
 	PRIMARY_INT
 } primary_type;
 
@@ -53,7 +53,7 @@ struct primary{
 	union{
 		int s_id;         // for strings
 		int i;            // for ints
-		float f;          // for floats
+		double d;          // for floats
 		tn_pointer child; // for expr
 	};	
 };
