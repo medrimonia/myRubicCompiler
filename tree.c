@@ -66,12 +66,18 @@ void destroy_function(tn_pointer node){
 	function_destroy(f);
 }
 
+void destroy_call(tn_pointer node){
+	function_call_p fc = node->content;
+	function_call_destroy(fc);
+}
+
 void destroy_tree(tn_pointer node){
 	if (node == NULL)
 		return;
 	destroy_tree(node->left_child);
 	destroy_tree(node->right_child);
 	switch(node->type){
+	case CALL:              destroy_call(node);            break;
 	case FUNCTION:          destroy_function(node);        break;
 	default: 
 		if(node->content != NULL)
