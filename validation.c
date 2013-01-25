@@ -222,6 +222,17 @@ void validate_function(function_p f){
 			function_set_add(global_fs, current_proto, f);
 			linked_list_insert(f->valid_prototypes, current_proto);
 		}else{
+			// new variables are created in combination, they must be free too
+			if (linked_list_size(combination) > 0) {
+				linked_list_restart(combination);
+				while(true){
+					variable_p v = linked_list_get(combination);
+					destroy_variable(v);
+					if (linked_list_end(combination))
+						break;
+					linked_list_next(combination);
+				}
+			}
 			linked_list_destroy_opt_erase(combination, false);
 			destroy_prototype(current_proto);
 		}

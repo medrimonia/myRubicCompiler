@@ -135,6 +135,18 @@ variable_p declare_global_variable(context_pointer c, char * name){
 	return v;
 }
 
+void destroy_variable_hashmap(hashmap_pointer hm){
+	if (hashmap_size(hm) > 0){
+		hashmap_start_iteration(hm);
+		while(hashmap_is_ended_iteration(hm)){
+			variable_p v = hashmap_get_current_value(hm);
+			destroy_variable(v);
+			hashmap_next_element(hm);
+		}
+	}
+	hashmap_destroy(hm, false, false);
+}
+
 void destroy_context(context_pointer c){
 	if (linked_list_size(c->child_contexts) > 0){
 		linked_list_restart(c->child_contexts);
@@ -149,7 +161,9 @@ void destroy_context(context_pointer c){
 	linked_list_destroy_opt_erase(c->child_contexts, false);
 	if (c->global_variables != NULL)
 		hashmap_destroy(c->global_variables, true, true);
-	hashmap_destroy(c->local_variables, false, true);
+	// destroying local variable
+	
+	destroy_variable_hashmap(c->local_variables);
 	hashmap_destroy(c->instance_variables, true, true);
 	hashmap_destroy(c->constants, true, true);
 	hashmap_destroy(c->types, true, true);
