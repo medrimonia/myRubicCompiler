@@ -210,7 +210,7 @@ void validate_function(function_p f){
 	// if the function has no parameter, the only combination will be an empty
 	// list
 	while(true){
-		// getting the combination
+		// getting the combination, it must be free once it's not used anymore
 		linked_list_pointer combination = get_combination(ts);
 		apply_combination(f, combination);
 		printf("\t\t;updating types\n");
@@ -222,6 +222,7 @@ void validate_function(function_p f){
 			function_set_add(global_fs, current_proto, f);
 			linked_list_insert(f->valid_prototypes, current_proto);
 		}else{
+			linked_list_destroy_opt_erase(combination, false);
 			destroy_prototype(current_proto);
 		}
 		if (is_last_combination(ts))
