@@ -74,6 +74,10 @@ void destroy_call(tn_pointer node){
 void destroy_tree(tn_pointer node){
 	if (node == NULL)
 		return;
+	if (node->allowed_types != NULL ||
+			node->type == IDENTIFIER    ||
+			node->type == AFFECT)
+		linked_list_destroy_opt_erase(node->allowed_types, false);
 	destroy_tree(node->left_child);
 	destroy_tree(node->right_child);
 	switch(node->type){
