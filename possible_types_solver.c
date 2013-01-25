@@ -90,5 +90,16 @@ linked_list_pointer get_combination(type_solver_p ts){
 }
 
 void type_solver_destroy(type_solver_p ts){
+	// clearing variables (duplicated on creation)
+	if(doubly_linked_list_size(ts) > 0){
+		doubly_linked_list_first(ts);
+		while(true){
+			variable_p v = doubly_linked_list_get(ts);
+			destroy_variable(v);
+			if (doubly_linked_list_is_last(ts))
+				break;
+			doubly_linked_list_next(ts);
+		}
+	}
 	doubly_linked_list_destroy(ts);
 }
