@@ -154,7 +154,7 @@ int doubly_linked_list_is_empty(doubly_linked_list_pointer l){
 void doubly_linked_list_destroy_opt_erase(doubly_linked_list_pointer l,
 																					bool free_data){
 	doubly_linked_list_first(l);
-	while(l->size > 1)
+	while(l->size > 0)
 		doubly_linked_list_remove_opt_erase(l, free_data);
 	free(l->sentinel);
 	free(l);
