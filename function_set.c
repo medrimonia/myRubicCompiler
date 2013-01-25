@@ -137,6 +137,17 @@ void function_set_destroy(function_set_p fs){
 					prototype_p p = (prototype_p) hashmap_get_current_key(hm);
 					function_p f = hashmap_get_current_value(hm);
 					//destroy_function(f);
+					//new variables created in validate_function must be free
+					if (linked_list_size(p->params) > 0) {
+						linked_list_restart(p->params);
+						while(true){
+							variable_p v = linked_list_get(p->params);
+							destroy_variable(v);
+							if (linked_list_end(p->params))
+								break;
+							linked_list_next(p->params);
+						}
+					}
 					linked_list_destroy_opt_erase(p->params, false);
 					destroy_prototype(p);
 					hashmap_next_element(hm);
