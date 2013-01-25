@@ -184,6 +184,8 @@ void update_type(tn_pointer node){
 void update_function(function_p f, prototype_p p){
 	ut_current_function = f;
 	ut_current_p = p;
+	linked_list_destroy_opt_erase(f->possible_return_types, false);
+	//linked_list_destroy_opt_erase(f->root->allowed_types, false);
 	f->possible_return_types = new_linked_list();
 	f->root->allowed_types = new_linked_list();
 	update_type(f->root);
