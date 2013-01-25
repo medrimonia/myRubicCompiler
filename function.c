@@ -155,6 +155,7 @@ bool is_built_in(function_p f){
 }
 
 void function_destroy(function_p f){
+	linked_list_destroy_opt_erase(f->valid_prototypes, false);
 	free(f);
 }
 
