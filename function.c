@@ -169,7 +169,7 @@ void destroy_built_ins(){
 	dictionnary_destroy(used_built_ins, false, false);
 	if (dictionnary_size(built_ins) > 0){
 		dictionnary_start_iteration(built_ins);
-		while(dictionnary_is_ended_iteration(built_ins)){
+		while(!dictionnary_is_ended_iteration(built_ins)){
 			function_p f = dictionnary_get_current_value(built_ins);
 			function_destroy(f);
 			dictionnary_next_element(built_ins);
