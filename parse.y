@@ -407,5 +407,6 @@ int main() {
 	destroy_context(global_context);
 	destroy_tree(global_root);
 	destroy_type_lists();
+	function_set_destroy(global_fs);
   return 0;
 }

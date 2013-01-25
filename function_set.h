@@ -49,19 +49,6 @@ void function_set_remove(function_set_p fs,
  */
 int function_set_size(function_set_p fs);
 
-/* Remove all the entries and destroy the function_set.
- * If the option free_key is specified :
- * - The key of the object found will be erased.
- *   (If it contains pointers of pointers, better use your own free)
- * If the option free_data is specified :
- * - The data of the object found will be erased.
- *   (If it contains pointers of pointers, better use your own free)
- */
-void function_set_destroy(function_set_p fs,
-										 bool free_keys,
-										 bool free_data);
-
-
 void function_set_start_iteration(function_set_p fs);
 
 prototype_p function_set_get_current_key(function_set_p fs);
@@ -81,4 +68,7 @@ linked_list_pointer function_set_matching_functions(function_set_p fs,
 linked_list_pointer function_set_matching_prototypes(function_set_p fs,
 																										 const char * name,
 																										 linked_list_pointer l);
+
+void function_set_destroy(function_set_p fs);
+
 #endif

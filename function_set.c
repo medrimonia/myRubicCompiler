@@ -55,24 +55,6 @@ int function_set_size(function_set_p fs){
 	return dictionnary_size(fs);
 }
 
-void function_set_destroy(function_set_p fs,
-													bool free_keys,
-													bool free_data){
-	if (dictionnary_size(fs) > 0){
-		dictionnary_start_iteration(fs);
-		while(true){
-			hashmap_pointer hm = dictionnary_get_current_value(fs);
-			hashmap_destroy(hm, free_keys, free_data);
-			if (dictionnary_is_ended_iteration(fs))
-				break;
-			dictionnary_next_element(fs);
-		}
-	}
-	
-	dictionnary_destroy(fs, free_keys, free_data);
-}
-
-
 void function_set_start_iteration(function_set_p fs){
 	dictionnary_start_iteration(fs);
 	hashmap_pointer hm = dictionnary_get_current_value(fs);
@@ -140,4 +122,26 @@ linked_list_pointer function_set_matching_prototypes(function_set_p fs,
 																										 const char * name,
 																										 linked_list_pointer l){
 	return function_set_matching(fs, name, l, true);
+}
+
+
+void function_set_destroy(function_set_p fs){
+	if (dictionnary_size(fs) > 0){
+		dictionnary_start_iteration(fs);
+		while(dictionnary_is_ended_iteration(fs)){
+			hashmap_pointer hm = dictionnary_get_current_value(fs);
+			// freeing hashmap's content
+			if (hashmap_size(hm) > 0){
+				hashmap_start_iteration(hm);
+				while(hashmap_is_ended_iteration(hm)){
+					prototype_p p = (prototype_p) hashmap_get_current_key(hm);
+					linked_list_pointer l = hashmap_get_current_value(hm);
+					hashmap_next_element(hm);
+				}
+			}
+			hashmap_destroy(hm, false, false);
+			dictionnary_next_element(fs);
+		}
+	}
+	dictionnary_destroy(fs, false, false);		
 }
