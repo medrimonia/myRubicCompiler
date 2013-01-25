@@ -15,7 +15,8 @@ void update_type(tn_pointer node);
 
 void update_type_primary(tn_pointer node){
 	primary_p value = (primary_p) node->content;
-	//TODO destroy_linked_list(node->allowed_types)
+	if (node->allowed_types != NULL)
+		linked_list_destroy_opt_erase(node->allowed_types, false);
 	linked_list_pointer type_list;
 	switch(value->t){
 	case PRIMARY_STRING :{
