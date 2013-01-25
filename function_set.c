@@ -128,12 +128,12 @@ linked_list_pointer function_set_matching_prototypes(function_set_p fs,
 void function_set_destroy(function_set_p fs){
 	if (dictionnary_size(fs) > 0){
 		dictionnary_start_iteration(fs);
-		while(dictionnary_is_ended_iteration(fs)){
+		while(!dictionnary_is_ended_iteration(fs)){
 			hashmap_pointer hm = dictionnary_get_current_value(fs);
 			// freeing hashmap's content
 			if (hashmap_size(hm) > 0){
 				hashmap_start_iteration(hm);
-				while(hashmap_is_ended_iteration(hm)){
+				while(!hashmap_is_ended_iteration(hm)){
 					prototype_p p = (prototype_p) hashmap_get_current_key(hm);
 					linked_list_pointer l = hashmap_get_current_value(hm);
 					if (linked_list_size(l) > 0){
