@@ -65,8 +65,7 @@ void linked_list_append(linked_list_pointer l, void * element){
 }
 
 void linked_list_insert_in_head(linked_list_pointer l, void * element){
-	node_pointer new_node =
-		(node_pointer)malloc(sizeof(struct linked_list_node));
+	node_pointer new_node = malloc(sizeof(struct linked_list_node));
 	if (l->size == 0)
 		l->actual = new_node;
 	new_node->next = l->first;
@@ -146,7 +145,7 @@ int linked_list_is_empty(linked_list_pointer l){
 
 void linked_list_destroy_opt_erase(linked_list_pointer l, bool free_data){
 	linked_list_restart(l);
-	while(l->size > 1)
+	while(l->size > 0)
 		linked_list_remove_opt_erase(l, free_data);
 	free(l);
 }

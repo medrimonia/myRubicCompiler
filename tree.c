@@ -71,8 +71,10 @@ void destroy_tree(tn_pointer node){
 	destroy_tree(node->left_child);
 	destroy_tree(node->right_child);
 	switch(node->type){
-	case FUNCTION: destroy_function(node);
-	default: break;
+	case FUNCTION:          destroy_function(node);        break;
+	default: 
+		if(node->content != NULL)
+			free(node->content);
 	}
 	free(node);
 }

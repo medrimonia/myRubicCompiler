@@ -32,6 +32,8 @@ void print_prototype_prefix(prototype_p p);
 /* print the list of true types associated, as : i32_double_i32 */
 //void print_type_list_prefix(linked_list_pointer l);
 
+void destroy_prototype(prototype_p p);
+
 
 
 

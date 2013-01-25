@@ -154,6 +154,6 @@ void destroy_context(context_pointer c){
 	hashmap_destroy(c->constants, true, true);
 	hashmap_destroy(c->types, true, true);
 	hashmap_destroy(c->classes, true, true);
-	hashmap_destroy(c->functions, true, false);
+	hashmap_destroy(c->functions, false, false);
 	free(c);
 }

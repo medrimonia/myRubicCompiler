@@ -52,6 +52,8 @@ bool is_built_in(function_p f);
 
 void function_destroy(function_p f);
 
+void function_call_destroy(function_call_p p);
+
 void destroy_built_ins();
 
 #endif

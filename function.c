@@ -84,7 +84,6 @@ function_call_p new_function_call(function_p function_called){
 
 
 void add_function_to_context(function_p f, context_pointer c){
-	//TODO handle function parameters type
 	dictionnary_add(c->functions, f->name,f);
 }
 
@@ -158,6 +157,11 @@ bool is_built_in(function_p f){
 void function_destroy(function_p f){
 	free(f);
 }
+
+void function_call_destroy(function_call_p fc){
+	free(fc);
+}
+
 
 void destroy_built_ins(){
 	dictionnary_destroy(used_built_ins, false, false);

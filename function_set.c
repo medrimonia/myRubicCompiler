@@ -135,17 +135,9 @@ void function_set_destroy(function_set_p fs){
 				hashmap_start_iteration(hm);
 				while(!hashmap_is_ended_iteration(hm)){
 					prototype_p p = (prototype_p) hashmap_get_current_key(hm);
-					linked_list_pointer l = hashmap_get_current_value(hm);
-					if (linked_list_size(l) > 0){
-						linked_list_restart(l);
-						while(true){
-							function_p f = (function_p)linked_list_get(l);
-							function_destroy(f);
-							if (linked_list_end(l))
-								break;
-							linked_list_next(l);
-						}
-					}
+					function_p f = hashmap_get_current_value(hm);
+					//destroy_function(f);
+					destroy_prototype(p);
 					hashmap_next_element(hm);
 				}
 			}
