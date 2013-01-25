@@ -89,4 +89,6 @@ linked_list_pointer get_combination(type_solver_p ts){
 	return combination;	
 }
 
-//TODO destroy type_solver
+void type_solver_destroy(type_solver_p ts){
+	doubly_linked_list_destroy(ts);
+}

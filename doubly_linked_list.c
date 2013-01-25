@@ -156,6 +156,7 @@ void doubly_linked_list_destroy_opt_erase(doubly_linked_list_pointer l,
 	doubly_linked_list_first(l);
 	while(l->size > 1)
 		doubly_linked_list_remove_opt_erase(l, free_data);
+	free(l->sentinel);
 	free(l);
 }
 

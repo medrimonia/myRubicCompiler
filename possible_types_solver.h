@@ -32,4 +32,6 @@ bool is_last_combination(type_solver_p ts);
 /* return a list of variable containing the actual types for the variable */
 linked_list_pointer get_combination(type_solver_p ts);
 
+void type_solver_destroy(type_solver_p ts);
+
 #endif

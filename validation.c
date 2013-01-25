@@ -240,4 +240,5 @@ void validate_function(function_p f){
 			break;
 		next_combination(ts);		
 	}
+	type_solver_destroy(ts);
 }
