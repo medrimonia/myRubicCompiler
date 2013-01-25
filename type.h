@@ -26,4 +26,7 @@ int type_associated_int(type_p t);
  */
 type_p get_type_from_name(const char * c);
 
+/* free all the global types lists */
+void destroy_type_lists();
+
 #endif

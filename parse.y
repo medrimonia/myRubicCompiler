@@ -405,5 +405,6 @@ int main() {
 	declare_built_ins();
 	generate_code(global_root);
 	destroy_context(global_context);
+	destroy_type_lists();
   return 0;
 }

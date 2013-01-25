@@ -66,3 +66,11 @@ type_p get_type_from_name(const char * name){
 	}
 	return NULL;
 }
+
+void destroy_type_lists(){
+	linked_list_destroy_opt_erase(additionable_types, false);
+	linked_list_destroy_opt_erase(comparable_types, false);
+	linked_list_destroy_opt_erase(logical_types, false);
+	// destroying type_lists and types theirself
+	linked_list_destroy_opt_erase(all_types, true);
+}
