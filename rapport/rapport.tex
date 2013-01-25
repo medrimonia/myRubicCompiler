@@ -311,21 +311,145 @@ liste d'instructions à exécuter dans le cas vrai et celle dans le cas faux
 \footnote{Cette dernière sera donc mise à nulle dans les cas où le elsen'est
 pas utilisé}\\
 
-La présence des conditionnelles a aussi grandement facilité
+La présence des conditionnelles a aussi grandement facilité la réalisation
+des tests de non régression, puisque cela permettait de renvoyer zéro
+uniquement dans le cas que l'on valide \footnote{il n'était donc plus
+nécessaire que le résultat soit zéro. Ceci est extrêmement pratique, pour les
+tests sur les floats par exemple.}\\
+
+Afin que les conditionnels fonctionnent il a aussi été nécessaire de garantir
+que les labels générés soient différent. Mon choix pour a simplement été
+de conserver une variable globale indiquant le numéro de label et de
+l'incrémenter à chaque utilisation de label.
 
 \subsection{Les boucles}
+La gestion des boucles s'est révélée relativement simple à implémenter,
+le principal étant d'assurer que les sauts soient dirigés vers les bons
+labels et que les labels soient bien différents.
 
 \subsubsection{La boucle \em{while}}
+Une boucle while consiste simplement à générer un label L1 avant la
+génération du code contenu dans la condition, un label L2 au début du code
+interne au while et un label L3 après celui-ci. Il faut aussi la présence
+d'un saut conditionnel juste avant L2 qui ira sur L2 dans le cas vrai et L3
+dans le cas où la condition se révèle fausse. À la fin du code interne au
+while il y aura aussi la présence d'un saut à destination de L1, afin que la
+condition soit évaluée à nouveau.
 
 \subsubsection{La boucle \em{for}}
+Cette structure de contrôle ressemble énormément au while, la différence
+principale étant que le code de condition n'est pas écrit de la même manière.
+Cependant, j'ai géré une fonctionnalité supplémentaire pour les boucles for
+en prenant en compte que les variables peuvent être internes au bloc et donc
+être d'un autre type à l'extérieur du bloc si elles n'ont pas été déclarées
+avant\footnote{Du moins, c'était mon but, mais cette partie n'est pas
+encore finalisée et le test qui y est associé ne compile pas}.
 
 \subsection{Gestion du polymorphisme}
+Lorsque l'on ajoute la simple présence du type float à la liste des types
+existants, le problème du polymorphisme se pose déjà sur des problèmes très
+peu complexe.
+% code equal
+Dans cette fonction, il y a déjà une ambiguité sur les types à utilisé pour
+les paramètres, en effet, a et b peuvent être des ints comme des floats. On
+peut aussi voir que les combinaisons int,float et float,int ne sont pas
+valides.
+
+\subsubsection{Itération sur toutes les possibilités}
+Il y a plusieurs façon de gérer le cas des déclaration de fonctions avec des
+paramètres dont le type est ambigu. On peut choisir de générer les fonctions
+uniquement lorsqu'elles seront appelées, ainsi le code correspondant à un
+prototype ne sera généré que si la fonction est utilisée. Cependant, ce qui
+m'a dissuadé de choisir cette méthode est le fait que si le code généré a
+vocation à être utilisé par un autre module, la fonction désirée ne sera pas
+forcément accessible. J'ai donc préféré itérer sur toutes les combinaisons
+possibles et générer celles qui engendrent un code valide.\\
+
+Il reste important de souligner qu'itérer ainsi sur toutes les possibilités
+engendrent une complexité exponentielle en fonction du nombre de paramètres
+\footnote{Ceci dans le pire des cas, même s'il n'est pas sensé arriver
+souvent, cela engendre le fait qu'il est facile d'écrire un programme dont
+la compilation prendra un temps incroyablement long.}
+
+\subsubsection{Génération du code}
+Afin de générer le code adapté, il est nécessaire d'appliquer les
+modifications de type des variables avant de générer le code. La méthode
+que j'ai utilisée consiste à enregistrer les prototypes valides durant une
+première phase, puis lors de la génération du code, le choix du type est
+appliqué aux paramètres, le type des noeuds est mis à jour et, ensuite
+seulement, le code est écrit. Cette méthode permet de ne pas avoir à recopier
+tout l'arbre d'une fonction uniquement pour changer le prototype utilisé.\\
+
+J'ai décidé pour cette partie de générer une erreur de compilation uniquement
+si aucun prototype valide n'était trouvé. Dans les cas où certains prototypes
+ne fonctionneraient pas, ils ne généreraient simplement pas de code.\\
+
+Cette phase ayant été particulièrement ardue à débuguer, je me suis servi de
+quelques printf écrivant des commentaires en langage llvm pour simplifier
+un premier repérage des erreurs, mais mon outil principal a été gdb qui m'a
+permit de rapidement détecté mes erreurs de codage.
+
+\subsubsection{La surcharge en llvm}
+Comme le langage llvm ne supporte pas la surcharge, il a été nécessaire de
+créer une différence de noms entre les différentes fonctions qui partageaient
+le même noms. J'ai simplement choisi de préfixer tous les noms de fonctions
+par le nom des types des arguments.
+
+\subsection{La gestion des {\em floats}}
+Lors de l'étape précédente, j'ai pu ajouter les {\em floats} en tant que
+type, mais cela ne suffisait pas à leur gestion, effectivement, le
+compilateur llvm utilisé butait sur l'écriture des éléments et les tests ne
+compilaient donc pas.\\
+
+Après quelques recherches, j'ai choisi d'utiliser la représentation
+hexadécimal des {\em floats} et grâce à cela j'ai réussi à faire compiler le
+programme de tests, cependant, mon test ne donnait pas le résultat escompté.
+\\
+
+Un autre groupe m'a soufflé à ce moment là que le problème disparaissait
+purement et simplement si l'on se servait des {\em double} à la place des
+{\em floats}, j'ai donc essayé et approuvé cette solution.
 
 \subsection{La gestion des classes}
+N'ayant malheureusement pas réussi à trouver le temps d'implémenter cette
+partie, je n'ai pas grand chose à dire sur celle-ci.
 
 \section{La gestion de la mémoire}
+Un des aspects critique présenté lors de la gestion de ce programme en c par
+rapport à mon expérience précédente en java est évidemment la gestion de
+la mémoire. Or, si j'ai réussi à éviter la présence de fuites mémoires lors
+des premiers tests qui n'utilisaient que des fonctionnalités assez simple,
+tout est devenu bien plus complexe lors de l'implémentation des parties plus
+difficile, et ce à tel point que j'ai choisi de repousser le moment de la
+gestion mémoire afin de réussir à implémenter plus rapidement ce que je
+désirais. En effet, obtenir une solution présentant des fuites mémoires était
+déjà quelque chose de satisfaisant pour moi et je craignais qu'à vouloir
+viser le mieux directement, je n'arrive même pas au bien.
 
 \section{Conclusion}
+Ce projet a sans conteste été l'occasion d'apprendre beaucoup et de me
+heurter à plusieurs problématiques difficiles, comme je m'y attendais, le
+volume de travail était conséquent et ma plus grande déception est que je
+sais que mon projet ne présente pas une gestion particulièrement propre de
+certains problèmes. Cependant, cette première approche un peu brutal était
+nécessaire pour prendre conscience de certains problèmes qui ne me sont
+apparus que lors de l'implémentation.\\
+
+Au terme du temps accordé à ce projet, je pense que j'éprouverais du plaisir
+à travailler sur la réalisation d'un compilateur en équipe
+\footnote{Effectivement, pour certaines problématiques, le fait d'avoir un
+dialogue et l'avis de plusieurs personnes était sans aucun doute d'une
+utilité indiscutable} et avec un temps disponible pour ce travail plus
+important que celui que j'avais à ma disposition. Pour arriver à un résultat
+propre, donnant des informations précises lors de tous les types d'erreurs
+de compilation, je pense qu'il aurait fallu plusieurs fois le temps que j'ai
+accordé à ce projet.\\
+
+Je suis particulièrement content que malgré le fait que j'ai travaillé en
+monôme, j'ai réussi à échanger avec d'autres groupes, leur apportant un peu
+de mes idées et piochant certaines des leurs. Je pense effectivement qu'il
+est indispensable de savoir reconnaître quand les autres ont de bonnes idées
+en informatique si l'on veut progresser et réaliser du travail de qualité.
 
 
 \end{document}
