@@ -101,5 +101,5 @@ void type_solver_destroy(type_solver_p ts){
 			doubly_linked_list_next(ts);
 		}
 	}
-	doubly_linked_list_destroy(ts);
+	doubly_linked_list_destroy_opt_erase(ts, false);
 }
