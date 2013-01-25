@@ -2,6 +2,7 @@
 
 #include "tree.h"
 #include "type_handler.h"
+#include "function.h"
 
 
 tn_pointer new_tree_node(node_type t){
@@ -57,4 +58,21 @@ for_block_p new_for_block(char * var_id,
 	new->to_expr = to_expr;
 	new->code = code;
 	return new;
+}
+
+void destroy_function(tn_pointer node){
+	function_p f = (function_p) node->content;
+	destroy_tree(f->root);
+}
+
+void destroy_tree(tn_pointer node){
+	if (node == NULL)
+		return;
+	destroy_tree(node->left_child);
+	destroy_tree(node->right_child);
+	switch(node->type){
+	case FUNCTION: destroy_function(node);
+	default: break;
+	}
+	free(node);
 }

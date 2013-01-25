@@ -96,4 +96,6 @@ for_block_p new_for_block(char * var_id,
 													tn_pointer to_node,
 													tn_pointer code);
 
+void destroy_tree(tn_pointer node);
+
 #endif
