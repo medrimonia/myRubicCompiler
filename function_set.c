@@ -137,6 +137,7 @@ void function_set_destroy(function_set_p fs){
 					prototype_p p = (prototype_p) hashmap_get_current_key(hm);
 					function_p f = hashmap_get_current_value(hm);
 					//destroy_function(f);
+					linked_list_destroy_opt_erase(p->params, false);
 					destroy_prototype(p);
 					hashmap_next_element(hm);
 				}
