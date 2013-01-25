@@ -63,6 +63,7 @@ for_block_p new_for_block(char * var_id,
 void destroy_function(tn_pointer node){
 	function_p f = (function_p) node->content;
 	destroy_tree(f->root);
+	function_destroy(f);
 }
 
 void destroy_tree(tn_pointer node){
