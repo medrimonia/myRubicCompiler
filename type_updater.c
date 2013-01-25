@@ -128,6 +128,7 @@ void update_type_call(tn_pointer node){
 			break;
 		linked_list_next(matching);
 	}
+	linked_list_destroy_opt_erase(matching, false);
 }
 
 void update_type_conditional(tn_pointer node){
