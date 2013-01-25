@@ -109,5 +109,5 @@ void print_type_list_prefix(linked_list_pointer l){
 
 void destroy_prototype(prototype_p p){
 	//linked_list_destroy_opt_erase(p->params, false);
-	//free(p);
+	free(p);
 }

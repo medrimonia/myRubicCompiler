@@ -221,6 +221,8 @@ void validate_function(function_p f){
 			printf("\t\t;valid prototype\n");
 			function_set_add(global_fs, current_proto, f);
 			linked_list_insert(f->valid_prototypes, current_proto);
+		}else{
+			destroy_prototype(current_proto);
 		}
 		if (is_last_combination(ts))
 			break;
