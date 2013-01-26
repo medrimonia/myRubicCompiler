@@ -25,7 +25,8 @@ variable_p copy_variable(variable_p v){
 	return new_variable(types_copy, v->name);	
 }
 
-void destroy_variable(variable_p v){
-	linked_list_destroy_opt_erase(v->allowed_types,false);
+void destroy_variable(variable_p v, bool free_allowed_types){
+	if (free_allowed_types)
+		linked_list_destroy_opt_erase(v->allowed_types, false);
 	free(v);
 }

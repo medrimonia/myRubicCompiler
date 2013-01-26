@@ -33,7 +33,9 @@ void initialize_built_ins(context_pointer root_context){
 	linked_list_destroy_opt_erase(f->possible_return_types, false);
 	f->possible_return_types = new_type_list_single_from_name("i8 *");
 	vars = new_linked_list();
-	linked_list_append(vars, get_variable(f->inner_context, "s"));
+	// variable should be copied in order to work like user functions
+	linked_list_append(vars,
+										 copy_variable(get_variable(f->inner_context, "s")));
 	p = new_prototype(f->name, vars);
 	dictionnary_add(built_ins,f->name,f);
 	function_set_add(global_fs, p, f);

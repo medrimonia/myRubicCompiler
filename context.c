@@ -138,11 +138,10 @@ variable_p declare_global_variable(context_pointer c, char * name){
 void destroy_variable_hashmap(hashmap_pointer hm){
 	if (hashmap_size(hm) > 0){
 		hashmap_start_iteration(hm);
-		while(hashmap_is_ended_iteration(hm)){
-			char * v_name = hashmap_get_current_key(hm);
+		while(!hashmap_is_ended_iteration(hm)){
 			variable_p v = hashmap_get_current_value(hm);
-			destroy_variable(v);
-			free(v_name);
+			// variable type_list is destroyed in function_set_destroy
+			destroy_variable(v, false);
 			hashmap_next_element(hm);
 		}
 	}

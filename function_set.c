@@ -142,7 +142,7 @@ void function_set_destroy(function_set_p fs){
 						linked_list_restart(p->params);
 						while(true){
 							variable_p v = linked_list_get(p->params);
-							destroy_variable(v);
+							destroy_variable(v, true);
 							if (linked_list_end(p->params))
 								break;
 							linked_list_next(p->params);

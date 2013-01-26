@@ -21,6 +21,6 @@ variable_p new_variable(linked_list_pointer allowed_types, char * name);
 variable_p copy_variable(variable_p v);
 
 /* Destroy the specified variable, free allowed_types but not name */
-void destroy_variable(variable_p v);
+void destroy_variable(variable_p v, bool free_allowed_types);
 
 #endif
