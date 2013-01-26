@@ -141,7 +141,7 @@ void destroy_variable_hashmap(hashmap_pointer hm){
 		while(!hashmap_is_ended_iteration(hm)){
 			variable_p v = hashmap_get_current_value(hm);
 			// variable type_list is destroyed in function_set_destroy
-			destroy_variable(v, false);
+			destroy_variable(v, true);
 			hashmap_next_element(hm);
 		}
 	}
