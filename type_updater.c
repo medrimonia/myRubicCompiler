@@ -64,12 +64,16 @@ void update_type_arithmetic(tn_pointer node){
 
 void update_type_logical(tn_pointer node){
 	update_type_childs(node);
+	if (node->allowed_types != NULL)
+		linked_list_destroy_opt_erase(node->allowed_types, false);
 	node->allowed_types = th_logical(node->left_child->allowed_types,
 																	 node->right_child->allowed_types);
 }
 
 void update_type_cmp(tn_pointer node){
 	update_type_childs(node);
+	if (node->allowed_types != NULL)
+		linked_list_destroy_opt_erase(node->allowed_types, false);
 	node->allowed_types = th_comparison(node->left_child->allowed_types,
 																			node->right_child->allowed_types);
 }

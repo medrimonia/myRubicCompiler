@@ -49,7 +49,14 @@ for ((i = 0; i < ${#RUBICS_FILES[@]} ; i++))
 do
 		VALGRIND_OUT=${RUBICS_FILES[i]%.rubic}.valgrind.output
 		VALGRIND_ERR=${RUBICS_FILES[i]%.rubic}.valgrind.error
-		printf "\033[1m${RUBICS_FILES[i]}:\033[0m\n"
 		valgrind ./rubic <${RUBICS_FILES[i]} >${VALGRIND_OUT} 2>${VALGRIND_ERR}
+		if grep -Fq "All heap blocks were freed" ${VALGRIND_ERR}
+		then
+				printf "\e[1;32m"
+		else
+				printf "\e[1;31m"
+		fi
+		printf "\033[1m${RUBICS_FILES[i]}:\033[0m\n"
 		grep "total heap usage" $VALGRIND_ERR
+		printf "\e[0m\n"
 done
