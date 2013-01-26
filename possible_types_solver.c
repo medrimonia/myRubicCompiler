@@ -94,7 +94,7 @@ void type_solver_destroy(type_solver_p ts){
 		doubly_linked_list_first(ts);
 		while(true){
 			variable_p v = doubly_linked_list_get(ts);
-			destroy_variable(v, false);
+			destroy_variable(v, true);
 			if (doubly_linked_list_is_last(ts))
 				break;
 			doubly_linked_list_next(ts);
