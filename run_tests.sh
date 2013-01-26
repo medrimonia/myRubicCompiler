@@ -28,6 +28,7 @@ done
 
 TESTS=(tests/*.test)
 
+# TESTING RETURN STATUS
 
 printf "\033[1m${NB_TESTS_COMPILED} / ${NB_TESTS} tests compiling\033[0m\n"
 
@@ -39,4 +40,16 @@ do
 		./${TESTS[$i]} >${TESTS[$i]}.output 2>${TESTS[$i]}.error \
 				&& printf $PASSED || printf $FAILED
 		printf "\n"
+done
+
+#CHECKING MEMORY_LEAKS
+printf "\033[25C\033[1m CHECKING MEMORY LEAKS \033[0m\n"
+
+for ((i = 0; i < ${#RUBICS_FILES[@]} ; i++))
+do
+		VALGRIND_OUT=${RUBICS_FILES[i]%.rubic}.valgrind.output
+		VALGRIND_ERR=${RUBICS_FILES[i]%.rubic}.valgrind.error
+		printf "\033[1m${RUBICS_FILES[i]}:\033[0m\n"
+		valgrind ./rubic <${RUBICS_FILES[i]} >${VALGRIND_OUT} 2>${VALGRIND_ERR}
+		grep "total heap usage" $VALGRIND_ERR
 done
