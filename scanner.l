@@ -34,7 +34,7 @@ I ([0-9]+)
 S (\"[^\n\"]*\")
 ID ([$@]?[a-zA-Z_][a-zA-Z_0-9]*)
 %%
-{F}      { sscanf(yytext, "%f",&yylval.f);count(); return(FLOAT); }
+{F}      { sscanf(yytext, "%f",&yylval.d);count(); return(FLOAT); }
 {I}      { sscanf(yytext, "%d",&yylval.i);count(); return(INT); }
 {S}      { yylval.s = strdup(yytext);count(); return(STRING); }
 "for"    { count(); return(FOR); }

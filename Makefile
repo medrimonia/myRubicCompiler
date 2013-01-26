@@ -9,7 +9,7 @@ all: rubic
 
 lex.yy.c: scanner.l
 	lex $<
-y.tab.c: parse.y tree.h linked_list.h
+y.tab.c: parse.y tree.h linked_list.h lex.yy.c
 	yacc $(YACCFLAGS) -d $<
 y.tab.o: y.tab.c y.tab.h context.h tree.h code_generator.h validation.h
 	$(CC) $(CFLAGS) -c $<
