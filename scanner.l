@@ -4,6 +4,10 @@
 #include "y.tab.h"
 #include "tree.h"
 
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic ignored "-Wformat"
+
+
 // declaring function earlier in order to avoid warnings
 char * strdup(char *);
 int fileno(FILE *);

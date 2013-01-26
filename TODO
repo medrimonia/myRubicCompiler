@@ -1,2 +1,9 @@
-- Remove warnings
+DONE - Remove warnings 
 - Handle addition of float and int with cast
+- Solving for issue with multiple variable
+- Adding constants
+- Testing globals variables
+- Add recursivity to report
+- Add tests and void functions
+- Handle arrays?
+- Handle classes?

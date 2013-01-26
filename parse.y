@@ -46,8 +46,6 @@
  }
 
 %token <s> STRING
-
-
 %token <s> ID
 %token <d> FLOAT
 %token <i> INT

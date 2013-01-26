@@ -53,7 +53,7 @@ struct primary{
 	union{
 		int s_id;         // for strings
 		int i;            // for ints
-		double d;          // for floats
+		double d;         // for floats
 		tn_pointer child; // for expr
 	};	
 };
