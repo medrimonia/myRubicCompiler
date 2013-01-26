@@ -121,6 +121,8 @@ void update_type_call(tn_pointer node){
 	if (valid_recursion){
 			linked_list_append(matching_proto, ut_current_p);		
 	}
+	if (call->valid_prototypes != NULL)
+		linked_list_destroy_opt_erase(call->valid_prototypes, false);		
 	call->valid_prototypes = matching_proto;
 	linked_list_restart(matching);
 	while(true){

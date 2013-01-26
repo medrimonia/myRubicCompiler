@@ -79,6 +79,7 @@ function_call_p new_function_call(function_p function_called){
 	function_call_p new = malloc(sizeof(struct function_call));
 	new->f_called = function_called;
 	new->parameters = NULL;
+	new->valid_prototypes = new_linked_list();
 	return new;
 }
 
@@ -163,6 +164,7 @@ void function_destroy(function_p f){
 
 void function_call_destroy(function_call_p fc){
 	linked_list_destroy_opt_erase(fc->parameters, false);
+	linked_list_destroy_opt_erase(fc->valid_prototypes, false);
 	free(fc);
 }
 
