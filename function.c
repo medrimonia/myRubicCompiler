@@ -23,7 +23,8 @@ void initialize_built_ins(context_pointer root_context){
 	linked_list_pointer vars;
 	//Adding puts
 	f = new_function(create_context_child(root_context));
-	f->name = "puts";
+	//strdup is used in order to be able to free it like user functions
+	f->name = strdup("puts");
 	f->parameters = new_linked_list();
 	linked_list_insert(f->parameters, "s");
 	declare_typed_variable(f->inner_context,
@@ -159,6 +160,7 @@ void function_destroy(function_p f){
 	linked_list_destroy_opt_erase(f->valid_prototypes, false);
 	linked_list_destroy_opt_erase(f->parameters, false);
 	linked_list_destroy_opt_erase(f->possible_return_types, false);
+	free(f->name);
 	free(f);
 }
 
