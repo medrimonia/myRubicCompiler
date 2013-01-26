@@ -139,8 +139,10 @@ void destroy_variable_hashmap(hashmap_pointer hm){
 	if (hashmap_size(hm) > 0){
 		hashmap_start_iteration(hm);
 		while(hashmap_is_ended_iteration(hm)){
+			char * v_name = hashmap_get_current_key(hm);
 			variable_p v = hashmap_get_current_value(hm);
 			destroy_variable(v);
+			free(v_name);
 			hashmap_next_element(hm);
 		}
 	}

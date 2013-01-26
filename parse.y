@@ -21,6 +21,9 @@
 	context_pointer global_context = NULL;
 	context_pointer actual_context = NULL;
 
+	// Used to avoid memory leaks, all id are stored in it
+	linked_list_pointer string_handler = NULL;
+
 	function_p actual_function = NULL;
 
 	tn_pointer global_root = NULL;
@@ -88,11 +91,15 @@ topstmts        :      {$$ = NULL;}
 ;
 topstmt	        : CLASS ID term stmts terms END
 {
+	linked_list_append(string_handler, $ID);
 	printf("Not implemented part\n");
 	//exit(EXIT_FAILURE);
 }
-                | CLASS ID '<' ID term stmts terms END
+                | CLASS ID[child_class] '<' ID[mother_class] term stmts
+								  terms END
 {
+	linked_list_append(string_handler, $child_class);
+	linked_list_append(string_handler, $mother_class);
 	printf("Not implemented part\n");
 	//exit(EXIT_FAILURE);
 }
@@ -134,6 +141,7 @@ stmt		: if_expr stmts terms END
 
     | FOR ID IN expr[from_expr] TO expr[to_expr] DO
 {
+	linked_list_append(string_handler, $ID);
 	actual_context = create_context_child(actual_context);
 	declare_variable(actual_context, $ID);
 }
@@ -198,6 +206,7 @@ stmt		: if_expr stmts terms END
 }
                 | DEF ID opt_params
 								{ // Context switch is needed before term parsing
+									linked_list_append(string_handler, $ID);
 									actual_context = create_context_child(actual_context);
 									actual_function = new_function(actual_context);
 									declare_parameters_to_variables(actual_context,
@@ -223,17 +232,20 @@ opt_params      : /* none */ { $$ = new_linked_list();}
 ;
 params          : ID ',' params
 {
+	linked_list_append(string_handler, $ID);
 	linked_list_insert($3, $ID);
 	$$ = $3;
 }
                 | ID
 {
+	linked_list_append(string_handler, $ID);
 	$$ = new_linked_list();
 	linked_list_insert($$, $ID);
 }
 ; 
 lhs             : ID
 {
+	linked_list_append(string_handler, $ID);
 	$$ = new_tree_node(IDENTIFIER);
 	$$->context = actual_context;
 	$$->content = $1;
@@ -247,10 +259,12 @@ lhs             : ID
 }
                 | ID '.' primary
 								{
-	exit(EXIT_FAILURE);
+									linked_list_append(string_handler, $ID);
+									exit(EXIT_FAILURE);
 								}
                 | ID '(' exprs ')'
 								{
+									linked_list_append(string_handler, $ID);
 									//TODO handle function must be adapted to new structure
 									function_p f_called = get_function(actual_context,$ID);
 									if (f_called == NULL){
@@ -398,6 +412,7 @@ int main() {
 	initialize_types();//add basic types to all_types
 	global_context = new_context();
 	actual_context = global_context;
+	string_handler = new_linked_list();
 	initialize_built_ins(actual_context);
   yyparse();
 	//printf("declare i32 @puts(i32*)\n"); //TODO Hack
@@ -409,5 +424,6 @@ int main() {
 	destroy_type_lists();
 	function_set_destroy(global_fs);
 	destroy_built_ins();
+	linked_list_destroy_opt_erase(string_handler, true);
   return 0;
 }

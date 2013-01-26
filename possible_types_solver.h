@@ -26,7 +26,7 @@ void next_combination(type_solver_p ts);
 
 /* return true if the actual combination is the last possible
  * (for every variable, the last type is chosen).
- *
+ */
 bool is_last_combination(type_solver_p ts);
 
 /* return a list of variable containing the actual types for the variable */

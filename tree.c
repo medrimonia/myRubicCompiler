@@ -82,6 +82,7 @@ void destroy_tree(tn_pointer node){
 		//	case IDENTIFIER:        free(nod
 	case CALL:              destroy_call(node);            break;
 	case FUNCTION:          destroy_function(node);        break;
+	case IDENTIFIER:                                       break;
 	default: 
 		if(node->content != NULL)
 			free(node->content);
