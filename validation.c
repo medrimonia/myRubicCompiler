@@ -8,6 +8,7 @@
 #include "type_handler.h"
 #include "type_updater.h"
 
+#define DEBUG 1
 
 /* return true if the node is valid with current context, false otherwise */
 bool validate_node(tn_pointer node);
@@ -117,13 +118,13 @@ bool validate_node_icmp(tn_pointer node){
 		return false;
 	}
 	type_p t_l = th_true_type(node->left_child->allowed_types);
-	type_p t_r= th_true_type(node->right_child->allowed_types);
+	type_p t_r = th_true_type(node->right_child->allowed_types);
 	return validate_type_equality(t_l,t_r);
 }
 bool validate_node_conditional(tn_pointer node){
 	conditional_block_p cond = node->content;
-	return (validate_node(cond->condition) ||
-					validate_node(cond->true_case) ||
+	return (validate_node(cond->condition) &&
+					validate_node(cond->true_case) &&
 					validate_node(cond->false_case));
 }
 
@@ -174,8 +175,11 @@ bool validate_node(tn_pointer node){
  * function.
  */
 void apply_combination(function_p f, linked_list_pointer combination){
-
-	//printf("\t;function %s (%d parameters)(",f->name, linked_list_size(combination));
+#if DEBUG
+	printf("\t;function %s (%d parameters)(",
+				 f->name,
+				 linked_list_size(combination));
+#endif
 	// applying parameters type
 	if (linked_list_size(combination)){
 		linked_list_restart(combination);
@@ -186,19 +190,27 @@ void apply_combination(function_p f, linked_list_pointer combination){
 			variable_p v_func = get_variable(f->inner_context, v->name);
 			linked_list_destroy_opt_erase(v_func->allowed_types,false);
 			v_func->allowed_types = new_type_list_single(type);
-			//printf("%s %s",type_get_name(type),v->name);
+#if DEBUG
+			printf("%s %s",type_get_name(type),v->name);
+#endif
 			if (linked_list_end(combination))
 				break;
-			//printf(",");
+#if DEBUG
+			printf(",");
+#endif
 			linked_list_next(combination);
 		}
 	}
-	//printf(")\n");
+#if DEBUG
+	printf(")\n");
+#endif
 }
 
 
 void validate_function(function_p f){
-	//printf(";validating function\n");
+#if DEBUG
+	printf(";validating function\n");
+#endif
 	type_solver_p ts = new_type_solver(f);
 	first_combination(ts);
 	// if the function has no parameter, the only combination will be an empty
@@ -207,12 +219,16 @@ void validate_function(function_p f){
 		// getting the combination, it must be free once it's not used anymore
 		linked_list_pointer combination = get_combination(ts);
 		apply_combination(f, combination);
-		//printf("\t\t;updating types\n");
+#if DEBUG
+		printf("\t\t;updating types\n");
+#endif
 		prototype_p current_proto = new_prototype(f->name, combination);
 		update_function(f, current_proto);
 		if (validate_node(f->root) &&
 				th_true_type(f->possible_return_types) != NULL){
-			//printf("\t\t;valid prototype\n");
+#if DEBUG
+			printf("\t\t;valid prototype\n");
+#endif
 			function_set_add(global_fs, current_proto, f);
 			linked_list_insert(f->valid_prototypes, current_proto);
 		}else{

@@ -129,6 +129,13 @@ linked_list_pointer th_logical(linked_list_pointer l1,
 }
 
 type_p th_true_type(linked_list_pointer l){
+	// Special case, if the only choices are double and int, return int
+	type_p double_type = get_type_from_name("double");
+	type_p int_type = get_type_from_name("i32");
+	if (linked_list_size(l) == 2 &&
+			type_list_contains(l, double_type) &&
+			type_list_contains(l, int_type))
+		return int_type;
 	if (linked_list_size(l) != 1)// all variables must have only one type
 		return NULL;
 	linked_list_restart(l);
