@@ -300,7 +300,10 @@ exprs           : exprs ',' expr
 primary         : lhs
                 | STRING
 {
-	int n = add_constant(strndup($1 + 1, strlen($1) - 2));
+	char * str_content = strndup($1 + 1, strlen($1) - 2);
+	linked_list_append(string_handler, str_content);
+	free($1);
+	int n = add_constant(str_content);
 	$$ = new_tree_node(PRIMARY);
 	primary_p value = malloc(sizeof(struct primary));
 	value->t = PRIMARY_STRING;
