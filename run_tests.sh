@@ -34,16 +34,28 @@ printf "\033[1m${NB_TESTS_COMPILED} / ${NB_TESTS} tests compiling\033[0m\n"
 
 printf "\033[25C\033[1m RUNNING TESTS \033[0m\n"
 
+NB_TESTS_OK=0
+
 for ((i = 0; i < ${#TESTS[@]} ; i++))
 do
 		printf "${TESTS[$i]}\033[80D\033[60C" 
-		./${TESTS[$i]} >${TESTS[$i]}.output 2>${TESTS[$i]}.error \
-				&& printf $PASSED || printf $FAILED
+		./${TESTS[$i]} >${TESTS[$i]}.output 2>${TESTS[$i]}.error
+		if [[ $? -ne 0 ]]
+		then
+				printf $FAILED
+		else
+				NB_TESTS_OK=$((NB_TESTS_OK+1))
+				printf $PASSED
+		fi
 		printf "\n"
 done
 
+printf "\033[1m${NB_TESTS_OK} / ${NB_TESTS} tests ok\033[0m\n"
+
 #CHECKING MEMORY_LEAKS
 printf "\033[25C\033[1m CHECKING MEMORY LEAKS \033[0m\n"
+
+NB_MEMORY_OK=0
 
 for ((i = 0; i < ${#RUBICS_FILES[@]} ; i++))
 do
@@ -52,6 +64,7 @@ do
 		valgrind ./rubic <${RUBICS_FILES[i]} >${VALGRIND_OUT} 2>${VALGRIND_ERR}
 		if grep -Fq "All heap blocks were freed" ${VALGRIND_ERR}
 		then
+				NB_MEMORY_OK=$((NB_MEMORY_OK+1))
 				printf "\e[1;32m"
 		else
 				printf "\e[1;31m"
@@ -60,3 +73,5 @@ do
 		grep "total heap usage" $VALGRIND_ERR
 		printf "\e[0m\n"
 done
+
+printf "\033[1m${NB_MEMORY_OK} / ${NB_TESTS} tests without memory leaks\033[0m\n"
