@@ -40,3 +40,7 @@ void print_constants(){
 					 constants[i]);
 	}
 }
+
+void destroy_constants(){
+	free(constants);
+}

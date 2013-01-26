@@ -438,5 +438,6 @@ int main() {
 	function_set_destroy(global_fs);
 	destroy_built_ins();
 	linked_list_destroy_opt_erase(string_handler, true);
+	destroy_constants();
   return 0;
 }

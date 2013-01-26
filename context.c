@@ -161,7 +161,7 @@ void destroy_context(context_pointer c){
 	}
 	linked_list_destroy_opt_erase(c->child_contexts, false);
 	if (c->global_variables != NULL)
-		hashmap_destroy(c->global_variables, true, true);
+		destroy_variable_hashmap(c->global_variables);
 	// destroying local variable
 	
 	destroy_variable_hashmap(c->local_variables);

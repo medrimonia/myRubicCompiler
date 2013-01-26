@@ -13,4 +13,6 @@ int get_constant_size(int id);
 /* Print the initialization of all the constants */
 void print_constants();
 
+/* Destroy the constant handler */
+void destroy_constants();
 #endif
