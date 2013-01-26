@@ -3,6 +3,30 @@ LDFLAGS=-ll -ly # les bibliotheques necessaires
 CC=gcc
 YACCFLAGS= #--debug --verbose #used to debug grammar issues
 
+report.pdf: report.dvi
+	dvipdf $< $@
+
+report.dvi : report/report.tex
+	latex $< -o $@
+
+# CREATING ARCHIVE
+
+AR_SOURCE = *.c               \
+						*.h	              \
+						scanner.l         \
+		        parse.y           \
+						report/report.tex \
+            report.pdf        \
+		        tests/*.rubic     \
+						Makefile          \
+	          README            \
+					 	run_tests.sh
+
+AR = tar
+AR_FLAGS = --exclude-vcs -cf
+archive: mrproper report.pdf $(AR_SOURCE)
+	$(AR) $(AR_FLAGS) hofer.tar $(AR_SOURCE)
+
 all: rubic
 
 # LEX AND YACC PART

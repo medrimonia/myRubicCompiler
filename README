@@ -1,0 +1,9 @@
+Author : Ludovic Hofer
+
+# How to compile the compiler :
+make rubic
+
+# How to run tests :
+./run_tests.sh
+(If everything work as intended, 35 tests over 36 must works and without any
+ memory leak issue)
