@@ -31,12 +31,12 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 	-llc $<
 
 %.ll: %.rubic rubic
-	-./rubic <$< >$@
+	./rubic <$< >$@
 
 # SPECIFIC RULES
 
 %.test : %.s
-	-$(CC) -o $@ $<
+	$(CC) -o $@ $<
 
 function.o : code_generator.h dictionnary.h function.h function_set.h \
 					   prototype.h type_handler.h
