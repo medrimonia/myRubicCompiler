@@ -459,6 +459,15 @@ mémoire, en effet, pour les built-ins ou pour les fonctions décrites par
 l'utilisateur, le fonctionnement n'était pas le même au niveau de la mémoire
 avant que je nettoie un peu le code.
 
+\subsection{Nettoyage général des fuites mémoires}
+Une fois un test parfaitement dénué de fuites mémoires, il était naturel
+d'étendre ce contrôle de qualité à tous les tests afin de vérifier que
+certaines parties du code ne génèrent pas de fuites mémoires. J'ai donc
+ajouté au script de test une partie permettant de vérifier que les tests ne
+génèrent pas de fuites mémoires. Cela m'a permis de déceler d'autres failles
+dans mon code et de les corriger par la suite. Après quelques vérifications,
+j'ai ainsi pu éliminer toutes les fuites mémoires des différents tests.
+
 \section{Conclusion}
 Ce projet a sans conteste été l'occasion d'apprendre beaucoup et de me
 heurter à plusieurs problématiques difficiles, comme je m'y attendais, le
