@@ -94,6 +94,14 @@ void destroy_conditional(tn_pointer node){
 	free(c);
 }
 
+void destroy_for(tn_pointer node){
+	for_block_p content = node->content;
+	destroy_tree(content->from_expr);
+	destroy_tree(content->to_expr);
+	destroy_tree(content->code);
+	free(content);
+}
+
 void destroy_tree(tn_pointer node){
 	if (node == NULL)
 		return;
@@ -109,6 +117,7 @@ void destroy_tree(tn_pointer node){
 	case IDENTIFIER:                                       break;
 	case PRIMARY:           destroy_primary(node);         break;
 	case IF_NODE:           destroy_conditional(node);     break;
+	case FOR_NODE:          destroy_for(node);             break;
 	default: 
 		if(node->content != NULL)
 			free(node->content);
