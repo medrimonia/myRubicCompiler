@@ -143,12 +143,15 @@ stmt		: if_expr stmts terms END
 {
 	linked_list_append(string_handler, $ID);
 	actual_context = create_context_child(actual_context);
-	declare_variable(actual_context, $ID);
+	variable_p v = declare_variable(actual_context, $ID);
+	linked_list_destroy_opt_erase(v->allowed_types, false);
+	v->allowed_types = new_type_list_single_from_name("i32");
 }
       term stmts[code] terms END
 {
 	// ID in expr TO expr, id should maybe declared in an intern context
 	type_p int_type = get_type_from_name("i32");
+	// TODO this kind of verification should be moved to validation
 	type_p from_type = th_true_type($4->allowed_types);
 	type_p dest_type = th_true_type($4->allowed_types);
 	if (int_type != from_type || int_type != dest_type){
