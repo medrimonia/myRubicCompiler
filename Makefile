@@ -159,7 +159,8 @@ type_updater.h : linked_list.h function.h prototype.h
 
 clean:
 	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS) \
-		$(RUBICS_TESTS_OUTPUT) $(RUBICS_TESTS_ERROR)
+		$(RUBICS_TESTS_OUTPUT) $(RUBICS_TESTS_ERROR) report.aux report.dvi \
+		report.log hofer.tar
 
 mrproper: clean
-	rm -rf $(EXECUTABLES) *~
+	rm -rf $(EXECUTABLES) *~ report.pdf
