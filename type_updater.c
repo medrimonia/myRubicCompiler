@@ -115,6 +115,8 @@ void update_type_call(tn_pointer node){
 		linked_list_append(matching, ut_current_function);
 	}
 	if (linked_list_size(matching) == 0){
+		linked_list_destroy_opt_erase(matching, false);
+		linked_list_destroy_opt_erase(args, false);
 		printf(";No functions matching the specified prototype\n");
 		return;
 	}
