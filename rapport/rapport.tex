@@ -426,6 +426,39 @@ désirais. En effet, obtenir une solution présentant des fuites mémoires étai
 déjà quelque chose de satisfaisant pour moi et je craignais qu'à vouloir
 viser le mieux directement, je n'arrive même pas au bien.
 
+\subsection{Premier nettoyage des fuites mémoires}
+Travail de longue haleine, le nettoyage des fuites mémoires m'a demandé un
+temps non négligeable, mais malgré tout, j'ai mis moins de temps que ce que
+j'avais estimé dans un premier temps. Pour cette tâche, j'ai choisi d'utiliser
+la procédure suivante.\\
+
+J'ai commencé par choisir un fichier de test qui allait me servir de
+référence. Je l'ai compilé avec un valgrind simple afin de voir rapidement la
+proportion de free par rapport au nombre d'allocs. Comme je m'y attendais,
+celle-ci était particulièrement faible. Ensuite, j'ai obtenu plus de détails
+à l'aide d'un {\em valgrind --leak-check=full --show-reachable=yes}. Ces
+détails me permettaient de savoir quelle partie de la mémoire n'était pas
+libérée et comme je connaissais l'intégralité de mon code, je pouvais assez
+facilement savoir quand et comment la libérer\footnote{Il est à noter que
+j'ai tout de même pu prendre conscience que ce travail aurait réellement été
+affreux si j'avais du le faire sur du code qui m'était inconnu et je pense
+donc qu'il est nettement préférable lorsque l'on travaille en équipe que
+chacun veille constamment à ne pas laisser trop de fuites mémoires.}.\\
+
+Même si ainsi présentée, la situation peut sembler un peu idyllique, je me
+dois d'avouer que certains problème de fuites mémoires ont tout de même
+nécessité un peu plus de raffinement qu'un simple free bien placé. À titre
+d'exemple, je citerai la gestion des identifiants. Ceux-ci étant présent à
+différents endroits\footnote{En tant que clé de dictionnaire, de contenu de
+certains noeuds, de nom de fonction etc...}, j'ai choisi de simplement
+maintenir à jour une liste contenant tous ces identifiants, et d'ainsi tous
+les libérer de manière uniforme à la fin de l'exécution.\\
+
+Cette partie du travail m'a aussi encouragé à uniformisé le traitement en
+mémoire, en effet, pour les built-ins ou pour les fonctions décrites par
+l'utilisateur, le fonctionnement n'était pas le même au niveau de la mémoire
+avant que je nettoie un peu le code.
+
 \section{Conclusion}
 Ce projet a sans conteste été l'occasion d'apprendre beaucoup et de me
 heurter à plusieurs problématiques difficiles, comme je m'y attendais, le
