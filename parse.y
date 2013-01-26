@@ -16,6 +16,8 @@
 	// Declaring functions in order to avoid warnings
 	int yylex(void);
 	int yyerror(char *);
+	void yylex_destroy(void);
+
 	char *strndup(const char *s, size_t n);
 	
 	context_pointer global_context = NULL;
@@ -423,6 +425,7 @@ int main() {
 	initialize_built_ins(actual_context);
   yyparse();
 	//printf("declare i32 @puts(i32*)\n"); //TODO Hack
+	yylex_destroy();
 	print_constants();
 	declare_built_ins();
 	generate_code(global_root);
