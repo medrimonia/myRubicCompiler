@@ -23,9 +23,9 @@ AR_SOURCE = *.c               \
 					 	run_tests.sh
 
 AR = tar
-AR_FLAGS = --exclude-vcs -cf
+AR_FLAGS = --exclude-vcs -zcf
 archive: mrproper report.pdf $(AR_SOURCE)
-	$(AR) $(AR_FLAGS) hofer.tar $(AR_SOURCE)
+	$(AR) $(AR_FLAGS) hofer.tar.gz $(AR_SOURCE)
 
 all: rubic
 
@@ -160,7 +160,7 @@ type_updater.h : linked_list.h function.h prototype.h
 clean:
 	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS) \
 		$(RUBICS_TESTS_OUTPUT) $(RUBICS_TESTS_ERROR) report.aux report.dvi \
-		report.log hofer.tar
+		report.log hofer.tar.gz
 
 mrproper: clean
 	rm -rf $(EXECUTABLES) *~ report.pdf
