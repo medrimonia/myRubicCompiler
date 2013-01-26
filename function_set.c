@@ -39,15 +39,14 @@ void function_set_remove(function_set_p fs,
 												 prototype_p key,
 												 bool free_prototype,
 												 bool free_function){
-	//TODO handle free
 	hashmap_pointer hm = (hashmap_pointer)dictionnary_get(fs, key->name);
 	if (hm == NULL)
 		return;
 	hashmap_remove(hm, key, free_prototype, free_function);
 	// empty hashmaps shouldn't be keeped
 	if (hashmap_size(hm) == 0){
-		hashmap_destroy(hm, false, false);
-		dictionnary_remove(fs, key->name, false, false);
+		hashmap_destroy(hm, free_prototype, free_function);
+		dictionnary_remove(fs, key->name, free_prototype, free_function);
 	}
 }
 

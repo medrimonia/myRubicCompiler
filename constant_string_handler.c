@@ -14,7 +14,6 @@ int nb_constants = 0;
 int add_constant(const char * s){
 	if (constants == NULL) //lazy mechanism
 		constants = malloc(MAX_CONSTANTS * sizeof(char *));
-	//TODO maybe optimized to avoid constant duplication
 	constants[nb_constants++] = s;
 	return nb_constants - 1;
 }

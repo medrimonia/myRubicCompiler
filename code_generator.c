@@ -84,7 +84,7 @@ void generate_code_primary(tn_pointer node){
 					 get_constant_size(p->s_id),
 					 p->s_id);
 		break;
-	case PRIMARY_DOUBLE: //TODO : handle later
+	case PRIMARY_DOUBLE:
 		printf("%%%d = fadd double %f, 0.0\n",
 					 node->reg_number,
 					 p->d);
@@ -254,7 +254,6 @@ void generate_code_for(tn_pointer node){
 }
 
 void generate_code_function(tn_pointer node){
-	// TODO fix in order to avoid problems when getting out of a function
 	function_p f = (function_p) node->content;
 	cg_actual_function = f;
 
@@ -355,7 +354,6 @@ void generate_code_call(tn_pointer node){
 	
 }
 
-//TODO label might be more explicit
 void generate_code_conditional(tn_pointer node){
 	conditional_block_p  cond = node->content;
 	generate_code(cond->condition);

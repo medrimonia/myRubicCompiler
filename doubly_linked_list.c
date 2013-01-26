@@ -50,8 +50,6 @@ void insert_with_place(doubly_linked_list_pointer l,
 		dest->previous = new_node;
 	if (new_node->previous != l->sentinel)
 		new_node->previous->next = new_node;
-	// Updating first and last pointers
-	// TODO issues here
 	if (l->size == 0){
 		l->actual = new_node;
 	}

@@ -39,16 +39,41 @@ void fill_map(linked_list_pointer * map, int size){
 		map[i] = new_linked_list();
 }
 
-hashmap_pointer new_hashmap(hash_function h_f, equals_function e_f){
+hashmap_pointer new_hashmap_sized(hash_function h_f,
+																	equals_function e_f,
+																	int size){
 	struct hashmap * hm = malloc(sizeof(struct hashmap));
 	hm->h_f = h_f;
 	hm->e_f = e_f;
-	hm->map_size = INITIAL_SIZE;
+	hm->map_size = size;
 	hm->nb_elements = 0;
-	hm->map = malloc(INITIAL_SIZE * sizeof(linked_list_pointer));
+	hm->map = malloc(size * sizeof(linked_list_pointer));
 	hm->actual_indice = 0;
-	fill_map(hm->map, INITIAL_SIZE);
+	fill_map(hm->map, size);
 	return hm;
+}
+
+hashmap_pointer new_hashmap(hash_function h_f, equals_function e_f){
+	hashmap_pointer hm = new_hashmap_sized(h_f, e_f, INITIAL_SIZE);
+	return hm;
+}
+
+void hashmap_resize(hashmap_pointer hm, int new_size){
+	hashmap_pointer new_hm = new_hashmap_sized(hm->h_f, hm->e_f, new_size);
+	hashmap_start_iteration(hm);
+	while(!hashmap_is_ended_iteration(hm)){
+		void * value = hashmap_get_current_value(hm);
+		const void * key = hashmap_get_current_key(hm);
+		hashmap_add(new_hm, key, value);
+		hashmap_next_element(hm);
+	}
+	int old_map_size = hm->map_size;
+	linked_list_pointer * old_map = hm->map;
+	hm->map = new_hm->map;
+	hm->map_size = new_hm->map_size;
+	new_hm->map = old_map;
+	new_hm->map_size = old_map_size;
+	hashmap_destroy(new_hm, false, false);
 }
 
 void * hashmap_get(hashmap_pointer hm, const void * key){
@@ -63,7 +88,8 @@ bool hashmap_exists(hashmap_pointer hm, const void * key){
 }
 
 void * hashmap_add(hashmap_pointer hm, const void * key, void * value){
-	//TODO increase size if nb_elements > map_size
+	if (hm->map_size <= hm->nb_elements)
+		hashmap_resize(hm, hm->map_size * 2);
 	if (hashmap_exists(hm, key))
 		return NULL;
 	int index = get_index(hm, key);
@@ -79,6 +105,9 @@ void hashmap_remove(hashmap_pointer hm,
 										const void * key,
 										bool free_key,
 										bool free_data){
+	if (hm->map_size > 4 &&
+			hm->map_size / 4 >= hm->nb_elements)
+		hashmap_resize(hm, hm->map_size / 2);
 	linked_list_pointer l = hm->map[get_index(hm, key)];
 	if (linked_list_is_empty(l))
 		return;

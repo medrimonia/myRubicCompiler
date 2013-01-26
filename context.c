@@ -60,7 +60,6 @@ void declare_parameters_to_variables(context_pointer c,
 #define IS_GLOBAL(X) (X[0] == '@')
 
 bool is_declared_variable(context_pointer c, char * name){
-	// TODO handle constants
 	if (IS_GLOBAL(name))
 		return is_declared_global_variable(c, name);
 	else
@@ -68,7 +67,6 @@ bool is_declared_variable(context_pointer c, char * name){
 }
 
 variable_p declare_variable(context_pointer c, char * name){
-	// TODO handle constants
 	if (IS_GLOBAL(name))
 		return declare_global_variable(c, name);
 	else
@@ -85,7 +83,6 @@ variable_p declare_typed_variable(context_pointer c,
 }
 
 variable_p get_variable(context_pointer c, char * name){
-	// TODO handle constants
 	if (IS_GLOBAL(name))
 		return get_global_variable(c, name);
 	else
@@ -107,7 +104,6 @@ bool is_declared_local_variable(context_pointer c, char * name){
 }
 
 variable_p declare_local_variable(context_pointer c, char * name){
-	//TODO add control of variable, once parameter has changed
 	variable_p v = new_variable(new_full_types_list(), name);
 	dictionnary_add(c->local_variables, name, v);
 	return v;
