@@ -39,7 +39,7 @@ bool type_list_contains(linked_list_pointer tl, type_p t){
 
 void type_list_add(linked_list_pointer tl, type_p t){
 	if (!type_list_contains(tl, t))
-		linked_list_insert(tl, t);
+		linked_list_append(tl, t);
 }
 
 void type_list_add_type_list(linked_list_pointer dst,

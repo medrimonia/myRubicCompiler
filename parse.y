@@ -199,7 +199,9 @@ stmt		: if_expr stmts terms END
 	}
 	$$ = new_tree_node(RETURN_NODE);
 	$$->left_child = $2;
-	$$->allowed_types = $2->allowed_types;
+	$$->allowed_types = new_linked_list();
+	type_list_add_type_list($$->allowed_types,
+													$2->allowed_types);
 	//TODO might be handled differently if return type is already known
 	type_list_add_type_list(actual_function->possible_return_types,
 													$2->allowed_types);

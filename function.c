@@ -29,6 +29,8 @@ void initialize_built_ins(context_pointer root_context){
 	declare_typed_variable(f->inner_context,
 												 "s",
 												 "i8 *");
+	// The empty list created must be free before
+	linked_list_destroy_opt_erase(f->possible_return_types, false);
 	f->possible_return_types = new_type_list_single_from_name("i8 *");
 	vars = new_linked_list();
 	linked_list_append(vars, get_variable(f->inner_context, "s"));

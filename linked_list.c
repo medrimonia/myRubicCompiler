@@ -20,9 +20,9 @@ void linked_list_next(linked_list_pointer l){
 }
 
 void linked_list_insert(linked_list_pointer l, void * element){
-	node_pointer new_node =
-		(node_pointer)malloc(sizeof(struct linked_list_node));
+	node_pointer new_node = NULL;
 	if (l->size == 0){
+		new_node = (node_pointer)malloc(sizeof(struct linked_list_node));
 		new_node->data = element;
 		new_node->next = NULL;
 		l->first = new_node;
@@ -30,6 +30,7 @@ void linked_list_insert(linked_list_pointer l, void * element){
 		l->size++;
 		return;
 	}
+	new_node = (node_pointer)malloc(sizeof(struct linked_list_node));
 	// the new_node is inserted between actual and next and value are swapped
 	new_node->next = l->actual->next;
 	l->actual->next = new_node;
@@ -41,9 +42,9 @@ void linked_list_insert(linked_list_pointer l, void * element){
 //TODO merge two function with a boolean swap in order to share code
 // (linked_list insert or insert_after)
 void linked_list_insert_after(linked_list_pointer l, void * element){
-	node_pointer new_node =
-		(node_pointer)malloc(sizeof(struct linked_list_node));
+	node_pointer new_node = NULL;
 	if (l->size == 0){
+		new_node = (node_pointer)malloc(sizeof(struct linked_list_node));		
 		new_node->data = element;
 		new_node->next = NULL;
 		l->first = new_node;
@@ -51,6 +52,7 @@ void linked_list_insert_after(linked_list_pointer l, void * element){
 		l->size++;
 		return;
 	}
+	new_node = (node_pointer)malloc(sizeof(struct linked_list_node));	
 	// values aren't swapped
 	new_node->next = l->actual->next;
 	l->actual->next = new_node;
