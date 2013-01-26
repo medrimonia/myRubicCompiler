@@ -1,0 +1,2 @@
+- Remove warnings
+- Handle addition of float and int with cast
