@@ -129,20 +129,47 @@ void generate_code_identifier(tn_pointer node){
 	
 }
 
+/* return the register where the result can be found */
+int generate_cast(char * castword,
+									type_p src_type,
+									type_p dst_type,
+									int register_num){
+	int dest = ++actual_register;
+	printf("%%%d = %s %s %%%d to %s",
+				 dest,
+				 castword,
+				 type_get_name(src_type),
+				 register_num,
+				 type_get_name(dst_type));
+	return dest;
+}
+
 void generate_code_generic_operation(tn_pointer node, char * op){
 	generate_code(node->left_child);
 	generate_code(node->right_child);
-	node->reg_number = ++actual_register;
 	
 	type_p t = th_true_type(node->allowed_types);
+	type_p left_type = th_true_type(node->left_child->allowed_types);
+	type_p right_type = th_true_type(node->right_child->allowed_types);
+	int left_reg = node->left_child->reg_number;
+	int right_reg = node->right_child->reg_number;
+	// handling implicit cast from int to double
+	type_p double_type = get_type_from_name("double");
+	if (t == double_type){
+		if (left_type != double_type)
+			left_reg = generate_cast("sitofp", left_type, double_type, left_reg);
+		if (right_type != double_type)
+			right_reg = generate_cast("sitofp", right_type, double_type, right_reg);
+	}
+	node->reg_number = ++actual_register;
 	printf("%%%d = ",node->reg_number);
-	if (t == get_type_from_name("double"))
+	if (t == double_type)
 		printf("f");//fadd, fsub, etc...
 	printf("%s %s %%%d, %%%d\n",
 				 op,
 				 type_get_name(t),
-				 node->left_child->reg_number,
-				 node->right_child->reg_number);
+				 left_reg,
+				 right_reg);
 }
 
 void generate_code_addition(tn_pointer node){

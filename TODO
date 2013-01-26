@@ -1,5 +1,6 @@
 DONE - Remove warnings 
 - Handle addition of float and int with cast
+- Updating links in Makefile
 - Solving for issue with multiple variable
 - Adding constants
 - Testing globals variables

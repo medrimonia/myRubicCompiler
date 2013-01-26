@@ -98,7 +98,20 @@ linked_list_pointer th_arithmetic(linked_list_pointer l1,
 																	linked_list_pointer l2){
 	remove_types_not_shared(l1, additionable_types);
 	remove_types_not_shared(l2, additionable_types);
-	return types_shared(l1,l2);
+	type_p double_type = get_type_from_name("double");
+	// If one side must be a double, both sides are double
+	if (th_true_type(l1) == double_type ||
+			th_true_type(l2) == double_type) 
+		return new_type_list_single(double_type);
+	type_p int_type = get_type_from_name("i32");
+	// If one side might contain a double, return a list containing both
+	if (type_list_contains(l1, double_type) ||
+			type_list_contains(l2, double_type)){
+		linked_list_pointer result = new_type_list_single(double_type);
+		type_list_add(result, int_type);
+		return result;
+	}
+	return new_type_list_single(int_type);
 }
 
 linked_list_pointer th_comparison(linked_list_pointer l1,
