@@ -279,7 +279,9 @@ lhs             : ID
 									$$ = new_tree_node(CALL);
 									$$->content = new_function_call(f_called);
 									((function_call_p)$$->content)->parameters = $3;
-									$$->allowed_types = f_called->possible_return_types;
+									$$->allowed_types = new_linked_list();
+									type_list_add_type_list($$->allowed_types,
+																					f_called->possible_return_types);
 								}
 ;
 exprs           : exprs ',' expr

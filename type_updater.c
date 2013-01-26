@@ -84,6 +84,8 @@ void update_type_return(tn_pointer node){
 
 void update_type_call(tn_pointer node){
 	function_call_p call = (function_call_p)node->content;
+	if (node->allowed_types != NULL)
+		linked_list_destroy_opt_erase(node->allowed_types, false);
 	node->allowed_types = new_linked_list();
 	//getting prototypes
 	linked_list_pointer args = new_linked_list();
