@@ -227,7 +227,7 @@ void validate_function(function_p f){
 				linked_list_restart(combination);
 				while(true){
 					variable_p v = linked_list_get(combination);
-					destroy_variable(v);
+					destroy_variable(v, true);
 					if (linked_list_end(combination))
 						break;
 					linked_list_next(combination);
