@@ -135,7 +135,7 @@ int generate_cast(char * castword,
 									type_p dst_type,
 									int register_num){
 	int dest = ++actual_register;
-	printf("%%%d = %s %s %%%d to %s",
+	printf("%%%d = %s %s %%%d to %s\n",
 				 dest,
 				 castword,
 				 type_get_name(src_type),
