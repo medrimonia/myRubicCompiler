@@ -37,7 +37,6 @@ void update_type_primary(tn_pointer node){
 
 void update_type_affect(tn_pointer node){
 	update_type(node->right_child);
-	//TODO destroy_linked_list(node->allowed_types)
 	linked_list_pointer types;
 	types = remove_types_not_shared(node->left_child->allowed_types,
 																	node->right_child->allowed_types);

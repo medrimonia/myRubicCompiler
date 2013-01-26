@@ -30,7 +30,6 @@ bool validate_node_affect(tn_pointer node){
 	validate_node(node->right_child);
 	variable_p target = get_variable(node->context, node->left_child->content);
 	type_p dst_type = th_true_type(target->allowed_types);
-	//TODO src_type filtering maybe
 	type_p src_type = th_true_type(node->right_child->allowed_types);
 	return validate_type_equality(src_type, dst_type);
 }
@@ -64,8 +63,6 @@ bool validate_node_logical(tn_pointer node){
 	if (!validate_node_childs(node))
 		return false;
 
-	//TODO eventually pass through a tmp list with left and right child
-//linked_list_pointer l = compared_type(node->left_child, node->right_child);
 	type_p t1 = th_true_type(node->right_child->allowed_types);
 	type_p t2 = th_true_type(node->left_child->allowed_types);
 	return validate_type_equality(t1, t2);
@@ -144,9 +141,6 @@ bool validate_node_for(tn_pointer node){
 bool validate_node(tn_pointer node){
 	if (node == NULL)
 		return true;
-	// TODO update_allowed_types needed
-	// Variables allowed_types may change, so allowed_types must be updated
-	// each time
 	switch(node->type){
 	case PRIMARY :      return true;
 	case AFFECT :       return validate_node_affect(node);

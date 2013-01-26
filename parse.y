@@ -207,7 +207,6 @@ stmt		: if_expr stmts terms END
 	$$->allowed_types = new_linked_list();
 	type_list_add_type_list($$->allowed_types,
 													$2->allowed_types);
-	//TODO might be handled differently if return type is already known
 	type_list_add_type_list(actual_function->possible_return_types,
 													$2->allowed_types);
 }
@@ -256,7 +255,6 @@ lhs             : ID
 	$$ = new_tree_node(IDENTIFIER);
 	$$->context = actual_context;
 	$$->content = $1;
-	// TODO list should maybe be copied
 	if (is_declared_variable(actual_context, $1)){
 		variable_p var = get_variable(actual_context, $1);
 		$$->allowed_types = var->allowed_types;
@@ -272,7 +270,6 @@ lhs             : ID
                 | ID '(' exprs ')'
 								{
 									linked_list_append(string_handler, $ID);
-									//TODO handle function must be adapted to new structure
 									function_p f_called = get_function(actual_context,$ID);
 									if (f_called == NULL){
 										fprintf(stderr, "No function called %s found.\n", $ID);
@@ -427,7 +424,6 @@ int main() {
 	string_handler = new_linked_list();
 	initialize_built_ins(actual_context);
   yyparse();
-	//printf("declare i32 @puts(i32*)\n"); //TODO Hack
 	yylex_destroy();
 	print_constants();
 	declare_built_ins();
