@@ -67,8 +67,23 @@ void destroy_function(tn_pointer node){
 }
 
 void destroy_call(tn_pointer node){
+	// destroying parameters exprs
 	function_call_p fc = node->content;
+	if (linked_list_size(fc->parameters) > 0){
+		linked_list_restart(fc->parameters);
+		while(true){
+			destroy_tree(linked_list_get(fc->parameters));
+			if (linked_list_end(fc->parameters))
+				break;
+			linked_list_next(fc->parameters);
+		}
+	}
 	function_call_destroy(fc);
+}
+
+void destroy_primary(tn_pointer node){
+	primary_p p = node->content;
+	free(p);
 }
 
 void destroy_tree(tn_pointer node){
@@ -80,10 +95,10 @@ void destroy_tree(tn_pointer node){
 	destroy_tree(node->left_child);
 	destroy_tree(node->right_child);
 	switch(node->type){
-		//	case IDENTIFIER:        free(nod
 	case CALL:              destroy_call(node);            break;
 	case FUNCTION:          destroy_function(node);        break;
 	case IDENTIFIER:                                       break;
+	case PRIMARY:           destroy_primary(node);         break;
 	default: 
 		if(node->content != NULL)
 			free(node->content);
