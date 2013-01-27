@@ -37,41 +37,41 @@ I ([0-9]+)
 S (\"[^\n\"]*\")
 ID ([$@]?[a-zA-Z_][a-zA-Z_0-9]*)
 %%
-{F}      { sscanf(yytext, "%f",&yylval.d);count(); return(FLOAT); }
-{I}      { sscanf(yytext, "%d",&yylval.i);count(); return(INT); }
-{S}      { yylval.s = strdup(yytext);count(); return(STRING); }
-"for"    { count(); return(FOR); }
-"while"  { count(); return(WHILE);}
-"do"  { count(); return(DO);}
-"if"     { count(); return(IF); }
-"then"   { count(); return(THEN); }
-"else"   { count(); return(ELSE); }
-"return" { count(); return(RETURN); }
-"class"  { count(); return(CLASS); }
-"def"    { count(); return(DEF); }
-"in"     { count(); return(IN); }
-"end"    { count(); return(END); }
-".."	 { count(); return(TO); }
-"<="	 { count(); return(LEQ); }
-">="     { count(); return(GEQ); }
-"=="	 { count(); return(EQ); }
-"!="	 { count(); return(NEQ); }
-"&&"     { count(); return(AND); }
-"||"     { count(); return(OR); }
-";"	 { count(); return(';'); }
-","	 { count(); return(','); }
-"."	 { count(); return('.'); }
-"="      { count(); return('='); }
-"("	 { count(); return('('); }
-")"	 { count(); return(')'); }
-"-"	 { count(); return('-'); }
-"+"	 { count(); return('+'); }
-"*"	 { count(); return('*'); }
-"/"	 { count(); return('/'); }
-"<"	 { count(); return('<'); }
-">"	 { count(); return('>'); }
-{ID}     {yylval.s = strdup(yytext); count(); return(ID); }
-"\n"     { count(); lineno++; return('\n'); }
+{F}        { sscanf(yytext, "%f",&yylval.d);count(); return(FLOAT); }
+{I}        { sscanf(yytext, "%d",&yylval.i);count(); return(INT); }
+{S}        { yylval.s = strdup(yytext);count(); return(STRING); }
+"for"      { count(); return(FOR); }
+"while"    { count(); return(WHILE);}
+"do"       { count(); return(DO);}
+"if"       { count(); return(IF); }
+"then"     { count(); return(THEN); }
+"else"     { count(); return(ELSE); }
+"return"   { count(); return(RETURN); }
+"class"    { count(); return(CLASS); }
+"def"      { count(); return(DEF); }
+"in"       { count(); return(IN); }
+"end"      { count(); return(END); }
+".."       { count(); return(TO); }
+"<="       { count(); return(LEQ); }
+">="       { count(); return(GEQ); }
+"=="       { count(); return(EQ); }
+"!="       { count(); return(NEQ); }
+"&&"       { count(); return(AND); }
+"||"       { count(); return(OR); }
+";"        { count(); return(';'); }
+","        { count(); return(','); }
+"."        { count(); return('.'); }
+"="        { count(); return('='); }
+"("        { count(); return('('); }
+")"        { count(); return(')'); }
+"-"        { count(); return('-'); }
+"+"        { count(); return('+'); }
+"*"        { count(); return('*'); }
+"/"        { count(); return('/'); }
+"<"        { count(); return('<'); }
+">"        { count(); return('>'); }
+{ID}       { yylval.s = strdup(yytext); count(); return(ID); }
+"\n"       { count(); lineno++; return('\n'); }
 [ \t\v\f]  { count(); }
 .        ;
 %%
