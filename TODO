@@ -1,8 +1,8 @@
 DONE - Remove warnings 
 DONE - Handle addition of float and int with cast
 DONE - Add recursivity to report
-- Updating links in Makefile
-- Untabify
+DONE - Updating links in Makefile
+DONE - Untabify
 - Solving for issue with multiple variable
 - Adding constants
 - Testing globals variables

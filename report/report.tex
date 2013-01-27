@@ -488,6 +488,27 @@ génèrent pas de fuites mémoires. Cela m'a permis de déceler d'autres failles
 dans mon code et de les corriger par la suite. Après quelques vérifications,
 j'ai ainsi pu éliminer toutes les fuites mémoires des différents tests.
 
+\section{La propreté du projet}
+Essayant de rendre le code présentable afin qu'il soit assez facile à lire,
+j'ai prêté une attention particulière à certains aspects :
+\begin{itemize}
+\item Remplacement des tabulations par des espaces dans le code afin de garder
+  un aspect uniforme quelque soit l'outil utilisé pour lire le code\footnote{
+    Ceci a été effectué à l'aide de la commande {\em untabify} d'emacs}.
+\item Gestion des dépendances détaillées dans le Makefile\footnote{Au delà
+  d'une histoire de propreté, cela permet aussi d'éviter que les changements
+  ne soient pas bien répercutés et que l'on soit donc obligé de faire un
+  {\em make mrproper} avant de tout recompiler.}.
+\item Suppression totale des warnings\footnote{Certains warnings n'étant pas
+  de mon ressort, j'ai du ajouter une directive {\em \# pragma GCC diagnostic
+    ignored "-Wunused-function"} dans le fichier scanner.l afin de pallier ce
+  problème} lors de la compilation\footnote{Un des aspects particulièrement
+  agréable de cette façon de procéder est que la présence de nouveaux warnings
+  est beaucoup plus facile à détecter, de plus, une compilation totale est
+  moins envahissante}.
+\item Présentation des include séparés par catégorie et triés par ordre
+  alphabétique ensuite afin de plus facilement se repérer.
+\end{itemize} 
 \section{Conclusion}
 Ce projet a sans conteste été l'occasion d'apprendre beaucoup et de me
 heurter à plusieurs problématiques difficiles, comme je m'y attendais, le
