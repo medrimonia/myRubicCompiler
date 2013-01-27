@@ -224,11 +224,15 @@ void validate_function(function_p f){
 #endif
 		prototype_p current_proto = new_prototype(f->name, combination);
 		update_function(f, current_proto);
+		type_p return_type = th_true_type(f->possible_return_types);
 		if (validate_node(f->root) &&
-				th_true_type(f->possible_return_types) != NULL){
+				return_type != NULL){
 #if DEBUG
-			printf("\t\t;valid prototype\n");
+			printf("\t\t;valid prototype return type : %s\n",
+						 type_get_name(return_type));
 #endif
+			// return type must be defined now
+			current_proto->return_type = return_type;
 			function_set_add(global_fs, current_proto, f);
 			linked_list_insert(f->valid_prototypes, current_proto);
 		}else{

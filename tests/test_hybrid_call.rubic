@@ -1,0 +1,11 @@
+def addition(a,b)
+		return a + b;
+end
+
+def main()
+		a = addition(2, 3.3);
+		if a > 5.2999 && a < 5.3001 then
+			 return 0;
+		end
+		return 1;
+end

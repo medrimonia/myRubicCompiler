@@ -8,6 +8,8 @@
 #include "function_set.h"
 #include "linked_list.h"
 
+#define DEBUG 1
+
 function_p ut_current_function = NULL;
 prototype_p ut_current_p = NULL;
 
@@ -109,14 +111,18 @@ void update_type_call(tn_pointer node){
 																						 args);
 	bool valid_recursion = false;
 	if (prototype_matches(ut_current_p,args)){
+#if DEBUG
 		printf(";recursion found\n");
+#endif
 		valid_recursion = true;
 		linked_list_append(matching, ut_current_function);
 	}
 	if (linked_list_size(matching) == 0){
 		linked_list_destroy_opt_erase(matching, false);
 		linked_list_destroy_opt_erase(args, false);
+#if DEBUG
 		printf(";No functions matching the specified prototype\n");
+#endif
 		return;
 	}
 	//printf(";a function matching the specified prototype was found\n");
@@ -131,14 +137,14 @@ void update_type_call(tn_pointer node){
 	if (call->valid_prototypes != NULL)
 		linked_list_destroy_opt_erase(call->valid_prototypes, false);		
 	call->valid_prototypes = matching_proto;
-	linked_list_restart(matching);
+	linked_list_restart(matching_proto);
 	while(true){
-		function_p f = (function_p)linked_list_get(matching);
-		type_list_add_type_list(node->allowed_types,
-														f->possible_return_types);
-		if (linked_list_end(matching))
+		prototype_p p = (prototype_p)linked_list_get(matching_proto);
+		type_list_add(node->allowed_types,
+									p->return_type);
+		if (linked_list_end(matching_proto))
 			break;
-		linked_list_next(matching);
+		linked_list_next(matching_proto);
 	}
 	linked_list_destroy_opt_erase(matching, false);
 	linked_list_destroy_opt_erase(args, false);

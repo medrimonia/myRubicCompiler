@@ -37,6 +37,7 @@ void initialize_built_ins(context_pointer root_context){
 	linked_list_append(vars,
 										 copy_variable(get_variable(f->inner_context, "s")));
 	p = new_prototype(f->name, vars);
+	p->return_type = get_type_from_name("i8 *");
 	dictionnary_add(built_ins,f->name,f);
 	function_set_add(global_fs, p, f);
 	linked_list_insert(f->valid_prototypes, p);

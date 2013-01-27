@@ -17,6 +17,7 @@ prototype_p new_prototype(const char * name,
 	prototype_p new = (prototype_p)malloc(sizeof(struct prototype));
 	new->name = name;
 	new->params = params;
+	new->return_type = NULL;
 	return new;
 }
 
@@ -54,10 +55,11 @@ bool prototype_equal(const void * key_1, const void * key_2){
 		if (linked_list_get(p1->params) != linked_list_get(p2->params))
 			return false;
 		if (linked_list_end(p1->params))
-			return linked_list_end(p2->params);//equivalent to return true
+			break;
 		linked_list_next(p1->params);
 		linked_list_next(p2->params);
 	}
+	return p1->return_type == p2->return_type;
 }
 
 bool prototype_matches(prototype_p target, linked_list_pointer l){
