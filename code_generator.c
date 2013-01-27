@@ -12,6 +12,8 @@
 #include "validation.h"
 #include "variable.h"
 
+#define DEBUG 1
+
 int actual_register = 0;
 int actual_label = 0;
 function_p cg_actual_function = NULL;
@@ -96,15 +98,28 @@ void generate_code_primary(tn_pointer node){
 }
 
 void generate_code_affect(tn_pointer node){
+	// on upper context, do nothing
+	if(node->context->parent_context == NULL)
+		return;
   //generate_code(node->left_child);
   generate_code(node->right_child);
   node->reg_number = actual_register;
   type_p t = th_true_type(node->right_child->allowed_types);
+	char * var_name = (char *) node->left_child->content;
+	variable_p v = get_variable(node->context, var_name);
+	if (v->is_global){
+		printf("store %s %%%d, %s * @%s\n",
+					 type_get_name(t),
+					 node->right_child->reg_number,
+					 type_get_name(t),
+					 var_name + 1);
+		return;		
+	}
   printf("store %s %%%d, %s * %%%s\n",
          type_get_name(t),
          node->right_child->reg_number,
          type_get_name(t),
-         (char *) node->left_child->content);
+				 var_name);
 } 
 
 void generate_code_list(tn_pointer node){
@@ -122,6 +137,13 @@ void generate_code_identifier(tn_pointer node){
     fprintf(stderr, "the identifier to load has an undecidable type\n");
     exit(EXIT_FAILURE);
   }
+	if (var->is_global){
+		printf("%%%d = load %s * @%s\n", 
+					 actual_register,
+					 type_get_name(t),
+					 var->name + 1);
+		return;
+	}
   printf("%%%d = load %s * %%%s\n", 
          actual_register,
          type_get_name(t),
@@ -435,4 +457,31 @@ void generate_variable_allocation(function_p f){
            type_get_name(th_true_type(v->allowed_types)));
     dictionnary_next_element(d);
   }
+}
+
+void generate_global_allocation(context_pointer global_context){
+#if DEBUG
+	printf(";Generating global allocation\n");
+#endif
+  dictionnary_pointer d = global_context->global_variables;
+  dictionnary_start_iteration(d);
+  while(!dictionnary_is_ended_iteration(d)){
+    variable_p v = dictionnary_get_current_value(d);
+    if (th_true_type(v->allowed_types) == NULL){
+      fprintf(stderr, "Impossible type choice for variable %s\n",
+              (char *) dictionnary_get_current_key(d));
+      exit(EXIT_FAILURE);
+    }
+		type_p t = th_true_type(v->allowed_types);
+		printf("@%s = global %s ",
+					 v->name + 1,
+					 type_get_name(t));
+		if (t == get_type_from_name("double"))
+			printf("%f",v->f);
+		if (t == get_type_from_name("i32"))
+			printf("%d",v->i);
+		printf("\n");
+    dictionnary_next_element(d);
+  }
+	
 }

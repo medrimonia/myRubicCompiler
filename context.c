@@ -57,7 +57,7 @@ void declare_parameters_to_variables(context_pointer c,
   }
 }
 
-#define IS_GLOBAL(X) (X[0] == '@')
+#define IS_GLOBAL(X) (X[0] == '$')
 
 bool is_declared_variable(context_pointer c, char * name){
   if (IS_GLOBAL(name))
@@ -118,7 +118,7 @@ variable_p get_global_variable(context_pointer c, char * name){
 
 bool is_declared_global_variable(context_pointer c, char * name){
   if (c->parent_context != NULL)
-    return is_declared_global_variable(c, name);
+    return is_declared_global_variable(c->parent_context, name);
   return dictionnary_exists(c->global_variables, name);
 }
 

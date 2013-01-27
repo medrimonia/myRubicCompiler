@@ -3,9 +3,17 @@ DONE - Handle addition of float and int with cast
 DONE - Add recursivity to report
 DONE - Updating links in Makefile
 DONE - Untabify
-- Solving for issue with multiple variable
+- Explain failed : Solving for issue with multiple variable
 - Adding constants
 - Testing globals variables
+	-> In code_generator_affect
+		 -> distinction between affect in the higher context
+		 -> store initial value if higher context
+	-> Add generation of global variables on the top
+		 -> @i = global i32 
+  -> Add field is_global in variable (or store the $ with it)
+		 -> name changing on var print
+- Talk about error handling and error handling tests in report
 - Add tests and void functions
 - Handle arrays?
 - Handle classes?

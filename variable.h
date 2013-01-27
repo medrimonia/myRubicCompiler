@@ -6,6 +6,11 @@
 struct variable{
   linked_list_pointer allowed_types; 
   char * name;
+	bool is_global;
+	union {
+		int i;
+		float f;
+	};
 };
 
 typedef struct variable * variable_p;

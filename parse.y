@@ -32,6 +32,27 @@
 
   int yydebug = 1;
 
+	void set_initial_value(variable_p v, tn_pointer expr){
+		if (expr->type != PRIMARY){
+			fprintf(stderr, "Can't set a variable value with a complex expression\n");
+			exit(EXIT_FAILURE);
+		}
+		primary_p p = (primary_p) expr->content;
+		switch(p->t){
+		case PRIMARY_STRING:
+			fprintf(stderr, "Global string initialisation not handled now\n");
+			exit(EXIT_FAILURE);
+		return;
+		case PRIMARY_DOUBLE:
+			v->f = p->d;
+			break;
+		case PRIMARY_INT:
+			v->i = p->i;
+			break;
+		}
+		// set with an union?
+	}
+
 }
 %code requires{
   #include "tree.h"
@@ -137,10 +158,13 @@ stmt    : if_expr stmts terms END
   $$->content = new_conditional_block($if_expr, $true_bl, $false_bl);
   actual_context = actual_context->parent_context;
 }
-| FOR ID IN expr[from_expr] TO expr[to_expr] DO
+| FOR
+{
+  actual_context = create_context_child(actual_context);
+}
+  ID IN expr[from_expr] TO expr[to_expr] DO
 {
   linked_list_append(string_handler, $ID);
-  actual_context = create_context_child(actual_context);
   variable_p v = declare_variable(actual_context, $ID);
   linked_list_destroy_opt_erase(v->allowed_types, false);
   v->allowed_types = new_type_list_single_from_name("i32");
@@ -150,8 +174,8 @@ stmt    : if_expr stmts terms END
   // ID in expr TO expr, id should maybe declared in an intern context
   type_p int_type = get_type_from_name("i32");
   // TODO this kind of verification should be moved to validation
-  type_p from_type = th_true_type($4->allowed_types);
-  type_p dest_type = th_true_type($4->allowed_types);
+  type_p from_type = th_true_type($from_expr->allowed_types);
+  type_p dest_type = th_true_type($to_expr->allowed_types);
   if (int_type != from_type || int_type != dest_type){
     fprintf(stderr,"invalid type used in for limits");
     exit(EXIT_FAILURE);
@@ -159,6 +183,7 @@ stmt    : if_expr stmts terms END
   $$ = new_tree_node(FOR_NODE);
   $$->context = actual_context;
   $$->content = new_for_block($ID, $from_expr, $to_expr, $code);
+  actual_context = actual_context->parent_context;
 }
 | WHILE expr DO term stmts terms END 
 {
@@ -173,15 +198,36 @@ stmt    : if_expr stmts terms END
     fprintf(stderr, "Can't affect something to a function\n");
     exit(EXIT_FAILURE);
   }
+	bool global_init = false;
+	if (actual_context->parent_context == NULL){
+		// if we're on the higher context, only global variables are allowed
+		// and the attributed value must be a primary
+		const char * var_name = $1->content; 
+		if (var_name[0] != '$'){
+			fprintf(stderr, "Can't affect something to a non global_variable now\n");
+			exit(EXIT_FAILURE);
+		} 
+		if ($3->type != PRIMARY){
+			fprintf(stderr, "Can only affect constant while on global context\n");
+			exit(EXIT_FAILURE);
+		}
+		global_init = true;
+	}
+	variable_p v = NULL;
   if (!is_declared_variable(actual_context,$1->content)){
     //printf("Declaring a variable named '%s'.\n", (char *) $1->content);
-    variable_p v = declare_variable(actual_context,$1->content);
+    v = declare_variable(actual_context,$1->content);
     $$->allowed_types = v->allowed_types;
   }
   else{
+    v = get_variable(actual_context, $1->content);
     // variable won't be added to the dictionnary, access to it will be lost
     // free might be needed
   }
+	if (global_init){
+		v->is_global = true;
+		set_initial_value(v, $3);
+	}
   $$ = new_tree_node(AFFECT);
   $$->context = actual_context;
   $$->left_child = $1;
@@ -433,6 +479,7 @@ int main() {
   yylex_destroy();
   print_constants();
   declare_built_ins();
+	generate_global_allocation(global_context);
   generate_code(global_root);
   destroy_context(global_context);
   destroy_tree(global_root);

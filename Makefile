@@ -1,7 +1,7 @@
-CFLAGS= -std=c99 -g -Wall -Wextra # -g, -O3 , ... par exemple
+CFLAGS= -std=c99 -Wall -Wextra -g # -g, -O3 , ... par exemple
 LDFLAGS=-ll -ly # les bibliotheques necessaires
 CC=gcc
-YACCFLAGS= #--debug --verbose #used to debug grammar issues
+YACCFLAGS= --debug --verbose #used to debug grammar issues
 
 report.pdf: report.dvi
 	dvipdf $< $@

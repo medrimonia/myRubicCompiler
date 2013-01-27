@@ -1,15 +1,14 @@
-
-def f(){
+def f(test)
 		test = 6;
 		for tmp in 0 .. 4 do
 				test = test - tmp;
 		end
 		tmp = 3.5;
 		return tmp;
-}
+end
 
 def main()
-		if (f() == 3.5) then
+		if f(2) == 3.5 then
 			 return 0;
 	  end
 		return 1;

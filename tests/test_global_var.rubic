@@ -1,0 +1,16 @@
+$i = 1
+
+def f(test)
+		test = 6;
+		$i = $i + 1;
+		return test;
+end
+
+def main()
+    $i = 1
+		test = f(0);
+		if $i == 2 then
+			 return 0;
+	  end
+		return 1;
+end
