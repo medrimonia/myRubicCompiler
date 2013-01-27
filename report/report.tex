@@ -17,15 +17,14 @@
 \begin{document}
 
 \thispagestyle{empty}
-%\noindent\includegraphics[width=0.25\textwidth]{enseirb-matmeca}
 
 \vspace{\stretch{1}}
 
 \begin{center}
-	\Huge{\textbf{Rapport de projet de Compilation :}}
+	\Huge{\textbf{Rapport de projet de Compilation :\\IF203}}
 \end{center}
 
-\vspace{\stretch{2}}
+\vspace{\stretch{1}}
 
 \begin{tabular}{r@{:~}l}
 	\textbf{Auteur} & \textit{HOFER Ludovic}\\
@@ -154,7 +153,16 @@ s'assurer de ne pas avoir introduit de bug.\\
 
 Dans un second temps, un affichage du nombre de tests total et du nombre de
 tests ayant compilé a été ajouté afin de déceler plus facilement si des
-problèmes surviennent à la compilation des fichiers rubics.
+problèmes surviennent à la compilation des fichiers rubics.\\
+
+Non seulement le script a évolué\footnote{En validant l'absence de fuites
+mémoire lors de la compilation des différents fichiers rubics par exemple},
+mais le nombre de tests a aussi augmenté, révélant parfois des étourderies
+majeures qui n'étaient pas détectées par les tests précédents car ils ne
+couvraient pas ce cas particulier. L'ajout de tests à donc réellement permis
+d'apporter plus de fiabilité au compilateur\footnote{Même s'il serait encore
+nécessaire d'établir de nombreux tests supplémentaires afin de garantir un
+meilleur fonctionnement}
 
 \section{Les conteneurs}
 
@@ -409,6 +417,18 @@ programme de tests, cependant, mon test ne donnait pas le résultat escompté.
 Un autre groupe m'a soufflé à ce moment là que le problème disparaissait
 purement et simplement si l'on se servait des {\em double} à la place des
 {\em floats}, j'ai donc essayé et approuvé cette solution.
+
+\subsection{La prise en charge de la récursivité}
+Si dans un premier temps, prendre en charge la récursivité n'a pas été
+particulièrement complexe pour moi, c'est avant tout le fait de maintenir son
+fonctionnement tout au long de l'évolution du programme qui a été difficile.
+Peu à peu, j'ai du faire apparaître à plusieurs endroits une gestion de cas
+particulier pour la récursivité. À titre d'exemple, je peux citer la gestion
+du type d'un noeud d'appel de fonction. Hors récursivité, le type de ces
+noeuds est défini par les types de retour des prototypes acceptés, mais comme 
+dans un cas de récursivité, le type de ce noeud devient équivalent au type de
+retour de la fonction en train d'être examinée, le type de retour du prototype
+n'étant pas encore défini.
 
 \subsection{La gestion des classes}
 N'ayant malheureusement pas réussi à trouver le temps d'implémenter cette

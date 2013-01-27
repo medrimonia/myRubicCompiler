@@ -1,10 +1,11 @@
 DONE - Remove warnings 
-- Handle addition of float and int with cast
+DONE - Handle addition of float and int with cast
+DONE - Add recursivity to report
 - Updating links in Makefile
+- Untabify
 - Solving for issue with multiple variable
 - Adding constants
 - Testing globals variables
-- Add recursivity to report
 - Add tests and void functions
 - Handle arrays?
 - Handle classes?
