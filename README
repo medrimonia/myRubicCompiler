@@ -5,5 +5,5 @@ make rubic
 
 # How to run tests :
 ./run_tests.sh
-(If everything work as intended, 35 tests over 36 must works and without any
- memory leak issue)
+(If everything work as intended, 37 tests over 38 must compile and work as 
+ intended and without any memory leak issue)
