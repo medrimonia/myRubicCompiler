@@ -137,14 +137,29 @@ void update_type_call(tn_pointer node){
 	if (call->valid_prototypes != NULL)
 		linked_list_destroy_opt_erase(call->valid_prototypes, false);		
 	call->valid_prototypes = matching_proto;
-	linked_list_restart(matching_proto);
-	while(true){
-		prototype_p p = (prototype_p)linked_list_get(matching_proto);
-		type_list_add(node->allowed_types,
-									p->return_type);
-		if (linked_list_end(matching_proto))
-			break;
-		linked_list_next(matching_proto);
+	// For recursion, prototype hasn't received return_type yet
+	if (valid_recursion){
+		linked_list_restart(matching);
+		while(true){
+			function_p f = (function_p)linked_list_get(matching);
+			type_list_add_type_list(node->allowed_types,
+															f->possible_return_types);
+			if (linked_list_end(matching))
+				break;
+			linked_list_next(matching);
+		}
+	}
+	// For usual cases, return_type of prototypes is known
+	else{
+		linked_list_restart(matching_proto);
+		while(true){
+			prototype_p p = (prototype_p)linked_list_get(matching_proto);
+			type_list_add(node->allowed_types,
+										p->return_type);
+			if (linked_list_end(matching_proto))
+				break;
+			linked_list_next(matching_proto);
+		}
 	}
 	linked_list_destroy_opt_erase(matching, false);
 	linked_list_destroy_opt_erase(args, false);
