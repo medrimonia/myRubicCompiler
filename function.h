@@ -2,30 +2,30 @@
 #define FUNCTION_H
 
 #include "context.h"
-#include "tree.h"
 #include "linked_list.h"
+#include "tree.h"
 
 /* TODO hash function and equals function in order to be able to use multiple
  * functions sharing the same name but with different parameters
  */
 struct function{
-	context_pointer inner_context;
-	char * name;
-	/* linked list of char * containing the parameter name */
-	linked_list_pointer parameters;
-	tn_pointer root;
-	linked_list_pointer possible_return_types;
-	/* linked list of prototypes */
-	linked_list_pointer valid_prototypes;
+  context_pointer inner_context;
+  char * name;
+  /* linked list of char * containing the parameter name */
+  linked_list_pointer parameters;
+  tn_pointer root;
+  linked_list_pointer possible_return_types;
+  /* linked list of prototypes */
+  linked_list_pointer valid_prototypes;
 };
 
 typedef struct function * function_p;
 
 struct function_call{
-	function_p f_called;
-	linked_list_pointer parameters;
-	/* all the valid prototypes */
-	linked_list_pointer valid_prototypes;
+  function_p f_called;
+  linked_list_pointer parameters;
+  /* all the valid prototypes */
+  linked_list_pointer valid_prototypes;
 };
 
 typedef struct function_call * function_call_p;

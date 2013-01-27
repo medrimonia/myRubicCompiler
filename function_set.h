@@ -39,9 +39,9 @@ function_p function_set_add(function_set_p fs, prototype_p p, function_p f);
  * - The function of the entry found will be erased.
  */
 void function_set_remove(function_set_p fs,
-												 prototype_p key,
-												 bool free_prototype,
-												 bool free_function);
+                         prototype_p key,
+                         bool free_prototype,
+                         bool free_function);
 
 /* Return the number of function names contained in the function_set.
  * Different prototypes are counted as only one function if they share the
@@ -61,13 +61,13 @@ bool function_set_is_ended_iteration(function_set_p fs);
 
 /* l is a list of type_list corresponding to the parameters */
 linked_list_pointer function_set_matching_functions(function_set_p fs,
-																										const char * name,
-																										linked_list_pointer l);
+                                                    const char * name,
+                                                    linked_list_pointer l);
 
 /* l is a list of type_list corresponding to the parameters */
 linked_list_pointer function_set_matching_prototypes(function_set_p fs,
-																										 const char * name,
-																										 linked_list_pointer l);
+                                                     const char * name,
+                                                     linked_list_pointer l);
 
 void function_set_destroy(function_set_p fs);
 

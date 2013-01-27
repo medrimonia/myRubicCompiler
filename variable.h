@@ -4,8 +4,8 @@
 #include "linked_list.h"
 
 struct variable{
-	linked_list_pointer allowed_types; 
-	char * name;
+  linked_list_pointer allowed_types; 
+  char * name;
 };
 
 typedef struct variable * variable_p;

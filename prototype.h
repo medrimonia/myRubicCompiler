@@ -7,16 +7,16 @@
 #include "type.h"
 
 struct prototype{
-	const char * name;
-	// params is a list of variables, the position of each type matters
-	linked_list_pointer params;
-	type_p return_type;
+  const char * name;
+  // params is a list of variables, the position of each type matters
+  linked_list_pointer params;
+  type_p return_type;
 };
 
 typedef struct prototype * prototype_p;
 
 prototype_p new_prototype(const char * name,
-													linked_list_pointer params);
+                          linked_list_pointer params);
 
 // key must be a prototype_p
 int prototype_hash_function(const void * key);

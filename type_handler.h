@@ -27,33 +27,33 @@ void type_list_add(linked_list_pointer tl, type_p t);
 
 /* add the types of the src list to the dst list if necessary */
 void type_list_add_type_list(linked_list_pointer dst,
-														 linked_list_pointer src);
+                             linked_list_pointer src);
 
 /* Remove of src the types which can't be found in cmp */
 linked_list_pointer remove_types_not_shared(linked_list_pointer src,
-																						linked_list_pointer cmp);
+                                            linked_list_pointer cmp);
 
 /* Return a list of the types shared by l1 and l2 */
 linked_list_pointer types_shared(linked_list_pointer l1,
-																 linked_list_pointer l2);
+                                 linked_list_pointer l2);
 
 /* handle an arithmetic operation between two types list and return the type
  * list corresponding to the allowed types for the result
  */
 linked_list_pointer th_arithmetic(linked_list_pointer l1,
-																linked_list_pointer l2);
+                                linked_list_pointer l2);
 
 /* handle a comparison between two types list and return the type list
  * corresponding to the allowed types for the result
  */
 linked_list_pointer th_comparison(linked_list_pointer l1,
-																	linked_list_pointer l2);
+                                  linked_list_pointer l2);
 
 /* handle a logical operation between two types list and return the type list
  * corresponding to the allowed types for the result
  */
 linked_list_pointer th_logical(linked_list_pointer l1,
-															 linked_list_pointer l2);
+                               linked_list_pointer l2);
 
 /* Return NULL if the list doesn't contain exactly one type
  * and the only type if the list contains only one element

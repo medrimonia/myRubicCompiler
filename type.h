@@ -13,9 +13,9 @@ extern linked_list_pointer logical_types;
 void initialize_types();
 
 type_p add_new_type(const char * name,
-										bool additionable,
-										bool comparable,
-										bool logical);
+                    bool additionable,
+                    bool comparable,
+                    bool logical);
 
 const char * type_get_name(type_p t);
 

@@ -15,12 +15,12 @@ typedef int (*hash_function)(const void *);
 typedef bool (*equals_function)(const void *, const void *);
 
 struct hashmap{
-	hash_function h_f;
-	equals_function e_f;
-	int nb_elements;
-	int map_size;
-	linked_list_pointer * map;
-	int actual_indice;
+  hash_function h_f;
+  equals_function e_f;
+  int nb_elements;
+  int map_size;
+  linked_list_pointer * map;
+  int actual_indice;
 };
 
 
@@ -56,9 +56,9 @@ void * hashmap_add(hashmap_pointer hm, const void * key, void * value);
  *   (If it contains pointers of pointers, better use your own free)
  */
 void hashmap_remove(hashmap_pointer hm,
-										const void * key,
-										bool free_key,
-										bool free_data);
+                    const void * key,
+                    bool free_key,
+                    bool free_data);
 
 /* Return the number of elements contained in the hashmap. */
 int hashmap_size(hashmap_pointer hm);
@@ -72,8 +72,8 @@ int hashmap_size(hashmap_pointer hm);
  *   (If it contains pointers of pointers, better use your own free)
  */
 void hashmap_destroy(hashmap_pointer hm,
-										 bool free_keys,
-										 bool free_data);
+                     bool free_keys,
+                     bool free_data);
 
 
 void hashmap_start_iteration(hashmap_pointer hm);

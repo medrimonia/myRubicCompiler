@@ -136,21 +136,33 @@ EXECUTABLES=              \
 
 ### .h DEPENDENCIES
 
-type_handler.h : type.h linked_list.h
+code_generator.h : tree.h
 
-type.h : linked_list.h
+context.h : dictionnary.h variable.h
 
-tree.h : linked_list.h
+dictionnary.h : hashmap.h
+
+function.h : context.h linked_list.h tree.h
+
+function_set.h : dictionnary.h function.h prototype.h
+
+hashmap.h : linked_list.h 
 
 possible_types_solver.h : doubly_linked_list.h function.h
 
-validation.h : function.h possible_types_solver.h linked_list.h
+prototype.h : linked_list.h type.h
 
-prototype.h : linked_list.h
+tree.h : context.h linked_list.h
 
-function_set.h : prototype.h dictionnary.h function.h
+type.h : linked_list.h
 
-type_updater.h : linked_list.h function.h prototype.h
+type_handler.h : linked_list.h type.h
+
+type_updater.h : function.h linked_list.h prototype.h
+
+validation.h : function.h linked_list.h possible_types_solver.h
+
+variable.h : linked_list.h
 
 ### CLEANING PART ###
 

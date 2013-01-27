@@ -8,8 +8,8 @@
 
 #include <stdbool.h>
 
-#include "function.h"
 #include "doubly_linked_list.h"
+#include "function.h"
 
 typedef doubly_linked_list_pointer type_solver_p;
 

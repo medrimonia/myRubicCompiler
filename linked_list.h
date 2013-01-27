@@ -4,14 +4,14 @@
 #include <stdbool.h>
 
 struct linked_list_node{
-	struct linked_list_node * next;
-	void * data;
+  struct linked_list_node * next;
+  void * data;
 };
 
 struct linked_list{
-	struct linked_list_node * first;
-	struct linked_list_node * actual;
-	int size;
+  struct linked_list_node * first;
+  struct linked_list_node * actual;
+  int size;
 };
 
 

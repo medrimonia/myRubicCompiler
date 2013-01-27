@@ -4,17 +4,17 @@
 #include <stdbool.h>
 
 struct doubly_linked_list_node{
-	struct doubly_linked_list_node * previous;
-	struct doubly_linked_list_node * next;
-	void * data;
+  struct doubly_linked_list_node * previous;
+  struct doubly_linked_list_node * next;
+  void * data;
 };
 
 struct doubly_linked_list{
-	struct doubly_linked_list_node * actual;
-	struct doubly_linked_list_node * first;
-	struct doubly_linked_list_node * last;
-	struct doubly_linked_list_node * sentinel;
-	int size;
+  struct doubly_linked_list_node * actual;
+  struct doubly_linked_list_node * first;
+  struct doubly_linked_list_node * last;
+  struct doubly_linked_list_node * sentinel;
+  int size;
 };
 
 
@@ -24,7 +24,7 @@ typedef struct doubly_linked_list * doubly_linked_list_pointer;
 doubly_linked_list_pointer new_doubly_linked_list();
 
 /* Insert the specified element after the actual value and then jump on the
-	 new value */
+   new value */
 void doubly_linked_list_append(doubly_linked_list_pointer l, void * element);
 
 /* Insert the specified element before the actual value */
@@ -32,15 +32,15 @@ void doubly_linked_list_insert(doubly_linked_list_pointer l, void * element);
 
 /* Insert the specified element after the actual value */
 void doubly_linked_list_insert_after(doubly_linked_list_pointer l,
-																		 void * element);
+                                     void * element);
 
 /* Insert the specified element at the head of the list */
 void doubly_linked_list_insert_in_head(doubly_linked_list_pointer l,
-																			 void * element);
+                                       void * element);
 
 /* Insert the specified element at the queue of the list */
 void doubly_linked_list_insert_in_queue(doubly_linked_list_pointer l,
-																				void * element);
+                                        void * element);
 
 /* Switching to the previous element of the list */
 void doubly_linked_list_previous(doubly_linked_list_pointer l);
@@ -65,7 +65,7 @@ void doubly_linked_list_last(doubly_linked_list_pointer l);
 
 /* Remove the node currently pointed and optionnaly remove the data */
 void doubly_linked_list_remove_opt_erase(doubly_linked_list_pointer l,
-																				 bool erase_data);
+                                         bool erase_data);
 
 /* Remove the node currently pointed and remove the data */
 void doubly_linked_list_remove(doubly_linked_list_pointer l);
@@ -78,7 +78,7 @@ int doubly_linked_list_is_empty(doubly_linked_list_pointer l);
 
 /* Destroy the specified list and optionnaly free the data contained */
 void doubly_linked_list_destroy_opt_erase(doubly_linked_list_pointer l,
-																					bool free_data);
+                                          bool free_data);
 
 /* Destroy the specified list */
 void doubly_linked_list_destroy(doubly_linked_list_pointer l);

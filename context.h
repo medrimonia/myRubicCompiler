@@ -18,16 +18,16 @@
 typedef struct context * context_pointer;
 
 struct context{
-	// The global context will contain a father_context = NULL
-	context_pointer parent_context;
-	dictionnary_pointer global_variables;
-	dictionnary_pointer local_variables;
-	dictionnary_pointer instance_variables;
-	dictionnary_pointer constants;
-	dictionnary_pointer types;
-	dictionnary_pointer classes;
-	dictionnary_pointer functions;
-	linked_list_pointer child_contexts;
+  // The global context will contain a father_context = NULL
+  context_pointer parent_context;
+  dictionnary_pointer global_variables;
+  dictionnary_pointer local_variables;
+  dictionnary_pointer instance_variables;
+  dictionnary_pointer constants;
+  dictionnary_pointer types;
+  dictionnary_pointer classes;
+  dictionnary_pointer functions;
+  linked_list_pointer child_contexts;
 };
 
 typedef struct context * context_pointer;
@@ -38,15 +38,15 @@ context_pointer create_context_child(context_pointer parent);
 
 /* the list must be a list of char * with the name of the parameters */
 void declare_parameters_to_variables(context_pointer c,
-																		 linked_list_pointer l);
+                                     linked_list_pointer l);
 
 bool is_declared_variable(context_pointer c, char * name);
 
 variable_p declare_variable(context_pointer c, char * name);
 
 variable_p declare_typed_variable(context_pointer c,
-																	char * name,
-																	char * type_name);
+                                  char * name,
+                                  char * type_name);
 
 variable_p get_variable(context_pointer c, char * name);
 

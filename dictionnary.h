@@ -42,8 +42,8 @@ bool dictionnary_exists(dictionnary_pointer d, const char * key);
  * If everything worked properly, returns the inserted value.
  */
 void * dictionnary_add(dictionnary_pointer hm,
-											 const char * key,
-											 void * value);
+                       const char * key,
+                       void * value);
 
 /* Remove the entry with the specified key.
  * If no entry with the specified key can be found, nothing is done
@@ -55,9 +55,9 @@ void * dictionnary_add(dictionnary_pointer hm,
  *   (If it contains pointers of pointers, better use your own free)
  */
 void dictionnary_remove(dictionnary_pointer d,
-												const char * key,
-												bool free_key,
-												bool free_data);
+                        const char * key,
+                        bool free_key,
+                        bool free_data);
 
 /* Return the number of elements contained in the hashmap. */
 int dictionnary_size(dictionnary_pointer d);
@@ -71,8 +71,8 @@ int dictionnary_size(dictionnary_pointer d);
  *   (If it contains pointers of pointers, better use your own free)
  */
 void dictionnary_destroy(dictionnary_pointer d,
-												 bool free_keys,
-												 bool free_data);
+                         bool free_keys,
+                         bool free_data);
 
 
 
