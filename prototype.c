@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "prototype.h"
+
 #include "dictionnary.h"//for string_hash_function
 #include "type.h"
 #include "type_handler.h"

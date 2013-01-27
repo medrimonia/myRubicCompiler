@@ -1,8 +1,9 @@
 #include <stdlib.h>
 
 #include "tree.h"
-#include "type_handler.h"
+
 #include "function.h"
+#include "type_handler.h"
 
 
 tn_pointer new_tree_node(node_type t){

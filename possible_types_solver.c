@@ -1,7 +1,9 @@
+#include <stdio.h>
+
 #include "possible_types_solver.h"
+
 #include "type.h"
 #include "type_handler.h"
-#include <stdio.h>
 
 type_solver_p new_type_solver(function_p f){
 	type_solver_p new = new_doubly_linked_list();

@@ -39,12 +39,6 @@ y.tab.o: y.tab.c y.tab.h context.h tree.h code_generator.h validation.h
 	$(CC) $(CFLAGS) -c $<
 lex.yy.o: lex.yy.c
 	$(CC) $(CFLAGS) -c $<
-rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
-			 code_generator.o tree.o function.o type_handler.o type.o variable.o \
-			 constant_string_handler.o doubly_linked_list.o \
-			 possible_types_solver.o validation.o prototype.o function_set.o \
-			 type_updater.o
-	$(CC) -o $@ $^ $(LDFLAGS)
 
 # GENERIC RULES
 
@@ -56,66 +50,72 @@ rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o \
 
 %.ll: %.rubic rubic
 	./rubic <$< >$@
-
-# SPECIFIC RULES
-
 %.test : %.s
 	$(CC) -o $@ $<
 
-function.o : code_generator.h dictionnary.h function.h function_set.h \
-					   prototype.h type_handler.h
+# EXECUTABLE RULES
+rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o    \
+			 code_generator.o tree.o function.o type_handler.o type.o variable.o \
+			 constant_string_handler.o doubly_linked_list.o                      \
+			 possible_types_solver.o validation.o prototype.o function_set.o     \
+			 type_updater.o
+	$(CC) -o $@ $^ $(LDFLAGS)
 
-tree.o : tree.h type_handler.h
+test_doubly_linked_list: doubly_linked_list.o test_doubly_linked_list.o
+	$(CC) -o $@ $^
 
-context.o : dictionnary.h
+test_hashmap: hashmap.o test_hashmap.o linked_list.o
+	$(CC) -o $@ $^
 
-context.o : context.h
+test_linked_list: linked_list.o test_linked_list.o
+	$(CC) -o $@ $^
+
+
+# OBJECT RULES
 
 code_generator.o : code_generator.h constant_string_handler.h function.h \
 									 prototype.h type.h type_handler.h type_updater.h \
 									 validation.h variable.h
 
+constant_string_handler.o : constant_string_handler.h
+
+context.o : context.h variable.h type_handler.h
+
 dictionnary.o : dictionnary.h
-
-hashmap.o: hashmap.h linked_list.h
-
-test_hashmap.o: hashmap.h
-
-test_hashmap: hashmap.o test_hashmap.o linked_list.o
-	$(CC) -o $@ $^
-
-linked_list.o: linked_list.h
-
-test_linked_list.o: linked_list.h
 
 doubly_linked_list.o: doubly_linked_list.h
 
-test_doubly_linked_list.o: doubly_linked_list.h
-
-possible_types_solver.o: possible_types_solver.h type.h type_handler.h
-
-type.o : type.h
-
-variable.o : variable.h
-
-type_handler.o : type_handler.h
-
-constant_string_handler.o : constant_string_handler.h
-
-validation.o : validation.h type_handler.h type.h type_updater.h \
-							 prototype.h function_set.h
-
-prototype.o : prototype.h dictionnary.h type.h type_handler.h variable.h
+function.o : function.h code_generator.h dictionnary.h function_set.h \
+					   prototype.h type_handler.h
 
 function_set.o : function_set.h
 
-type_updater.o : type_updater.h function.h linked_list.h function_set.h
+hashmap.o: hashmap.h
 
-test_linked_list: linked_list.o test_linked_list.o
-	$(CC) -o $@ $^
+linked_list.o: linked_list.h
 
-test_doubly_linked_list: doubly_linked_list.o test_doubly_linked_list.o
-	$(CC) -o $@ $^
+possible_types_solver.o: possible_types_solver.h type.h type_handler.h
+
+prototype.o : prototype.h dictionnary.h type.h type_handler.h variable.h
+
+test_doubly_linked_list.o: doubly_linked_list.h
+
+test_hashmap.o: hashmap.h
+
+test_linked_list.o: linked_list.h
+
+tree.o : tree.h function.h type_handler.h
+
+type.o : type.h
+
+type_handler.o : type_handler.h
+
+type_updater.o : type_updater.h function.h function_set.h linked_list.h
+
+validation.o : validation.h function_set.h prototype.h type.h type_handler.h \
+							 type_updater.h
+
+variable.o : variable.h
 
 RUBICS_FILES=$(wildcard tests/*.rubic)
 RUBICS_OBJS=$(RUBICS_FILES:.rubic=.ll)
