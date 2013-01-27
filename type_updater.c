@@ -99,7 +99,7 @@ void update_type_call(tn_pointer node){
 		while(true){
 			tn_pointer arg = linked_list_get(call->parameters);
 			update_type(arg);
-			linked_list_insert(args, arg->allowed_types);
+			linked_list_append(args, arg->allowed_types);
 			if (linked_list_end(call->parameters))
 				break;
 			linked_list_next(call->parameters);

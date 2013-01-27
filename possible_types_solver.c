@@ -74,16 +74,16 @@ linked_list_pointer get_combination(type_solver_p ts){
 	// names with associated type
 	if (doubly_linked_list_size(ts) == 0)
 		return combination;
-	doubly_linked_list_last(ts);
+	doubly_linked_list_first(ts);
 	while(true){
 		variable_p v = (variable_p)doubly_linked_list_get(ts);
 		type_p type = linked_list_get(v->allowed_types);
-		linked_list_insert(combination,
+		linked_list_append(combination,
 											 new_variable(new_type_list_single(type),
 																		v->name));
-		if (doubly_linked_list_is_first(ts))
+		if (doubly_linked_list_is_last(ts))
 			break;
-		doubly_linked_list_previous(ts);
+		doubly_linked_list_next(ts);
 	}
 	return combination;	
 }

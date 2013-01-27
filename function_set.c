@@ -85,6 +85,7 @@ bool function_set_is_ended_iteration(function_set_p fs){
 }
 
 // if key = false, then values are added to the list
+// key is used to know if we want values or keys
 linked_list_pointer function_set_matching(function_set_p fs,
 																					const char * name,
 																					linked_list_pointer l,

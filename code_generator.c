@@ -343,8 +343,11 @@ void generate_code_call(tn_pointer node){
 			linked_list_next(fc->parameters);
 	}
 	actual_register++;
+	// there should be one and only one prototype matching
+	linked_list_restart(fc->valid_prototypes);
+	prototype_p p = (prototype_p)linked_list_get(fc->valid_prototypes);
 	
-	type_p t = th_true_type(fc->f_called->possible_return_types);
+	type_p t = p->return_type;
 	if (t == NULL){
 		fprintf(stderr, "Calling a function with an undecidable type\n");
 		exit(EXIT_FAILURE);
@@ -352,9 +355,7 @@ void generate_code_call(tn_pointer node){
 	printf("%%%d = call %s @",
 				 actual_register,
 				 type_get_name(t));
-	// there should be one and only one prototype matching
-	linked_list_restart(fc->valid_prototypes);
-	prototype_p p = (prototype_p)linked_list_get(fc->valid_prototypes);
+	// built_in have no prefix
 	if (!is_built_in(fc->f_called))
 		print_prototype_prefix(p);
 	printf("%s(",
@@ -362,19 +363,24 @@ void generate_code_call(tn_pointer node){
 	node->reg_number = actual_register;
 	//using parameters results
 	linked_list_restart(fc->parameters);
+	linked_list_restart(p->params);
 	if (!linked_list_is_empty(fc->parameters))
 		while(true){
 			tn_pointer param = linked_list_get(fc->parameters);
+			variable_p v = linked_list_get(p->params);
 	
-			type_p t = th_true_type(fc->f_called->possible_return_types);
+			type_p t = th_true_type(v->allowed_types);
 			if (t == NULL){
 				fprintf(stderr, "A parameter of function have undecidable type\n");
 				exit(EXIT_FAILURE);
 			}
-			printf("%s %%%d", type_get_name(t), param->reg_number);
+			printf("%s %%%d",
+						 type_get_name(t),
+						 param->reg_number);
 			if (linked_list_end(fc->parameters))
 				break;
 			linked_list_next(fc->parameters);
+			linked_list_next(p->params);
 			printf(", ");
 	}
 	printf(")\n");
