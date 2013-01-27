@@ -12,7 +12,7 @@
 #include "validation.h"
 #include "variable.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 int actual_register = 0;
 int actual_label = 0;

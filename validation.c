@@ -8,7 +8,7 @@
 #include "type_handler.h"
 #include "type_updater.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 /* return true if the node is valid with current context, false otherwise */
 bool validate_node(tn_pointer node);

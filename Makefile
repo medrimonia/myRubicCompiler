@@ -1,25 +1,26 @@
 CFLAGS= -std=c99 -Wall -Wextra -g # -g, -O3 , ... par exemple
 LDFLAGS=-ll -ly # les bibliotheques necessaires
 CC=gcc
-YACCFLAGS= --debug --verbose #used to debug grammar issues
+YACCFLAGS= #--debug --verbose #used to debug grammar issues
 
-report.pdf: report.dvi
-	dvipdf $< $@
+report.pdf: report/report.tex
+	cd report && make report.pdf
+	cp report/report.pdf report.pdf
 
-report.dvi : report/report.tex
-	latex $< -o $@
 
 # CREATING ARCHIVE
 
-AR_SOURCE = *.c               \
-            *.h               \
-            scanner.l         \
-            parse.y           \
-            report/report.tex \
-            report.pdf        \
-            tests/*.rubic     \
-            Makefile          \
-            README            \
+AR_SOURCE = *.c                       \
+            *.h                       \
+            scanner.l                 \
+            parse.y                   \
+            report/report.tex         \
+            report/Makefile           \
+            report/ENSEIRB-MATMECA.ps \
+            report.pdf                \
+            tests/*.rubic             \
+            Makefile                  \
+            README                    \
             run_tests.sh
 
 AR = tar
@@ -169,9 +170,11 @@ variable.h : linked_list.h
 .PHONY: clean mrproper
 
 clean:
-	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS)      \
+	@echo "cleaning temporary files"
+	@rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS)     \
     $(RUBICS_TESTS_OUTPUT) $(RUBICS_TESTS_ERROR) report.aux report.dvi \
     report.log hofer.tar.gz
 
 mrproper: clean
-	rm -rf $(EXECUTABLES) *~ report.pdf
+	@echo "MrProper working"
+	@rm -rf $(EXECUTABLES) *~ report.pdf

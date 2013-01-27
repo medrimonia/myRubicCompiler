@@ -9,8 +9,8 @@
 \usepackage{lmodern}
 \usepackage{color}
 \usepackage{listings}
-\lstset{language=SQL, frame=shadowbox, rulesepcolor=\color{white}}
-
+\lstset{language=Ruby, frame=shadowbox, rulesepcolor=\color{white}}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
 \geometry{margin=2cm}
 
 
@@ -18,13 +18,20 @@
 
 \thispagestyle{empty}
 
+\vspace{\stretch{2}}
+
+
+\hfill  \includegraphics [width=40mm]{ENSEIRB-MATMECA.ps}
+
 \vspace{\stretch{1}}
 
 \begin{center}
-	\Huge{\textbf{Rapport de projet de Compilation :\\IF203}}
+	\Huge{\textbf{Rapport de projet de Compilation :\\
+      \vspace{1cm}
+      IF203}}
 \end{center}
 
-\vspace{\stretch{1}}
+\vspace{\stretch{2}}
 
 \begin{tabular}{r@{:~}l}
 	\textbf{Auteur} & \textit{HOFER Ludovic}\\
@@ -44,7 +51,7 @@
 Ce travail s'inscrit dans le cadre du cours de compilation dispensé à
 l'enseirb-matmeca. Le but qui nous a été donné est de réaliser un compilateur
 capable de transformer un programme écrit en rubic\footnote{Une version
-simplifiée du langage Ruby} en une version du programme respectant les
+simplifiée du langage Ruby.} en une version du programme respectant les
 spécifications du langage llvm\footnote{http://llvm.org/}.\\
 
 Afin de nous faciliter le travail, l'analyse lexicale et syntaxique étaient
@@ -57,14 +64,14 @@ compilateur pour un langage simplifié, plusieurs difficultés techniques
 
 \begin{itemize}
 \item Résolution du types des variables\footnote{Le type de celles-ci
-  n'étant pas fourni, il est nécessaire de le déterminer à la compilation}
+  n'étant pas fourni, il est nécessaire de le déterminer à la compilation.}
 \item Gestion de la surcharge\footnote{Il est possible d'écrire plusieurs
-  fonctions ayant le même nom, si elles diffèrent par leurs paramètres}
+  fonctions ayant le même nom, si elles diffèrent par leurs paramètres.}
 \item Gestion des classes\footnote{rubic étant un langage objet,
-  il doit être possible de déclarer des classes et de les utiliser}
+  il doit être possible de déclarer des classes et de les utiliser.}
 \item Génération de fonction ambigues\footnote{Lorsque les types de certains
   paramètres d'une fonction ne peuvent pas être résolus directement, il faut
-  générer le code de plusieurs fonctions pour une seule définition}
+  générer le code de plusieurs fonctions pour une seule définition.}
 \end{itemize}
 
 Certaines de ces tâches étant d'une complexité non négligeable, il est
@@ -72,7 +79,7 @@ intéressant de noter comment elles ont été traitées ainsi que les raisons
 de certains choix d'implémentation.\\
 
 Au vu de l'ampleur de la tâche\footnote{Bien que ce soit le projet du premier
-semestre sur lequel j'aie le plus travaillé, PFA excepté, je suis loin de
+semestre sur lequel j'ai le plus travaillé, PFA excepté, je suis loin de
 remplir de façon satisfaisante les objectifs qui ont été donnés.}, il m'a
 semblé évident qu'un minimum d'organisation était nécessaire et que le choix
 des méthodes de développement utilisées était primordial. La méthode utilisée
@@ -82,7 +89,7 @@ Ayant déjà fait un travail\footnote{http://code.google.com/p/my-c-compiler/}
 un peu similaire lors de ma scolarité à l'université de Bordeaux 1
 \footnote{Le projet mentionné ici ne comportait pas les mêmes difficultés,
 puisque le langage d'entrée était typé et ne permettait pas la surcharge.},
-j'ai décidé de rester en c plutôt que de choisir le java\footnote{C'est le
+j'ai décidé de rester en{\em C}plutôt que de choisir le java\footnote{C'est le
 choix que j'avais pour mon projet précédent, y utilisant jflex et cup.}. Les
 principales difficultés engendrées par ce changement étaient les suivantes :
 
@@ -96,13 +103,12 @@ java.}
 
 \section{Organisation du travail}
 
-Sachant pertinemment que j'avais peu de chance d'arriver à remplir toutes les
-exigences du projet en étant seul dans mon groupe et qu'il m'était difficile
-d'appréhender directement tout le contenu du projet, j'ai préféré m'orienter
-vers une approche de construction progressive du projet en ajoutant une à une
-des fonctionnalité plutôt que de concevoir le projet en entier puis de passer
-à une phase d'implémentation et de me retrouver coincé par des problèmes que
-je n'avais pas envisagé.
+Je savais pertinemment que j'avais peu de chance d'arriver à remplir toutes les
+exigences du projet en étant seul dans mon groupe, de plus il m'était difficile
+d'appréhender directement tout le contenu du projet. J'ai donc préféré
+m'orienter vers une approche de construction progressive du projet plutôt que de
+finaliser la conception avant de passer à l'implémentation. J'évitais ainsi le
+risque de me retrouver bloqué par des problèmes que je n'avais pas envisagés.
 
 \subsection{Développement brique par brique}
 Le principe de l'ordre de développement choisi est assez simple, il consiste
@@ -156,13 +162,13 @@ tests ayant compilé a été ajouté afin de déceler plus facilement si des
 problèmes surviennent à la compilation des fichiers rubics.\\
 
 Non seulement le script a évolué\footnote{En validant l'absence de fuites
-mémoire lors de la compilation des différents fichiers rubics par exemple},
+mémoire lors de la compilation des différents fichiers rubics par exemple.},
 mais le nombre de tests a aussi augmenté, révélant parfois des étourderies
 majeures qui n'étaient pas détectées par les tests précédents car ils ne
 couvraient pas ce cas particulier. L'ajout de tests à donc réellement permis
 d'apporter plus de fiabilité au compilateur\footnote{Même s'il serait encore
 nécessaire d'établir de nombreux tests supplémentaires afin de garantir un
-meilleur fonctionnement}
+meilleur fonctionnement.}.
 
 \section{Les conteneurs}
 
@@ -170,10 +176,10 @@ meilleur fonctionnement}
 ne sont pas de taille fixée, il semble évident qu'utiliser uniquement des
 tableaux ne sera pas adapté. Les conteneurs génériques étant difficiles à
 trouver en c, j'ai donc implémenté les miens en essayant de les rendre
-réutilisable afin de pouvoir m'en servir à nouveau pour d'autres projets.
+réutilisables afin de pouvoir m'en servir à nouveau pour d'autres projets.
 
 \subsection{Hashmap}
-Ce choix s'est imposé comme étant indispensable pour la gestion du stockage
+Ce choix s'est imposé comme indispensable pour la gestion du stockage
 de différentes données telles que les fonctions ou les variables. Il est
 beaucoup plus aisé d'utiliser une structure permettant un accès et une
 insertion rapide.\\
@@ -182,8 +188,8 @@ Dans une première approche, je souhaitais effacer automatiquement les clés et
 les objets contenus, mais je me suis rapidement rendu compte qu'il valait
 souvent mieux laisser l'utilisateur du conteneur faire ses free.\\
 
-J'ai aussi du ajouter un moyen d'itérer sur ces conteneurs afin d'allouer
-toutes les variables par exemple.\\
+Par exemple, j'ai du ajouter un moyen d'itérer sur ces conteneurs afin d'allouer
+l'espace mémoire nécessaire pour toutes les variables en début de fonction.\\
 
 La possibilité d'ajuster la taille d'une hashmap a été laissée de côté
 pour l'instant, les problèmes de temps d'accès n'étant pas cruciaux dans le
@@ -191,7 +197,7 @@ cadre actuel.
 
 \subsection{Dictionnary}
 Comme de nombreuses Hashmap auraient prit comme clé des chaînes de caractère,
-j'ai préféré créer un conteneur qui simplifie les pointeur renvoyés et
+j'ai préféré créer un conteneur qui simplifie les pointeurs renvoyés et
 qui fournit dans le même temps une fonction de hachage et une fonction
 vérifiant l'égalité de deux chaînes de caractère tout en respectant le
 prototype souhaité par les Hashmap.
@@ -224,19 +230,19 @@ disposer de ces fonctionnalités ou si une liste chaînée n'aurait pas suffit
 pour gérer le polymorphisme.
 
 \section{Les aspects de la compilation}
-Compiler un programme rubic en programme llvm pouvant être perçu comme un
+Compiler un programme rubic en programme llvm peut être perçu comme un
 ensemble de fonctionnalités à implémenter et donc comme un ensemble de
 problèmes. Dans cette optique, je vais expliquer les méthodes utilisées pour
-chacun des sous-problèmes.\\
+résoudre chacun des sous-problèmes.\\
 
 Il est à noter qu'afin de simplifier un maximum les problèmes, j'ai commencé
-par considérer que le seul type accepté était les int, ainsi toutes mes
+par considérer que le seul type accepté était les {\em int}, ainsi toutes mes
 opérations pouvaient être codée plus facilement.
 
 \subsection{Les allocations mémoires}
 Afin d'allouer de la mémoire à toutes les différentes variables qui en
-nécessitaient, j'ai décidé de simpler allouer l'espace à toutes les
-variables au début de chaque fonction, cependant, je n'ai pas vérifié si
+nécessitaient, j'ai décidé de simplement allouer l'espace à toutes les
+variables au début de chaque fonction. Cependant, je n'ai pas vérifié si
 ces espaces mémoires étaient bien libérés à la sortie de chaque fonction.
 
 \subsection{Les fonctions}
@@ -245,7 +251,7 @@ paramètres des simples variables locales, les premiers appartennant à la
 signature tandis que les secondes n'ont qu'une visibilité locale.\\
 
 Traité d'une manière similaire aux variables, les fonctions étaient
-simplement ajoutées à un dictionnaire et pour déterminer si l'appel était
+simplement ajoutées à un dictionnaire. Pour déterminer si l'appel était
 valide, il fallait simplement vérifier si la fonction était présente dans le
 dictionnaire et si les paramètres correspondaient à ce qui était attendu.
 
@@ -254,32 +260,36 @@ L'utilisation de certains {\em built-in} comme {\em puts} nécessitait que les
 fonctions soient déclarées, même si elles n'étaient pas définies. Afin que
 cela reste le plus simple pour l'utilisateur, j'ai simplement ajouté un
 dictionnaire contenant les {\em built-in}, ainsi qu'un autre contenant les
-{\em built-in} utilisé\footnote{Celui-ci étant évidemment initialisé comme
-vide}. Ainsi à chaque fois qu'une utilisation de {\em built-in} était
-détectée, il était assuré que le built-in serait déclaré dans le fichier
+{\em built-in} utilisés\footnote{Celui-ci étant évidemment initialisé comme
+vide.}. Ainsi à chaque fois qu'une utilisation de {\em built-in} était
+détectée, il était assuré que le {\em built-in} serait déclaré dans le fichier
 généré. Cette procédure m'a permit de garantir que si de nouveaux
-{\em built-in} étaient ajouté, il n'y aurait pas un nombre de lignes inutiles
+{\em built-in} étaient ajoutées, il n'y aurait pas un nombre de lignes inutiles
 grandissant au début de chaque fichier généré.
 
 \subsection{Les opérateurs}
-
+La gestion de tous les types d'opérateurs s'est révélée assez simple tant qu'un
+seul type était pris en charge. Lorsque j'ai ajouté d'autres types, il a été
+nécessaire de peaufiner certains détails, mais sans que cet aspect ne pose
+réellement problème à une quelconque étape du projet.
 
 \subsection{Première gestion des types}
 Afin de travailler dans un environnement simplifié, j'ai commencé par
-considérer comme types possibles uniquement les int et les chaînes de
+considérer comme types possibles uniquement les {\em int} et les chaînes de
 caractère, l'ambiguité entre ces deux types étant peu probable. Ainsi,
-j'ajoutai malgré tout la prise en charge de plusieurs types, sans pour autant
-m'heurter à des problèmes plus complexes\footnote{L'ajout de float engendrait
-en effet une obligation de traiter (de manière plus ou moins complète) le cas
-du polymorphisme}.
+j'ajoutais malgré tout la prise en charge de plusieurs types, sans pour autant
+m'heurter à des problèmes plus complexes\footnote{L'ajout des {\em float}
+engendrait en effet une obligation de traiter (de manière plus ou moins complète)
+le cas du polymorphisme.}.
 
 \subsubsection{Des listes de types autorisés}
 Afin de déterminer de quel type est une variable, j'ai pensé qu'il était plus
 simple de commencer par affirmer qu'elle pouvait être de tous les types
 connus, puis de restreindre ces types lorsqu'une contrainte était découverte
 \footnote{Que ce soit sous la forme d'un opérateur, d'un appel à une fonction
-ou n'importe quel autre type de contrainte}. Lorsqu'un nouveau noeud était
-créé, les types qui lui étaient autorisé dépendait donc du type de ses fils.
+ou n'importe quel autre type de contrainte.}. Lorsqu'un nouveau noeud était
+créé, les types qui lui étaient autorisés dépendaient donc des types autorisés de
+ses fils.
 Le nouveau noeud exerçait aussi une contrainte sur les noeuds qui étaient
 directement ses fils, mais pas sur toute sa descendance\footnote{Ceci afin
 d'éviter de faire exploser la complexité. La compilation étant sensé être une
@@ -291,42 +301,42 @@ les contraintes plusieurs fois et d'ainsi affiner le résultat dans des cas
 particuliers un peu litigieux. Cependant, étant donné qu'il est difficile
 de borner le nombre de passages nécessaires, un seul passage était effectué
 au début\footnote{Les changements seront plus détaillés lors de la phase
-gestion du polymorphisme}. Le choix pris à ce moment était de déclencher une
-erreur de compilation lorsque le type des paramètres d'une fonction n'étaient
-pas déterminés après le premier passage.
+gestion du polymorphisme.}. Le choix pris à ce moment était de déclencher une
+erreur de compilation lorsque le type des paramètres d'une fonction n'était
+pas déterminé après le premier passage.
 
 \subsubsection{Choix du type lors de la génération de code}
 Lors de la passe sur l'arbre servant à effectuer la génération de code,
 il m'était nécessaire de décider quel type allait être utilisé pour le noeud,
 étant donné que celui-ci déterminait le nom de l'opération à appliquer
-\footnote{add, fadd ou icmp, fcmp etc...}. Pour ceci, j'ai décidé d'utiliser
+\footnote{add, fadd ou icmp, fcmp etc...}. Pour cela, j'ai décidé d'utiliser
 une logique extrêment simple, s'il restait un seul type alloué, c'est celui
 qui était utilisé et dans le cas contraire, il y avait une erreur de
 compilation\footnote{Le type de la variable étant ambigu ou impossible
-à définir}.
+à définir.}.
 
 \subsection{Les conditionnelles}
 Afin d'implémenter les structures de code conditionnelles\footnote{blocs if
-et blocs if/else}, il a été évidemment nécessaire de supporter les booléens,
+et blocs if/else.}, il a été évidemment nécessaire de supporter les booléens,
 ce qui s'est fait assez facilement, puisqu'avec la manière dont j'avais
 implémenté mon gestionnaire de type, cela ne représentait que quelques lignes
 à ajouter.\\
 
 Afin de simplifier un peu l'implémentation, j'ai décidé que les deux formes
-de blocs conditionnels seraient représentés par le même noeud. Le contenu de
-celui-ci serait simplement représenter par trois noeuds, la condition, la
-liste d'instructions à exécuter dans le cas vrai et celle dans le cas faux
-\footnote{Cette dernière sera donc mise à nulle dans les cas où le elsen'est
-pas utilisé}\\
+de blocs conditionnels seraient représentées par le même type de noeud. Le
+contenu de celui-ci serait simplement représenté par trois noeuds, la condition,
+la liste d'instructions à exécuter dans le cas vrai et celle dans le cas faux
+\footnote{Cette dernière sera donc mise à nulle dans les cas où le else n'est
+pas utilisé.}.\\
 
 La présence des conditionnelles a aussi grandement facilité la réalisation
 des tests de non régression, puisque cela permettait de renvoyer zéro
-uniquement dans le cas que l'on valide \footnote{il n'était donc plus
+uniquement dans le cas que l'on valide\footnote{il n'était donc plus
 nécessaire que le résultat soit zéro. Ceci est extrêmement pratique, pour les
-tests sur les floats par exemple.}\\
+tests sur les {\em float} par exemple.}.\\
 
-Afin que les conditionnels fonctionnent il a aussi été nécessaire de garantir
-que les labels générés soient différent. Mon choix pour a simplement été
+Afin que les conditionnelles fonctionnent, il a aussi été nécessaire de garantir
+que les labels générés soient différents. Mon choix pour cela a simplement été
 de conserver une variable globale indiquant le numéro de label et de
 l'incrémenter à chaque utilisation de label.
 
@@ -336,35 +346,44 @@ le principal étant d'assurer que les sauts soient dirigés vers les bons
 labels et que les labels soient bien différents.
 
 \subsubsection{La boucle \em{while}}
-Une boucle while consiste simplement à générer un label L1 avant la
-génération du code contenu dans la condition, un label L2 au début du code
-interne au while et un label L3 après celui-ci. Il faut aussi la présence
-d'un saut conditionnel juste avant L2 qui ira sur L2 dans le cas vrai et L3
-dans le cas où la condition se révèle fausse. À la fin du code interne au
-while il y aura aussi la présence d'un saut à destination de L1, afin que la
-condition soit évaluée à nouveau.
+Une boucle while consiste simplement à générer un label {\em L1} avant la
+génération du code contenu dans la condition, un label {\em L2} au début du code
+interne au while et un label {\em L3} après celui-ci. Il faut aussi la présence
+d'un saut conditionnel juste avant {\em L2} qui ira sur {\em L2} dans le cas vrai
+et {\em L3} dans le cas où la condition se révèle fausse. À la fin du code
+interne au while il y aura aussi la présence d'un saut à destination de {\em L1},
+afin que la condition soit évaluée à nouveau.
 
 \subsubsection{La boucle \em{for}}
 Cette structure de contrôle ressemble énormément au while, la différence
 principale étant que le code de condition n'est pas écrit de la même manière.
-Cependant, j'ai géré une fonctionnalité supplémentaire pour les boucles for
-en prenant en compte que les variables peuvent être internes au bloc et donc
+Cependant, j'ai tenté de gérer une fonctionnalité supplémentaire pour les boucles
+for en prenant en compte que les variables peuvent être internes au bloc et donc
 être d'un autre type à l'extérieur du bloc si elles n'ont pas été déclarées
-avant\footnote{Du moins, c'était mon but, mais cette partie n'est pas
-encore finalisée et le test qui y est associé ne compile pas}.
+avant. Je me suis heurté à un problème lorsque j'ai mis en place un test pour
+vérifier le bon fonctionnement d'un exemple illustrant cette possibilité. En
+effet, s'il était possible dans la représentation interne de mon compilateur de
+conserver deux variables de même nom à un niveau de contexte différent, cette
+possibilité m'a semblée ne pas être fournie par llvm. Il m'est donc apparu comme
+nécessaire de définir des alias pour réussir à fournir cette possibilité. Je
+n'ai malheureusement pas eu le temps de tester la validité de cette idée.
 
 \subsection{Gestion du polymorphisme}
 Lorsque l'on ajoute la simple présence du type float à la liste des types
 existants, le problème du polymorphisme se pose déjà sur des problèmes très
 peu complexe.
-% code equal
-Dans cette fonction, il y a déjà une ambiguité sur les types à utilisé pour
-les paramètres, en effet, a et b peuvent être des ints comme des floats. On
-peut aussi voir que les combinaisons int,float et float,int ne sont pas
-valides.
+\begin{lstlisting}
+def comparaison(a,b)
+  return a == b;
+end
+\end{lstlisting}
+Dans cette fonction, il y a déjà une ambiguité sur les types à utiliser pour
+les paramètres. En effet, a et b peuvent être des {\em int} comme des
+{\em float}. On peut aussi voir que les combinaisons {\em int, float} et 
+{\em float, int} ne sont pas valides.
 
 \subsubsection{Itération sur toutes les possibilités}
-Il y a plusieurs façon de gérer le cas des déclaration de fonctions avec des
+Il y a plusieurs façons de gérer le cas des déclarations de fonctions avec des
 paramètres dont le type est ambigu. On peut choisir de générer les fonctions
 uniquement lorsqu'elles seront appelées, ainsi le code correspondant à un
 prototype ne sera généré que si la fonction est utilisée. Cependant, ce qui
@@ -377,7 +396,7 @@ Il reste important de souligner qu'itérer ainsi sur toutes les possibilités
 engendrent une complexité exponentielle en fonction du nombre de paramètres
 \footnote{Ceci dans le pire des cas, même s'il n'est pas sensé arriver
 souvent, cela engendre le fait qu'il est facile d'écrire un programme dont
-la compilation prendra un temps incroyablement long.}
+la compilation prendra un temps incroyablement long.}.
 
 \subsubsection{Génération du code}
 Afin de générer le code adapté, il est nécessaire d'appliquer les
@@ -389,12 +408,12 @@ seulement, le code est écrit. Cette méthode permet de ne pas avoir à recopier
 tout l'arbre d'une fonction uniquement pour changer le prototype utilisé.\\
 
 J'ai décidé pour cette partie de générer une erreur de compilation uniquement
-si aucun prototype valide n'était trouvé. Dans les cas où certains prototypes
-ne fonctionneraient pas, ils ne généreraient simplement pas de code.\\
+si aucun prototype valide n'était trouvé. Dans les cas où une partie des
+prototypes ne fonctionneraient pas, ils ne généreraient simplement pas de code.\\
 
 Cette phase ayant été particulièrement ardue à débuguer, je me suis servi de
-quelques printf écrivant des commentaires en langage llvm pour simplifier
-un premier repérage des erreurs, mais mon outil principal a été gdb qui m'a
+quelques {\em printf} écrivant des commentaires en langage llvm pour simplifier
+un premier repérage des erreurs. Mais mon outil principal a été gdb qui m'a
 permit de rapidement détecté mes erreurs de codage.
 
 \subsubsection{La surcharge en llvm}
@@ -403,20 +422,20 @@ créer une différence de noms entre les différentes fonctions qui partageaient
 le même noms. J'ai simplement choisi de préfixer tous les noms de fonctions
 par le nom des types des arguments.
 
-\subsection{La gestion des {\em floats}}
-Lors de l'étape précédente, j'ai pu ajouter les {\em floats} en tant que
-type, mais cela ne suffisait pas à leur gestion, effectivement, le
+\subsection{La gestion des {\em float}}
+Lors de l'étape précédente, j'ai pu ajouter les {\em float} en tant que
+type, mais cela ne suffisait pas à leur gestion. Effectivement, le
 compilateur llvm utilisé butait sur l'écriture des éléments et les tests ne
-compilaient donc pas.\\
+compilaient pas.\\
 
 Après quelques recherches, j'ai choisi d'utiliser la représentation
-hexadécimal des {\em floats} et grâce à cela j'ai réussi à faire compiler le
+hexadécimal des {\em float} et grâce à cela j'ai réussi à faire compiler le
 programme de tests, cependant, mon test ne donnait pas le résultat escompté.
 \\
 
 Un autre groupe m'a soufflé à ce moment là que le problème disparaissait
 purement et simplement si l'on se servait des {\em double} à la place des
-{\em floats}, j'ai donc essayé et approuvé cette solution.
+{\em float}, j'ai donc essayé et approuvé cette solution.
 
 \subsection{La prise en charge de la récursivité}
 Si dans un premier temps, prendre en charge la récursivité n'a pas été
@@ -430,18 +449,50 @@ dans un cas de récursivité, le type de ce noeud devient équivalent au type de
 retour de la fonction en train d'être examinée, le type de retour du prototype
 n'étant pas encore défini.
 
-\subsection{La gestion des classes}
-N'ayant malheureusement pas réussi à trouver le temps d'implémenter cette
-partie, je n'ai pas grand chose à dire sur celle-ci.
+\subsection{Les variables à portée globale}
+Pour prendre en charge ces variables, j'ai décidé de les stocker dans un
+dictionnaire différent de celui contenant les variables locales. Il était
+ensuite nécessaire de différencier les références à celle-ci lorsqu'elles
+étaient faîtes dans une fonction où à l'extérieur de toute fonction.
+Effectivement, il n'est pas autorisé d'affecter autre chose qu'une constante à
+l'extérieur de toute fonction. Il est également interdit de faire n'importe quel
+type d'opération hors des fonctions.\\
+
+Pour différencier ces situations, je me suis servi d'une information donnée par
+ma variable globale {\em actual\_context}, en effet, ci l'attribut
+{\em parent\_context} de celle-ci valait {\em NULL} c'est que l'affectation en
+cours étaient hors de toute fonction.\\
+
+Il était également nécessaire de déclarer toutes les variables globales avant
+les fonctions. Pour arriver à cela, j'ai simplement ajouté un appel à une
+fonction générant les allocations avec l'initialisation des variables globales
+\footnote{La valeur initiale étant fournie par un attribut de la structure
+{\em variable}.}.\\
+
+De plus, il fallait changer le nom de la variable lors de son écriture en llvm,
+les variables globales en llvm étant préfixées par le symbole @. Ceci n'était
+qu'un détail technique assez simple à mettre en pratique.
+
+\subsection{Les constantes}
+Malheureusement, je n'ai pas eu le temps d'implémenter cette partie, mais je
+pense qu'il est entre autre nécessaire d'ajouter des champs dans la structure
+variable afin de définir si la variable est une constante et si son affectation 
+a déjà été faîte. La vérification du nombre d'affectation peut-être faîte durant
+la phase de validation finale, celle-ci étant exécutée une seule fois.
+
+\subsection{Les oubliés}
+Malheureusement je n'ai pas réussi à me pencher en détail sur les classes, les
+tableaux ou encore les fonctions ne prenant pas de paramètre ou ne retournant
+rien. 
 
 \section{La gestion de la mémoire}
-Un des aspects critique présenté lors de la gestion de ce programme en c par
-rapport à mon expérience précédente en java est évidemment la gestion de
+Un des aspects critiques présenté lors de la gestion de ce programme en{\em C}
+par rapport à mon expérience précédente en java est évidemment la gestion de
 la mémoire. Or, si j'ai réussi à éviter la présence de fuites mémoires lors
 des premiers tests qui n'utilisaient que des fonctionnalités assez simple,
 tout est devenu bien plus complexe lors de l'implémentation des parties plus
-difficile, et ce à tel point que j'ai choisi de repousser le moment de la
-gestion mémoire afin de réussir à implémenter plus rapidement ce que je
+difficile, et ce à tel point que j'ai choisi de retarder la gestion des
+libérations de mémoire afin de réussir à implémenter plus rapidement ce que je
 désirais. En effet, obtenir une solution présentant des fuites mémoires était
 déjà quelque chose de satisfaisant pour moi et je craignais qu'à vouloir
 viser le mieux directement, je n'arrive même pas au bien.
@@ -453,29 +504,30 @@ j'avais estimé dans un premier temps. Pour cette tâche, j'ai choisi d'utiliser
 la procédure suivante.\\
 
 J'ai commencé par choisir un fichier de test qui allait me servir de
-référence. Je l'ai compilé avec un valgrind simple afin de voir rapidement la
-proportion de free par rapport au nombre d'allocs. Comme je m'y attendais,
-celle-ci était particulièrement faible. Ensuite, j'ai obtenu plus de détails
+référence. Je l'ai compilé avec un {\em valgrind} simple afin d'estimer
+rapidement la proportion de {\em free} par rapport au nombre d'allocations.
+Comme je m'y attendais, celle-ci était particulièrement faible.
+Ensuite, j'ai obtenu plus de détails
 à l'aide d'un {\em valgrind --leak-check=full --show-reachable=yes}. Ces
 détails me permettaient de savoir quelle partie de la mémoire n'était pas
 libérée et comme je connaissais l'intégralité de mon code, je pouvais assez
 facilement savoir quand et comment la libérer\footnote{Il est à noter que
 j'ai tout de même pu prendre conscience que ce travail aurait réellement été
-affreux si j'avais du le faire sur du code qui m'était inconnu et je pense
+insurmontable si j'avais du le faire sur du code qui m'était inconnu et je pense
 donc qu'il est nettement préférable lorsque l'on travaille en équipe que
 chacun veille constamment à ne pas laisser trop de fuites mémoires.}.\\
 
 Même si ainsi présentée, la situation peut sembler un peu idyllique, je me
 dois d'avouer que certains problème de fuites mémoires ont tout de même
-nécessité un peu plus de raffinement qu'un simple free bien placé. À titre
+nécessité un peu plus de raffinement qu'un simple {\em free} bien placé. À titre
 d'exemple, je citerai la gestion des identifiants. Ceux-ci étant présent à
 différents endroits\footnote{En tant que clé de dictionnaire, de contenu de
 certains noeuds, de nom de fonction etc...}, j'ai choisi de simplement
 maintenir à jour une liste contenant tous ces identifiants, et d'ainsi tous
 les libérer de manière uniforme à la fin de l'exécution.\\
 
-Cette partie du travail m'a aussi encouragé à uniformisé le traitement en
-mémoire, en effet, pour les built-ins ou pour les fonctions décrites par
+Cette partie du travail m'a aussi encouragé à uniformiser le traitement en
+mémoire. En effet, pour les {\em built-in} ou pour les fonctions décrites par
 l'utilisateur, le fonctionnement n'était pas le même au niveau de la mémoire
 avant que je nettoie un peu le code.
 
@@ -484,17 +536,17 @@ Une fois un test parfaitement dénué de fuites mémoires, il était naturel
 d'étendre ce contrôle de qualité à tous les tests afin de vérifier que
 certaines parties du code ne génèrent pas de fuites mémoires. J'ai donc
 ajouté au script de test une partie permettant de vérifier que les tests ne
-génèrent pas de fuites mémoires. Cela m'a permis de déceler d'autres failles
+génèraient pas de fuites mémoires. Cela m'a permis de déceler d'autres failles
 dans mon code et de les corriger par la suite. Après quelques vérifications,
 j'ai ainsi pu éliminer toutes les fuites mémoires des différents tests.
 
-\section{La propreté du projet}
+\section{Les détails du projet}
 Essayant de rendre le code présentable afin qu'il soit assez facile à lire,
 j'ai prêté une attention particulière à certains aspects :
 \begin{itemize}
 \item Remplacement des tabulations par des espaces dans le code afin de garder
   un aspect uniforme quelque soit l'outil utilisé pour lire le code\footnote{
-    Ceci a été effectué à l'aide de la commande {\em untabify} d'emacs}.
+    Ceci a été effectué à l'aide de la commande {\em untabify} d'emacs.}.
 \item Gestion des dépendances détaillées dans le Makefile\footnote{Au delà
   d'une histoire de propreté, cela permet aussi d'éviter que les changements
   ne soient pas bien répercutés et que l'on soit donc obligé de faire un
@@ -502,10 +554,10 @@ j'ai prêté une attention particulière à certains aspects :
 \item Suppression totale des warnings\footnote{Certains warnings n'étant pas
   de mon ressort, j'ai du ajouter une directive {\em \# pragma GCC diagnostic
     ignored "-Wunused-function"} dans le fichier scanner.l afin de pallier ce
-  problème} lors de la compilation\footnote{Un des aspects particulièrement
+  problème.} lors de la compilation\footnote{Un des aspects particulièrement
   agréable de cette façon de procéder est que la présence de nouveaux warnings
   est beaucoup plus facile à détecter, de plus, une compilation totale est
-  moins envahissante}.
+  moins envahissante.}.
 \item Présentation des include séparés par catégorie et triés par ordre
   alphabétique ensuite afin de plus facilement se repérer.
 \end{itemize} 
@@ -515,12 +567,29 @@ Bien que je sois parfaitement conscient qu'il reste beaucoup d'aspects pouvant
 du code, je m'efforce d'appliquer les principes que j'ai acquis jusqu'ici afin
 de bien les mettre en pratique.
 
+\section{Perspectives}
+L'implémentation du compilateur rubic à laquelle j'ai abouti ne supporte pas
+toutes les possibilités qui nous ont été demandées. Un certain travail
+est donc encore nécessaire pour arriver à une version plus complète du
+compilateur. Cependant, ce n'est pas dans cette optique que le plus
+d'améliorations sont possibles. Un des aspect cruciaux d'un compilateur est la
+gestion d'erreur, or je n'ai fait qu'effleurer celui-ci au cours de ce projet.
+En effet, on peut aisément imaginer qu'écrire un programme en {\em C} serait
+bien plus compliqué si le seul résultat de notre compilation suite à l'entrée
+d'un programme incorrect était : {\em échec de la compilation}.\\
+
+Bien que j'ai fait quelques efforts dans cette direction, je n'ai réalisé aucun
+tests vérifiant que des entrées invalides produisaient bien les messages
+d'erreur attendus et un certain nombre de problèmes ne sont pas du tout
+signalés. Si je devais poursuivre ce projet, je pense que cet aspect deviendrait
+une de mes priorités.
+
 \section{Conclusion}
 Ce projet a sans conteste été l'occasion d'apprendre beaucoup et de me
 heurter à plusieurs problématiques difficiles, comme je m'y attendais, le
 volume de travail était conséquent et ma plus grande déception est que je
 sais que mon projet ne présente pas une gestion particulièrement propre de
-certains problèmes. Cependant, cette première approche un peu brutal était
+certains problèmes. Cependant, cette première approche un peu brutale était
 nécessaire pour prendre conscience de certains problèmes qui ne me sont
 apparus que lors de l'implémentation.\\
 
@@ -528,7 +597,7 @@ Au terme du temps accordé à ce projet, je pense que j'éprouverais du plaisir
 à travailler sur la réalisation d'un compilateur en équipe
 \footnote{Effectivement, pour certaines problématiques, le fait d'avoir un
 dialogue et l'avis de plusieurs personnes était sans aucun doute d'une
-utilité indiscutable} et avec un temps disponible pour ce travail plus
+utilité indiscutable.} et avec un temps disponible pour ce travail plus
 important que celui que j'avais à ma disposition. Pour arriver à un résultat
 propre, donnant des informations précises lors de tous les types d'erreurs
 de compilation, je pense qu'il aurait fallu plusieurs fois le temps que j'ai

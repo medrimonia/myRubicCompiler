@@ -8,7 +8,7 @@
 #include "function_set.h"
 #include "linked_list.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 function_p ut_current_function = NULL;
 prototype_p ut_current_p = NULL;
