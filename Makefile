@@ -12,15 +12,15 @@ report.dvi : report/report.tex
 # CREATING ARCHIVE
 
 AR_SOURCE = *.c               \
-						*.h	              \
-						scanner.l         \
-		        parse.y           \
-						report/report.tex \
+            *.h               \
+            scanner.l         \
+            parse.y           \
+            report/report.tex \
             report.pdf        \
-		        tests/*.rubic     \
-						Makefile          \
-	          README            \
-					 	run_tests.sh
+            tests/*.rubic     \
+            Makefile          \
+            README            \
+            run_tests.sh
 
 AR = tar
 AR_FLAGS = --exclude-vcs -zcf
@@ -55,10 +55,10 @@ lex.yy.o: lex.yy.c
 
 # EXECUTABLE RULES
 rubic: y.tab.o lex.yy.o context.o dictionnary.o hashmap.o linked_list.o    \
-			 code_generator.o tree.o function.o type_handler.o type.o variable.o \
-			 constant_string_handler.o doubly_linked_list.o                      \
-			 possible_types_solver.o validation.o prototype.o function_set.o     \
-			 type_updater.o
+       code_generator.o tree.o function.o type_handler.o type.o variable.o \
+       constant_string_handler.o doubly_linked_list.o                      \
+       possible_types_solver.o validation.o prototype.o function_set.o     \
+       type_updater.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 test_doubly_linked_list: doubly_linked_list.o test_doubly_linked_list.o
@@ -74,8 +74,8 @@ test_linked_list: linked_list.o test_linked_list.o
 # OBJECT RULES
 
 code_generator.o : code_generator.h constant_string_handler.h function.h \
-									 prototype.h type.h type_handler.h type_updater.h \
-									 validation.h variable.h
+                   prototype.h type.h type_handler.h type_updater.h \
+                   validation.h variable.h
 
 constant_string_handler.o : constant_string_handler.h
 
@@ -86,7 +86,7 @@ dictionnary.o : dictionnary.h
 doubly_linked_list.o: doubly_linked_list.h
 
 function.o : function.h code_generator.h dictionnary.h function_set.h \
-					   prototype.h type_handler.h
+             prototype.h type_handler.h
 
 function_set.o : function_set.h
 
@@ -113,7 +113,7 @@ type_handler.o : type_handler.h
 type_updater.o : type_updater.h function.h function_set.h linked_list.h
 
 validation.o : validation.h function_set.h prototype.h type.h type_handler.h \
-							 type_updater.h
+               type_updater.h
 
 variable.o : variable.h
 
@@ -126,12 +126,12 @@ RUBICS_TESTS_ERROR=$(RUBICS_FILES:.rubic=.test.error)
 tests : $(RUBICS_TESTS)
 
 EXECUTABLES=              \
-	hello_world             \
-	rubic	                  \
-	test_hashmap            \
-	test_linked_list        \
-	test_doubly_linked_list \
-	$(RUBICS_TESTS)
+  hello_world             \
+  rubic                   \
+  test_hashmap            \
+  test_linked_list        \
+  test_doubly_linked_list \
+  $(RUBICS_TESTS)
 
 
 ### .h DEPENDENCIES
@@ -169,9 +169,9 @@ variable.h : linked_list.h
 .PHONY: clean mrproper
 
 clean:
-	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS) \
-		$(RUBICS_TESTS_OUTPUT) $(RUBICS_TESTS_ERROR) report.aux report.dvi \
-		report.log hofer.tar.gz
+	rm -rf *.o *.s lex.yy.c y.tab.c y.tab.h y.output $(RUBICS_OBJS)      \
+    $(RUBICS_TESTS_OUTPUT) $(RUBICS_TESTS_ERROR) report.aux report.dvi \
+    report.log hofer.tar.gz
 
 mrproper: clean
 	rm -rf $(EXECUTABLES) *~ report.pdf
