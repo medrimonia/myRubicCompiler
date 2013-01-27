@@ -39,7 +39,7 @@
 }
 %union{
 	int i;
-	double d;
+	float d;
 	char * s;
 	tn_pointer node;
 	linked_list_pointer l;

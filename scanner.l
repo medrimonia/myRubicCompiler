@@ -5,7 +5,6 @@
 #include "tree.h"
 
 #pragma GCC diagnostic ignored "-Wunused-function"
-#pragma GCC diagnostic ignored "-Wformat"
 
 
 // declaring function earlier in order to avoid warnings
