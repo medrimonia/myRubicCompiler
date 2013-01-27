@@ -166,7 +166,6 @@ variable.h : linked_list.h
 
 ### CLEANING PART ###
 
-
 .PHONY: clean mrproper
 
 clean:
